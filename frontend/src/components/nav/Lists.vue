@@ -15,12 +15,17 @@ const closeMenu = () => {
 };
 
 const menuItems = [
-  { label: "Inicio", link: "#" },
-  { label: "Novedades", link: "#" },
-  { label: "Disponibles ahora!", link: "#" },
-  { label: "Masajistas", link: "#" },
-  { label: "Redes", link: "#" },
-  { label: "Todas", link: "#" },
+  { label: "Inicio", url: "#" },
+  { label: "Novedades", url: "#" },
+  { label: "Disponibles ahora!", url: "#" },
+  { label: "Masajistas", url: "#" },
+  { label: "Redes", url: "#" },
+  { label: "Enterprise", url: "#" },
+  { label: "Premium", url: "#" },
+  { label: "Top", url: "#" },
+  { label: "Vip", url: "#" },
+  { label: "Normal", url: "#" },
+  { label: "Todas", url: "/all" },
 ];
 
 const locations = [
@@ -85,7 +90,7 @@ const locations = [
       <div
         v-if="isMenuOpen"
         @click.self="closeMenu"
-        class="absolute top-16 md:top-20 left-0 right-0 bg-[#0a0a0a] border-t border-b border-[#FFD700] shadow-2xl max-h-[80vh] overflow-y-auto z-50"
+        class="absolute top-14 md:top-16 lg:top-20 xl:top-24 left-0 right-0 bg-[#0a0a0a] border-t border-b border-[#FFD700] shadow-2xl max-h-[80vh] overflow-y-auto z-50"
       >
         <div
           @click.self="closeMenu"
@@ -115,7 +120,7 @@ const locations = [
               <ul class="space-y-2">
                 <li v-for="item in menuItems" :key="item.label">
                   <a
-                    :href="item.link"
+                    :href="item.url"
                     @click="closeMenu"
                     class="text-gray-300 hover:text-[#FFD700] transition-colors duration-200 text-sm md:text-base py-1"
                   >

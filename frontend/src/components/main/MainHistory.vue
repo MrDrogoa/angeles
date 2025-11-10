@@ -138,7 +138,9 @@ function resumeStory() {
 
 <template>
   <!-- Carrusel de Miniaturas con vue3-carousel -->
-  <div class="relative w-full max-w-7xl mx-auto px-4 py-6">
+  <div
+    class="relative w-full max-w-7xl mx-auto px-4 pt-6 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16"
+  >
     <Carousel
       :items-to-show="5"
       :wrap-around="true"
