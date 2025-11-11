@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import NewCardsComponents from "@/components/main/category/NewCardsComponents.vue";
+</script>
 
 <template>
-  <div></div>
+  <new-cards-components />
 </template>
 
 <style scoped></style>

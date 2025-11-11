@@ -15,16 +15,16 @@ const closeMenu = () => {
 };
 
 const menuItems = [
-  { label: "Inicio", url: "#" },
-  { label: "Novedades", url: "#" },
+  { label: "Inicio", url: "/" },
+  { label: "Novedades", url: "/news" },
   { label: "Disponibles ahora!", url: "#" },
-  { label: "Masajistas", url: "#" },
-  { label: "Redes", url: "#" },
+  { label: "Masajistas", url: "/masajistas" },
+  { label: "Redes", url: "/social" },
   { label: "Enterprise", url: "#" },
-  { label: "Premium", url: "#" },
-  { label: "Top", url: "#" },
-  { label: "Vip", url: "#" },
-  { label: "Normal", url: "#" },
+  { label: "Premium", url: "/premium" },
+  { label: "Top", url: "/top" },
+  { label: "Vip", url: "/vip" },
+  { label: "Normal", url: "/normal" },
   { label: "Todas", url: "/all" },
 ];
 

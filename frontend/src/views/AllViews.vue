@@ -1,9 +1,9 @@
 <script setup>
-import AllComponents from "@/components/main/category/AllComponents.vue";
+import AllCardsComponents from "@/components/main/category/AllCardsComponents.vue";
 </script>
 
 <template>
-  <section><all-components /></section>
+  <section><all-cards-components /></section>
 </template>
 
 <style scoped></style>

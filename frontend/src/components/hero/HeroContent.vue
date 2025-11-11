@@ -16,7 +16,10 @@ import ButtonComponents from "@/components/buttons/ButtonComponents.vue";
           “Tu mejor lugar de encuentros”
         </p>
         <!-- button de action -->
-        <button-components>Explorar ahora</button-components>
+
+        <router-link to="/all"
+          ><button-components>Explorar ahora</button-components></router-link
+        >
       </div>
     </div>
   </section>

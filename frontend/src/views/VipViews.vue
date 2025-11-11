@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import VipCardsComponents from "@/components/main/category/VipCardsComponents.vue";
+</script>
 
 <template>
-  <div></div>
+  <vip-cards-components />
 </template>
 
 <style scoped></style>

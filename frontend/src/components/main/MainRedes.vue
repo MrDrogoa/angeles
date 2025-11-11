@@ -57,10 +57,7 @@ const newsRedes = [
 
 <template>
   <section class="max-w-[1300px] mx-auto px-4">
-    <title-h-2-components
-      title="Redes A&D"
-      class="text-center mb-6 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
-    />
+    <title-h-2-components title="Redes A&D" class="text-center" />
     <article class="flex justify-center flex-wrap gap-4">
       <div
         v-for="redes in newsRedes"
@@ -95,7 +92,9 @@ const newsRedes = [
       </div>
     </article>
     <div class="flex justify-center mt-4 lg:mt-6 xl:mt-8">
-      <button-components>Ver más</button-components>
+      <router-link to="/social">
+        <button-components>Ver más</button-components>
+      </router-link>
     </div>
   </section>
 </template>

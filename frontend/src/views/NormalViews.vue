@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import NormalCardsComponents from "@/components/main/category/NormalCardsComponents.vue";
+</script>
 
 <template>
-  <div></div>
+  <normal-cards-components />
 </template>
 
 <style scoped></style>

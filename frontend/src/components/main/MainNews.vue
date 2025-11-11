@@ -40,10 +40,7 @@ const goToPage = (path) => {
 
 <template>
   <section class="max-w-[1300px] mx-auto py-8 md:py-20 lg:py-25 xl:py-30 px-4">
-    <title-h-2-components
-      title="Novedades"
-      class="text-center mb-6 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
-    />
+    <title-h-2-components title="Novedades" class="text-center" />
 
     <!-- Grid de tarjetas con Flexbox -->
     <div class="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6">
@@ -81,7 +78,9 @@ const goToPage = (path) => {
       </div>
     </div>
     <div class="flex justify-center mt-4 lg:mt-6 xl:mt-8">
-      <button-components>Ver más</button-components>
+      <router-link to="/news">
+        <button-components>Ver más</button-components>
+      </router-link>
     </div>
   </section>
 </template>

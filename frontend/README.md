@@ -76,6 +76,151 @@ Ruta base: `frontend/src`
 	- Layout responsive: grid 1 / 2 / 4 columnas (mobile → tablet → desktop). Grid adicional para logos de pago (3 cols mobile, 5 cols desktop).
 	- Styling con Tailwind: fondo oscuro `#1a1a1a`, borde superior dorado `#FFD700`, enlaces con hover dorado, logos con fondo blanco contenedor.
 
+	## Cambios recientes (añadidos)
+
+	Estos cambios se realizaron después del resumen anterior y están incluidos en el frontend:
+
+	### Sistema de Comentarios y Valoraciones (Nuevo - 11/11/2025)
+
+	Se implementó un sistema completo de comentarios dinámicos y valoraciones con corazones, utilizando un store reactivo centralizado:
+
+	- `src/composables/useProfileStore.js` — composable/store global para gestión de datos del perfil:
+		- `setComments()` — guarda comentarios desde ProfileComponents.
+		- `getComments()` — obtiene comentarios para ComentsComponents.
+		- `addAssessment()` — agrega nueva valoración (1-5 corazones).
+		- `getAverageAssessment()` — calcula promedio de valoraciones.
+		- `getTotalAssessments()` — retorna total de valoraciones acumuladas.
+		- Usa `ref()` para reactividad total sin necesidad de localStorage.
+
+	- `src/components/ProfileComponents.vue` — actualizado:
+		- Importa y usa `useProfileStore` para compartir datos globalmente.
+		- Inicializa el store con `qualifications` en `onMounted()`.
+		- Muestra **indicador visual de valoración promedio** debajo de la categoría del perfil.
+		- Formato: "⭐⭐⭐⭐⭐ 4.5 / 5 (10 valoraciones)" (solo si hay valoraciones).
+		- Estrellas doradas (#FFD700) hasta el promedio redondeado, grises después.
+		- Pasaje dinámico de `qualifications` a componentes hijos (ProfileComents, ProfileQualifications, ProfileAssessment).
+
+	- `src/components/main/profile/ProfileComents.vue` — actualizado:
+		- Simplificado: elimina localStorage, usa props directamente.
+		- Muestra **solo los primeros 3 comentarios** del perfil (preview).
+		- Botón "Ver todo" navega a `/coments` usando `router-link`.
+		- Cada tarjeta: usuario, fecha, comentario.
+
+	- `src/components/ComentsComponents.vue` — completamente reescrito:
+		- Usa `computed` para obtener comentarios del store (`useProfileStore.getComments()`).
+		- Elimina localStorage: los datos vienen **dinámicamente del store**.
+		- **Layout de 2 columnas responsive** con Flexbox y Tailwind:
+			- Mobile (1 col): `flex-col`
+			- Tablet/Desktop (2 cols): `md:flex-row md:flex-wrap` con `basis-[calc(50%-...)]`
+		- Cada tarjeta muestra: usuario, fecha, rating/7, categoría y comentario completo.
+		- Borde dorado (#FFD700), hover con cambio de fondo, transición suave.
+		- Mensaje si no hay comentarios.
+
+	- `src/components/main/profile/ProfileAssessment.vue` — nuevo componente de valoración:
+		- **Diseño de 5 corazones interactivos** (imagen de referencia):
+			- Corazones llenos en dorado (#FFD700) cuando se seleccionan/hover.
+			- Corazones vacíos en gris cuando no están seleccionados.
+			- Efectos: hover con `scale-110`, transiciones suaves, cursor pointer.
+		- Tamaños responsive: 64px (mobile) → 80px (sm) → 96px (md) → 112px (lg).
+		- **Estadísticas superiores**: muestra promedio actual y total de valoraciones acumuladas (ej. "4.5 / 5 (10 valoraciones)").
+		- Interactividad:
+			- Click en corazón selecciona (1-5) y cambia color.
+			- Hover pre-visualiza cuántos corazones se van a votar.
+			- Texto dinámico: "Has seleccionado 3 corazones" o "Selecciona tu valoración".
+		- Botón "Enviar valoración" llama `profileStore.addAssessment()`.
+		- Resetea selección tras enviar y muestra alert de confirmación.
+		- Usa Font Awesome: `faHeart` (lleno) y `['far', 'heart']` (vacío).
+
+	- `src/components/main/profile/ProfileQualifications.vue` — refactorizado dinámicamente:
+		- **Eliminada repetición de código**: 4 divs idénticos ahora son 1 div con `v-for`.
+		- Array dinámico `qualificationCards` que genera las 4 tarjetas:
+			- Lugar y Presencia (promedio categoría "lugar")
+			- Físico (promedio categoría "fisico")
+			- Servicio (promedio categoría "servicio")
+			- Nota final (promedio de los 3 anteriores, máximo 7.0)
+		- Estilos dinámicos con `:class` binding:
+			- Tarjeta 4 (Nota final): borde dorado + texto dorado.
+			- Tarjetas 1-3: borde blanco + texto blanco.
+			- Todos: fondo gris oscuro, hover con efecto, border-2, rounded-2xl.
+		- Responsive: `w-32/h-32` (mobile) → `w-44/h-44` (lg).
+		- Botón "Calificar" al pie.
+
+	- `src/icons/icon.js` — actualizado:
+		- Se agregaron iconos: `faHeart` (solid), `farHeart` (regular), `faCheckCircle`, `faCreditCard`, `faClock`.
+		- Se mantiene exportación por defecto de `FontAwesomeIcon`.
+
+	### Flujo de datos del perfil (11/11/2025):
+
+	```
+	ProfileComponents (origen de datos)
+	  ├→ qualifications[] → ProfileComents (primeros 3)
+	  ├→ onMounted() → profileStore.setComments(qualifications)
+	  └→ Muestra promedio de valoraciones (computed desde store)
+	
+	useProfileStore (estado global reactivo)
+	  ├→ getComments() → ComentsComponents (todos, 2 columnas)
+	  └→ getAverageAssessment() / getTotalAssessments() → ProfileComponents & ProfileAssessment
+	
+	ProfileAssessment (captura valoraciones)
+	  └→ addAssessment(hearts) → profileStore (acumula ratings)
+	     └→ ProfileComponents re-renderiza promedio automáticamente (computed reactivo)
+	```
+
+	### Características del sistema de perfil (11/11/2025):
+
+	✅ **Comentarios dinámicos**:
+	- Fuente única: `profileData.qualifications` en ProfileComponents.
+	- Sin localStorage: Todo reactivo via composable.
+	- 3 comentarios en perfil (preview).
+	- Todos los comentarios en ComentsComponents (grid 2 columnas).
+
+	✅ **Valoraciones con corazones**:
+	- 5 corazones interactivos con diseño visual igual a la imagen referencia.
+	- Cada usuario puede valorar (1-5 corazones).
+	- Promedio calculado automáticamente con 1 decimal.
+	- Promedio visible en el perfil con estrellas doradas.
+	- Persistente: se guarda en el store global.
+
+	✅ **Responsive**:
+	- Mobile: comentarios 1 columna, corazones 64px.
+	- Tablet: comentarios 2 columnas, corazones 80-96px.
+	- Desktop: layout optimizado, corazones 112px.
+
+	✅ **Código optimizado**:
+	- ProfileQualifications: 1 div dinámico en lugar de 4 divs repetidos (~110 líneas ahorradas).
+	- Todos los estilos en un solo `:class` binding.
+	- Array de configuración para fácil mantenimiento.
+
+	---
+
+	- `src/components/buttons/ReturnComponents.vue` — botón "Volver" mejorado:
+		- Ahora usa `useRouter()` y llama a `router.back()` para navegar al historial anterior.
+		- Integra el icono de Font Awesome girado (ej. `arrow-turn-down`) y soporta estados disabled.
+
+	- `src/components/main/category/AllCardsComponents.vue` — paginación de tarjetas:
+		- Se añadió paginación con control previa/siguiente y número de página central.
+		- Implementación responsive y estilos con Tailwind (botones conectados como en la imagen de referencia).
+		- Se generaron 56 tarjetas de ejemplo (2 páginas de 28) y el layout cambia correctamente entre páginas.
+
+	- `src/components/main/ProfileComponents.vue` y subcomponentes bajo `src/components/main/profile/`:
+		- `ProfileComponents.vue`: nuevo layout de perfil con carrusel (vue3-carousel), badges, botones de contacto, descripción y listados de características.
+		- `ProfileDescription.vue`: ahora recibe `description` por prop (dinámico desde el padre).
+		- `ProfileIcons.vue` / `Profilecons.vue`: recibe `features` por prop y renderiza iconos + texto (dinámico desde el padre).
+		- `ProfilePicture.vue`: recibe `images` por prop, limita a 15 imágenes y las muestra en un grid responsive de hasta 5 columnas (estilos con Tailwind, hover y borde dorado).
+		- Se añadieron funciones auxiliares: toggle favorito, llamadas telefónicas (`tel:`) y apertura a WhatsApp.
+
+	- `src/components/main/Outstanding.vue` y `src/components/main/MainHistory.vue`:
+		- Ajustes menores de tamaño y breakpoints para que los carruseles se vean correctos en mobile y desktop.
+
+	- `src/icons/icon.js` — mejoras en la librería de iconos:
+		- Se agregaron iconos adicionales necesarios por los nuevos componentes (brands y solid): `faWhatsapp`, `faCheckCircle`, `faCreditCard`, `faClock`, y se mantuvo la exportación por defecto de `FontAwesomeIcon`.
+
+	- Varios fixes menores:
+		- Corrección de imports usando el alias `@/` (p. ej. `Footer.vue` import Logo con `@/components/...`).
+		- Reemplazo de estilos nativos por clases Tailwind donde fue posible (ej. paginación, grids de imágenes).
+
+	Estos cambios están listos y preparados para ser conectados a datos reales (back-end). Si quieres, puedo incluir en el README ejemplos de la estructura JSON esperada para `profileData` (útil para el API) o crear un pequeño mock service para consumir desde los componentes.
+
 ## Dependencias principales usadas
 
 - Vue 3 (script setup)

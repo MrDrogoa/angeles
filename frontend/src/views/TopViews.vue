@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import TopCardsComponents from "@/components/main/category/TopCardsComponents.vue";
+</script>
 
 <template>
-  <div></div>
+  <top-cards-components />
 </template>
 
 <style scoped></style>

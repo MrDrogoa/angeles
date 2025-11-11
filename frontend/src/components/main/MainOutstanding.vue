@@ -41,10 +41,7 @@ const goToPage = (path) => {
 
 <template>
   <section class="max-w-[1300px] mx-auto px-4">
-    <title-h-2-components
-      title="Destacadas"
-      class="text-center mb-6 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16"
-    />
+    <title-h-2-components title="Destacadas" class="text-center" />
 
     <!-- Carrusel de tarjetas destacadas -->
     <div class="relative">
@@ -100,7 +97,9 @@ const goToPage = (path) => {
       </Carousel>
     </div>
     <div class="flex justify-center mt-4 lg:mt-6 xl:mt-8">
-      <button-components>Ver más</button-components>
+      <router-link to="/destacadas">
+        <button-components>Ver más</button-components>
+      </router-link>
     </div>
   </section>
 </template>

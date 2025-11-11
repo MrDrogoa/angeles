@@ -14,10 +14,10 @@ const footerData = {
       title: "Secciones",
       links: [
         { text: "Inicio", url: "/" },
-        { text: "Novedades", url: "/" },
+        { text: "Novedades", url: "/news" },
         { text: "Disponibles ahora!", url: "/" },
-        { text: "Masajistas", url: "/" },
-        { text: "Redes", url: "/" },
+        { text: "Masajistas", url: "/masajistas" },
+        { text: "Redes", url: "/social" },
         { text: "Todas", url: "/all" },
       ],
     },
@@ -68,7 +68,7 @@ const footerData = {
         <!-- Columna 1: Logo y Slogan -->
         <div class="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
           <Logo />
-          <h3 class="text-[#FFD700] text-lg sm:text-xl font-bold">
+          <h3 class="text-[#FFD700] text-lg sm:text-xl md:text-2xl font-bold">
             {{ footerData.slogan }}
           </h3>
         </div>

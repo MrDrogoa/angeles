@@ -17,19 +17,17 @@ import {
   faDollarSign,
   faChevronLeft,
   faChevronRight,
+  faArrowTurnDown,
+  faCheckCircle,
+  faCreditCard,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
-// import { farHeart, farUser } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 
-// Brand icons
-// import {
-//   faFacebook,
-//   faTwitter,
-//   faInstagram,
-//   faLinkedin,
-//   faGithub,
-// } from "@fortawesome/free-brands-svg-icons";
+// Brands icons
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 // Agrega los iconos a la librería
 library.add(
@@ -46,7 +44,15 @@ library.add(
   faArrowRightFromBracket,
   faDollarSign,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faArrowTurnDown,
+  faCheckCircle,
+  faCreditCard,
+  faClock,
+  // Regular
+  farHeart,
+  // Brands
+  faWhatsapp
 );
 
 export default FontAwesomeIcon;

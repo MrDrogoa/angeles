@@ -6,6 +6,11 @@ import PremiumViews from "@/views/PremiumViews.vue";
 import VipViews from "@/views/VipViews.vue";
 import NormalViews from "@/views/NormalViews.vue";
 import TopViews from "@/views/TopViews.vue";
+import MasajistasViews from "@/views/MasajistasViews.vue";
+import SocialViews from "@/views/SocialViews.vue";
+import DestacadasViews from "@/views/DestacadasViews.vue";
+import ProfileViews from "@/views/ProfileViews.vue";
+import ComentsViews from "@/views/ComentsViews.vue";
 
 const routes = [
   {
@@ -62,6 +67,46 @@ const routes = [
     component: TopViews,
     meta: {
       title: "Top - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/masajistas",
+    name: "Masajistas",
+    component: MasajistasViews,
+    meta: {
+      title: "Masajistas - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/social",
+    name: "Social",
+    component: SocialViews,
+    meta: {
+      title: "Social - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/destacadas",
+    name: "Destacadas",
+    component: DestacadasViews,
+    meta: {
+      title: "Destacadas - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: ProfileViews,
+    meta: {
+      title: "Perfil - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/coments",
+    name: "coments",
+    component: ComentsViews,
+    meta: {
+      title: "Comentarios - Angeles y Demonios",
     },
   },
 ];

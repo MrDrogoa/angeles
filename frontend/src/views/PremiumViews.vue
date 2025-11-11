@@ -1,7 +1,7 @@
-<script setup></script>
+<script setup>
+import PremiumCardsComponents from "@/components/main/category/PremiumCardsComponents.vue";
+</script>
 
-<template>
-  <div></div>
-</template>
+<template><premium-cards-components /></template>
 
 <style scoped></style>
