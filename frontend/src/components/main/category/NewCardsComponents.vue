@@ -5,6 +5,7 @@ import TitleH2Components from "@/components/TitleH2Components.vue";
 import { useRouter } from "vue-router";
 import Hero from "@/assets/hero.webp";
 import ButtonCarouselComponents from "@/components/buttons/ButtonCarouselComponents.vue";
+import MainRedes from "@/components/main/MainRedes.vue";
 
 const router = useRouter();
 
@@ -442,7 +443,7 @@ const nextPage = () => {
 <template>
   <section class="max-w-[1300px] mx-auto px-4">
     <return-components />
-    <title-h-2-components title="Novedades" class="text-center mb-6" />
+    <title-h-2-components title="Novedades" class="text-center" />
 
     <!-- buttons carrusel para mobile -->
     <button-carousel-components />
@@ -517,6 +518,7 @@ const nextPage = () => {
       </button>
     </div>
   </section>
+  <main-redes class="py-8 md:py-20 lg:py-25 xl:py-30" />
 </template>
 
 <style scoped></style>

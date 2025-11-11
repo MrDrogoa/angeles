@@ -158,24 +158,30 @@ const locations = [
                 Acciones
               </h3>
               <div class="space-y-4">
-                <button2-components class="w-full">
-                  <font-awesome-icon icon="arrow-right-from-bracket" />
-                  Acceder
-                </button2-components>
+                <router-link to="/login" class="block">
+                  <button2-components class="w-full">
+                    <font-awesome-icon icon="arrow-right-from-bracket" />
+                    Acceder
+                  </button2-components>
+                </router-link>
 
-                <button-components class="w-full"
-                  ><font-awesome-icon icon="user" /> Registro</button-components
-                >
+                <router-link to="/register" class="block">
+                  <button-components class="w-full"
+                    ><font-awesome-icon icon="user" />
+                    Registro</button-components
+                  >
+                </router-link>
 
                 <button3-components class="w-full"
                   ><font-awesome-icon icon="dollar-sign" />
                   Publicar</button3-components
                 >
-
-                <button-components class="w-full"
-                  ><font-awesome-icon icon="envelope" />
-                  Contacto</button-components
-                >
+                <router-link to="/contact">
+                  <button-components class="w-full"
+                    ><font-awesome-icon icon="envelope" />
+                    Contacto</button-components
+                  >
+                </router-link>
               </div>
             </div>
           </div>

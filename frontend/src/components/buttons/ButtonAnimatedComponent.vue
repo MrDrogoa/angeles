@@ -49,7 +49,7 @@ const labelLetters = computed(() => {
       v-model="inputValue"
       :type="type"
       required
-      class="bg-transparent border-0 border-b-2 border-white block w-full px-2 lg:px-4 py-[15px] text-lg text-white outline-none focus:border-[#E6C200]"
+      class="bg-transparent border-0 rounded-lg border-b-2 border-white block w-full px-2 lg:px-4 py-[15px] text-lg text-white outline-none focus:border-[#E6C200]"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -78,6 +78,6 @@ const labelLetters = computed(() => {
 
 .letter-active {
   color: #fff;
-  transform: translateY(-30px);
+  transform: translateY(-40px);
 }
 </style>

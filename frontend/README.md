@@ -149,6 +149,161 @@ Ruta base: `frontend/src`
 		- Se agregaron iconos: `faHeart` (solid), `farHeart` (regular), `faCheckCircle`, `faCreditCard`, `faClock`.
 		- Se mantiene exportación por defecto de `FontAwesomeIcon`.
 
+	### Sistema de Autenticación Completo (11/11/2025 - NUEVO)
+
+	Se implementó un sistema completo de autenticación con registro, login y gestión de usuarios, incluyendo persistencia en localStorage:
+
+	- `src/composables/useAuthStore.js` — composable/store para autenticación global (NUEVO):
+		- `registerUser(userData)` — registra nuevo usuario con validación de email único:
+			- Valida que no exista email duplicado
+			- Crea usuario con id, nombre, email, password, fechaNacimiento
+			- Guarda en `users` ref y localStorage
+			- Retorna `{ success, message, user }`
+		- `loginUser(email, password)` — verifica credenciales:
+			- Busca usuario en array local
+			- Valida email y password
+			- Establece `currentUser` y lo guarda en localStorage
+			- Retorna `{ success, message, user }`
+		- `logoutUser()` — limpia sesión:
+			- Borra `currentUser` y localStorage
+			- Retorna mensaje de confirmación
+		- `loadUsersFromStorage()` — restaura estado desde localStorage:
+			- Llamada en `onMounted()` de components
+			- Restaura array de usuarios y usuario actual
+		- `getCurrentUser()`, `getAllUsers()` — getters para acceso a datos
+		- `isAuthenticated` — computed que verifica si hay usuario activo
+		- Estado: `users` ref[], `currentUser` ref, `isAuthenticated` computed
+		- ⚠️ TODO: Reemplazar endpoints `/api/auth/register` y `/api/auth/login` con backend real
+
+	- `src/components/RegisterComponents.vue` — formulario de registro (NUEVO):
+		- Campos: **nombre, email, password, confirmPassword, fechaNacimiento** (5 campos requeridos)
+		- Validaciones dinámicas:
+			- Nombre: no vacío
+			- Email: formato válido (regex) + no duplicado en store
+			- Password: mínimo 6 caracteres, indicador visual "6 / 6 caracteres mínimo ✓"
+			- Confirmación: coincide con password, indicador "✓ Las contraseñas coinciden" o "✗ Las contraseñas no coinciden"
+			- Fecha de nacimiento: requerida
+		- Estados:
+			- `isFormValid` computed: true solo si todos los campos son válidos
+			- `isSubmitting` ref: desactiva inputs/botones mientras se procesa
+			- `submitError` / `submitMessage` refs: muestran feedback al usuario
+		- Funcionalidad:
+			- `handleRegister()` async: valida y llama `authStore.registerUser()`
+			- En éxito: resetea form, muestra mensaje y redirige a `/login` después de 2 segundos
+			- En error: muestra mensaje de error específico
+			- `resetForm()` function: limpia todos los campos y mensajes
+		- Estilo:
+			- Border dorado 2px `#FFD700`, rounded-3xl
+			- Grid responsive: flex-col → md:flex-row
+			- Inputs con ring focus `#FFD700`, rounded-lg, placeholder gris
+			- Botones: gris con hover oscuro, deshabilitados semi-transparentes
+		- Enlace a login: "¿Ya tienes cuenta? Inicia sesión aquí"
+		- Debug: muestra "Formulario válido: ✓ Sí / ✗ No"
+
+	- `src/components/LoginComponents.vue` — formulario de inicio de sesión (ACTUALIZADO):
+		- **Diseño original preservado**: ButtonAnimatedComponent, Button3Components, border-[#E6C200]
+		- Campos: **email, password** (simples refs, no formData object)
+		- Validaciones:
+			- Email: no vacío + formato válido (regex)
+			- Password: mínimo 6 caracteres
+			- Credenciales: coinciden con usuario registrado en store
+		- Estados:
+			- `submitError` ref: muestra errores en rojo
+			- `isSubmitting` ref: desactiva inputs/botón durante login
+		- Funcionalidad:
+			- `onMounted()` hook: carga usuarios desde localStorage (`authStore.loadUsersFromStorage()`)
+			- `handleLogin()` async: valida campos y llama `authStore.loginUser()`
+			- En éxito: resetea form y redirige a `/home` después de 2 segundos
+			- En error: muestra mensaje específico
+		- Estilo:
+			- Max-width sm → lg, border-2 border-[#E6C200], rounded-2xl
+			- ButtonAnimatedComponent para inputs animados
+			- Button3Components para submit con estado disabled
+			- Error message: bg-red-500/20, border-red-500, text-red-400
+		- Enlace a registro: "¿No tienes cuenta? Regístrate aquí"
+
+	- `src/components/ContactComponents.vue` — formulario de contacto (ACTUALIZADO):
+		- Campos: **nombre, apellido, correo, mensaje**
+		- Validaciones:
+			- Nombre: no vacío
+			- Apellido: no vacío
+			- Correo: formato válido (regex)
+			- Mensaje: **mínimo 15 caracteres**, indicador visual dinámico:
+				- Contador: "5 / 15 caracteres mínimo" → "15 / 15 caracteres mínimo ✓ Válido"
+				- Focus ring: `focus:ring-[#FFD700]` (inválido) → `focus:ring-green-500` (válido)
+		- Estados:
+			- `isFormValid` computed: true si todos cumples requisitos
+			- `isSubmitting` ref: desactiva durante envío
+			- `submitError` / `submitMessage` refs: feedback al usuario
+		- Funcionalidad:
+			- `handleSubmit()` async: valida y envía POST a `/api/contact`
+			- En éxito: muestra "¡Tu mensaje ha sido enviado exitosamente!" y resetea después de 5 segundos
+			- En error: muestra mensaje de error específico
+			- `resetForm()` function: limpia formulario
+		- Layout responsive:
+			- Nombre + Apellido: flex-col → md:flex-row (2 columnas en desktop)
+			- Correo: full width
+			- Mensaje: textarea con 6 filas, resize-none
+		- Estilo:
+			- Border dorado 2px `#FFD700`, rounded-3xl
+			- Inputs/textarea con ring focus dinámico
+			- Botones: gris con hover, deshabilitados semi-transparentes
+		- Debug: "Formulario válido: ✓ Sí / ✗ No" con detalles de validación
+		- ⚠️ TODO: Reemplazar endpoint `/api/contact` con backend real
+
+	### Flujo de autenticación (11/11/2025):
+
+	```
+	RegisterComponents (captura datos)
+	  └→ authStore.registerUser() → almacena en users[] + localStorage
+	     └→ redirige a LoginComponents después de éxito
+
+	LoginComponents (verifica credenciales)
+	  ├→ onMounted() → carga usuarios desde localStorage
+	  └→ authStore.loginUser() → busca usuario + verifica password
+	     └→ establece currentUser + localStorage
+	        └→ redirige a Home si éxito
+
+	ContactComponents (envía contacto)
+	  └→ POST /api/contact (TODO: backend)
+	     └→ muestra confirmación o error
+	```
+
+	### Características del sistema de autenticación (11/11/2025):
+
+	✅ **Registro completo**:
+	- 5 campos requeridos: nombre, email, password, confirmPassword, fechaNacimiento
+	- Validación de email único (impide duplicados)
+	- Indicadores visuales de validez (contraseñas coinciden, password strength)
+	- Error messages específicos por campo
+	- Persistencia en localStorage (desarrollo) / TODO: JWT en backend
+
+	✅ **Login funcional**:
+	- Verifica credenciales contra usuarios registrados
+	- Restora sesión anterior al abrir app (loadUsersFromStorage)
+	- Mantiene diseño original (ButtonAnimatedComponent, Button3Components)
+	- Error handling con mensajes claros
+	- Desactiva inputs/botones durante proceso
+
+	✅ **Contacto dinámico**:
+	- Validación de 15+ caracteres en mensaje
+	- Contador visual de caracteres con feedback colorido
+	- Layout responsive (nombre+apellido lado a lado en desktop)
+	- Mensaje de éxito/error con auto-limpieza
+	- Integración con backend lista (cambiar endpoint)
+
+	✅ **Persistencia**:
+	- localStorage guarda usuarios registrados
+	- localStorage mantiene sesión actual
+	- App carga sesión automáticamente al iniciar (onMounted)
+	- ⚠️ Temporal: usar para desarrollo solo
+
+	✅ **Seguridad (TODO)**:
+	- Validación en cliente completa
+	- ⚠️ Passwords guardados en plaintext (solo desarrollo)
+	- TODO: Implementar JWT en backend
+	- TODO: Hash de passwords en servidor
+
 	### Flujo de datos del perfil (11/11/2025):
 
 	```

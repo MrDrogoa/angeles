@@ -11,6 +11,9 @@ import SocialViews from "@/views/SocialViews.vue";
 import DestacadasViews from "@/views/DestacadasViews.vue";
 import ProfileViews from "@/views/ProfileViews.vue";
 import ComentsViews from "@/views/ComentsViews.vue";
+import ContactViews from "@/views/ContactViews.vue";
+import LoginViews from "@/views/LoginViews.vue";
+import RegisterViews from "@/views/RegisterViews.vue";
 
 const routes = [
   {
@@ -107,6 +110,30 @@ const routes = [
     component: ComentsViews,
     meta: {
       title: "Comentarios - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/contact",
+    name: "Contacto",
+    component: ContactViews,
+    meta: {
+      title: "Contacto - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: LoginViews,
+    meta: {
+      title: "Iniciar Sesión - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: RegisterViews,
+    meta: {
+      title: "Registro - Angeles y Demonios",
     },
   },
 ];

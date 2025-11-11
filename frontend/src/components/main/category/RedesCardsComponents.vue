@@ -4,6 +4,7 @@ import { ref, computed } from "vue";
 import Hero from "@/assets/hero.webp";
 import ReturnComponents from "@/components/buttons/ReturnComponents.vue";
 import ButtonCarouselComponents from "@/components/buttons/ButtonCarouselComponents.vue";
+import MainOutstanding from "@/components/main/MainOutstanding.vue";
 
 const currentPage = ref(1);
 const itemsPerPage = 9;
@@ -271,6 +272,7 @@ const nextPage = () => {
       </button>
     </div>
   </section>
+  <main-outstanding class="py-8 md:py-20 lg:py-25 xl:py-30" />
 </template>
 
 <style scoped></style>

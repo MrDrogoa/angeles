@@ -5,6 +5,7 @@ import TitleH2Components from "@/components/TitleH2Components.vue";
 import { useRouter } from "vue-router";
 import Hero from "@/assets/hero.webp";
 import ButtonCarouselComponents from "@/components/buttons/ButtonCarouselComponents.vue";
+import MainRedes from "@/components/main/MainRedes.vue";
 
 const router = useRouter();
 
@@ -517,6 +518,8 @@ const nextPage = () => {
       </button>
     </div>
   </section>
+
+  <main-redes class="py-8 md:py-20 lg:py-25 xl:py-30" />
 </template>
 
 <style scoped></style>

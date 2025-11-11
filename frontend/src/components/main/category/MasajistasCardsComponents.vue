@@ -5,6 +5,7 @@ import TitleH2Components from "@/components/TitleH2Components.vue";
 import { useRouter } from "vue-router";
 import Hero from "@/assets/hero.webp";
 import ButtonCarouselComponents from "@/components/buttons/ButtonCarouselComponents.vue";
+import MainNews from "@/components/main/MainNews.vue";
 
 const router = useRouter();
 
@@ -517,6 +518,7 @@ const nextPage = () => {
       </button>
     </div>
   </section>
+  <main-news />
 </template>
 
 <style scoped></style>
