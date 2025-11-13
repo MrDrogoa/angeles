@@ -456,19 +456,19 @@ const nextPage = () => {
         v-for="card in paginatedCards"
         :key="card.id"
         @click="goToPage(card.path)"
-        class="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:border-white hover:shadow-2xl hover:-translate-y-2"
+        class="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2"
       >
         <!-- Imagen con overlay -->
         <div class="relative overflow-hidden aspect-3/4 group">
           <img
             :src="card.img"
             :alt="card.title"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            class="w-full h-full object-cover transition-transform duration-500 lg:group-hover:scale-110"
           />
 
           <!-- Overlay degradado (sombreado) -->
           <div
-            class="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-70 hover:opacity-80 transition-opacity duration-300"
+            class="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-70 lg:hover:opacity-80 transition-opacity duration-300"
           ></div>
         </div>
 

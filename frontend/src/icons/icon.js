@@ -17,10 +17,18 @@ import {
   faDollarSign,
   faChevronLeft,
   faChevronRight,
+  faChevronDown,
   faArrowTurnDown,
   faCheckCircle,
   faCreditCard,
   faClock,
+  faNewspaper,
+  faFile,
+  faMapPin,
+  faArrowRight,
+  faMagnifyingGlass,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
@@ -45,10 +53,18 @@ library.add(
   faDollarSign,
   faChevronLeft,
   faChevronRight,
+  faChevronDown,
   faArrowTurnDown,
   faCheckCircle,
   faCreditCard,
   faClock,
+  faNewspaper,
+  faFile,
+  faMapPin,
+  faArrowRight,
+  faMagnifyingGlass,
+  faEye,
+  faEyeSlash,
   // Regular
   farHeart,
   // Brands

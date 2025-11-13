@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import ButtonComponents from "../buttons/ButtonComponents.vue";
-import Button2Components from "../buttons/Button2Components.vue";
-import Button3Components from "../buttons/Button3Components.vue";
+import ButtonComponents from "@/components/buttons/ButtonComponents.vue";
+import Button2Components from "@/components/buttons/Button2Components.vue";
+import Button3Components from "@/components/buttons/Button3Components.vue";
+import SearchComponents from "@/components/SearchComponents.vue";
 
 const isMenuOpen = ref(false);
 
@@ -27,17 +28,6 @@ const menuItems = [
   { label: "Normal", url: "/normal" },
   { label: "Todas", url: "/all" },
 ];
-
-const locations = [
-  "Escorts en Independencia",
-  "Escorts en La Florida",
-  "Escorts en Las Condes",
-  "Escorts en Lo Barnechea",
-  "Escorts en Ñuñoa",
-  "Escorts en Providencia",
-  "Escorts en Santiago Centro",
-  "Escorts en Vitacura",
-];
 </script>
 
 <template>
@@ -45,24 +35,10 @@ const locations = [
     <div class="flex items-center gap-2 md:gap-4 lg:gap-6">
       <!-- Search Icon -->
       <button
-        class="text-gray-300 hover:text-[#FFD700] transition-colors duration-200"
+        class="hover:text-[#FFD700] transition-colors duration-200"
         aria-label="Buscar"
       >
-        <font-awesome-icon
-          icon="search"
-          class="text-lg lg:text-xl cursor-pointer"
-        />
-      </button>
-
-      <!-- Heart Icon -->
-      <button
-        class="text-gray-300 hover:text-[#FFD700] transition-colors duration-200"
-        aria-label="Favoritos"
-      >
-        <font-awesome-icon
-          icon="heart"
-          class="text-lg lg:text-xl cursor-pointer"
-        />
+        <search-components />
       </button>
 
       <!-- Menu Icon -->
@@ -90,7 +66,7 @@ const locations = [
       <div
         v-if="isMenuOpen"
         @click.self="closeMenu"
-        class="absolute top-14 md:top-16 lg:top-20 xl:top-24 left-0 right-0 bg-[#0a0a0a] border-t border-b border-[#FFD700] shadow-2xl max-h-[80vh] overflow-y-auto z-50"
+        class="absolute top-14 md:top-16 lg:top-20 xl:top-24 left-0 right-0 bg-[#0a0a0a] border-t border-b border-[#FFD700] shadow-2xl max-h-[80vh] overflow-y-auto z-100"
       >
         <div
           @click.self="closeMenu"
@@ -107,9 +83,7 @@ const locations = [
             </button>
           </div>
 
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-3"
-          >
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 pb-3">
             <!-- Secciones Column -->
             <div @click.self="closeMenu">
               <h3
@@ -125,26 +99,6 @@ const locations = [
                     class="text-gray-300 hover:text-[#FFD700] transition-colors duration-200 text-sm md:text-base py-1"
                   >
                     {{ item.label }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Locations Column -->
-            <div @click.self="closeMenu">
-              <h3
-                class="text-white font-bold text-lg mb-4 border-b border-gray-700 pb-2"
-              >
-                Ubicaciones
-              </h3>
-              <ul class="space-y-2">
-                <li v-for="location in locations" :key="location">
-                  <a
-                    href="#"
-                    @click="closeMenu"
-                    class="text-gray-300 hover:text-[#FFD700] transition-colors duration-200 text-sm md:text-base py-1"
-                  >
-                    {{ location }}
                   </a>
                 </li>
               </ul>

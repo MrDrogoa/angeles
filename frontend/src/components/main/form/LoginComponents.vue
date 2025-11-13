@@ -69,9 +69,11 @@ const handleLogin = async () => {
     <return-components />
     <div class="flex flex-col items-center justify-center">
       <div
-        class="border-2 border-[#E6C200] px-6 py-10 lg:px-8 lg:py-13 xl:px-10 xl:py-15 rounded-2xl shadow-2xl w-full max-w-sm lg:max-w-md"
+        class="border-2 border-[#E6C200] px-6 py-10 lg:px-8 lg:py-13 xl:px-10 xl:py-15 rounded-2xl shadow-2xl w-full max-w-sm lg:max-w-md bg-gray-900/50"
       >
-        <h2 class="text-3xl font-bold mb-8 text-center text-white">
+        <h2
+          class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-8 text-center text-white"
+        >
           Iniciar Sesión
         </h2>
         <form

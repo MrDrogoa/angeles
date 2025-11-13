@@ -60,7 +60,7 @@ const goToPage = (path) => {
               class="w-full max-w-[180px] sm:max-w-[200px] md:max-w-60 lg:max-w-[280px] xl:max-w-80 mx-auto"
             >
               <div
-                class="aspect-3/4 overflow-hidden border-2 border-[#FFD700] rounded-xl transition-all duration-300 hover:border-white hover:shadow-2xl"
+                class="aspect-3/4 overflow-hidden border-2 border-[#FFD700] rounded-xl transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl"
               >
                 <img
                   :src="card.img"

@@ -23,6 +23,19 @@ const isSubmitting = ref(false);
 const submitMessage = ref("");
 const submitError = ref("");
 
+// Estado para mostrar/ocultar contraseñas
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
+// Funciones para toggle de visibilidad
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+
+const toggleConfirmPasswordVisibility = () => {
+  showConfirmPassword.value = !showConfirmPassword.value;
+};
+
 // Validar que el formulario sea válido
 const isFormValid = computed(() => {
   const nombre = formData.value.nombre.trim();
@@ -205,14 +218,27 @@ const resetForm = () => {
               Contraseña
               <span class="text-gray-400 text-xs"> (Mínimo 6 caracteres) </span>
             </label>
-            <input
-              id="password"
-              v-model="formData.password"
-              type="password"
-              placeholder="Tu contraseña"
-              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
-              :disabled="isSubmitting"
-            />
+            <div class="relative">
+              <input
+                id="password"
+                v-model="formData.password"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="Tu contraseña"
+                class="w-full px-4 py-3 pr-12 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+                :disabled="isSubmitting"
+              />
+              <button
+                type="button"
+                @click="togglePasswordVisibility"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                :disabled="isSubmitting"
+              >
+                <font-awesome-icon
+                  :icon="showPassword ? 'eye' : 'eye-slash'"
+                  class="text-lg"
+                />
+              </button>
+            </div>
             <!-- Indicador de fortaleza -->
             <div class="mt-2 text-xs text-gray-400">
               {{ formData.password.length }} / 6 caracteres mínimo
@@ -233,21 +259,34 @@ const resetForm = () => {
             >
               Confirmar Contraseña
             </label>
-            <input
-              id="confirmPassword"
-              v-model="formData.confirmPassword"
-              type="password"
-              placeholder="Repite tu contraseña"
-              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
-              :class="
-                formData.confirmPassword.length > 0
-                  ? passwordsMatch
-                    ? 'focus:ring-green-500'
-                    : 'focus:ring-red-500'
-                  : 'focus:ring-[#FFD700]'
-              "
-              :disabled="isSubmitting"
-            />
+            <div class="relative">
+              <input
+                id="confirmPassword"
+                v-model="formData.confirmPassword"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Repite tu contraseña"
+                class="w-full px-4 py-3 pr-12 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                :class="
+                  formData.confirmPassword.length > 0
+                    ? passwordsMatch
+                      ? 'focus:ring-green-500'
+                      : 'focus:ring-red-500'
+                    : 'focus:ring-[#FFD700]'
+                "
+                :disabled="isSubmitting"
+              />
+              <button
+                type="button"
+                @click="toggleConfirmPasswordVisibility"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                :disabled="isSubmitting"
+              >
+                <font-awesome-icon
+                  :icon="showConfirmPassword ? 'eye' : 'eye-slash'"
+                  class="text-lg"
+                />
+              </button>
+            </div>
             <!-- Indicador de coincidencia -->
             <div
               v-if="formData.confirmPassword.length > 0"
@@ -299,7 +338,7 @@ const resetForm = () => {
             <button
               type="submit"
               :disabled="!isFormValid || isSubmitting"
-              class="px-8 py-3 font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="px-8 py-3 font-semibold bg-gray-600 lg:hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {{ isSubmitting ? "Registrando..." : "Registrarse" }}
             </button>
@@ -307,7 +346,7 @@ const resetForm = () => {
               type="button"
               @click="resetForm"
               :disabled="isSubmitting"
-              class="px-8 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="px-8 py-3 bg-gray-600 lg:hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               Limpiar
             </button>

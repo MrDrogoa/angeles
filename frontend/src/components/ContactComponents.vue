@@ -129,7 +129,7 @@ const resetForm = () => {
     <div class="flex flex-col items-center justify-center">
       <!-- Contenedor principal del formulario -->
       <div
-        class="border-2 border-[#FFD700] rounded-3xl p-6 md:p-8 lg:p-10 w-full max-w-2xl"
+        class="border-2 border-[#FFD700] rounded-3xl p-6 md:p-8 lg:p-10 w-full max-w-2xl bg-gray-900/50"
       >
         <!-- Formulario dinámico -->
         <form @submit.prevent="handleSubmit" class="flex flex-col gap-6">
@@ -246,7 +246,7 @@ const resetForm = () => {
             <button
               type="submit"
               :disabled="!isFormValid || isSubmitting"
-              class="px-8 py-3 font-semibold bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="px-8 py-3 font-semibold bg-gray-600 lg:hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {{ isSubmitting ? "Enviando..." : "Enviar" }}
             </button>
@@ -254,7 +254,7 @@ const resetForm = () => {
               type="button"
               @click="resetForm"
               :disabled="isSubmitting"
-              class="px-8 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="px-8 py-3 bg-gray-600 lg:hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               Limpiar
             </button>

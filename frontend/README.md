@@ -376,6 +376,49 @@ Ruta base: `frontend/src`
 
 	Estos cambios están listos y preparados para ser conectados a datos reales (back-end). Si quieres, puedo incluir en el README ejemplos de la estructura JSON esperada para `profileData` (útil para el API) o crear un pequeño mock service para consumir desde los componentes.
 
+	### Mejoras en Formularios de Autenticación (13/11/2025 - NUEVO)
+
+	Se implementaron mejoras en la experiencia de usuario de los formularios de autenticación, enfocándose en la visibilidad de contraseñas y refinamientos menores en validaciones:
+
+	- `src/icons/icon.js` — actualizado:
+		- Se agregaron iconos `faEye` (solid) y `faEyeSlash` (solid) para los botones de mostrar/ocultar contraseña.
+		- Estos iconos permiten alternar la visibilidad de los campos de contraseña en los formularios.
+
+	- `src/components/RegisterComponents.vue` — actualizado:
+		- **Funcionalidad de visibilidad de contraseña**: Se añadieron botones con íconos de ojo al lado derecho de los campos de contraseña y confirmación de contraseña.
+			- Estados reactivos: `showPassword` y `showConfirmPassword` (refs booleanos) para controlar la visibilidad.
+			- Funciones: `togglePasswordVisibility()` y `toggleConfirmPasswordVisibility()` para alternar entre `type="password"` y `type="text"`.
+			- Estilo: Botones posicionados absolutamente con `absolute right-3 top-1/2 transform -translate-y-1/2`, usando Tailwind para alineación.
+			- Iconos: `faEye` cuando la contraseña está oculta, `faEyeSlash` cuando está visible.
+			- Deshabilitación: Los botones se deshabilitan durante el envío del formulario (`isSubmitting`).
+		- Mantiene todas las validaciones existentes: indicadores visuales de coincidencia de contraseñas, validación de email único, etc.
+		- Mejora la UX al permitir a los usuarios verificar sus contraseñas sin necesidad de borrar y reescribir.
+
+	- `src/components/ContactComponents.vue` — actualizado:
+		- Refinamientos menores en el manejo de estados y validaciones, asegurando consistencia con los otros formularios.
+
+	- `src/components/LoginComponents.vue` — actualizado:
+		- Refinamientos menores en el manejo de errores y estados de carga, preservando el diseño original.
+
+	### Características de las mejoras en autenticación (13/11/2025):
+
+	✅ **Visibilidad de contraseñas**:
+	- Botones intuitivos con íconos de Font Awesome para mostrar/ocultar contraseñas.
+	- Funciona en ambos campos de contraseña en el registro (password y confirmPassword).
+	- No interfiere con las validaciones existentes ni con el estado de envío.
+	- Mejora la accesibilidad y reduce errores de tipeo en contraseñas.
+
+	✅ **Consistencia visual**:
+	- Los íconos siguen el esquema de colores dorado (#FFD700) del proyecto.
+	- Posicionamiento consistente y responsive.
+	- Integración perfecta con Tailwind CSS.
+
+	✅ **Estado reactivo**:
+	- Cambios inmediatos en el tipo de input sin recargar la página.
+	- Estados independientes para cada campo de contraseña.
+
+	Estos cambios completan la implementación del sistema de autenticación, proporcionando una experiencia de usuario más fluida y segura.
+
 ## Dependencias principales usadas
 
 - Vue 3 (script setup)

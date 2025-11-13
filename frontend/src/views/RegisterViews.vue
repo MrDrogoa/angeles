@@ -1,5 +1,5 @@
 <script setup>
-import RegisterComponents from "@/components/RegisterComponents.vue";
+import RegisterComponents from "@/components/main/form/RegisterComponents.vue";
 </script>
 
 <template>

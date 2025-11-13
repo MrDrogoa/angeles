@@ -1,5 +1,5 @@
 <script setup>
-import LoginComponents from "@/components/LoginComponents.vue";
+import LoginComponents from "@/components/main/form/LoginComponents.vue";
 </script>
 
 <template>
