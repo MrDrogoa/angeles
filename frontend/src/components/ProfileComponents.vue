@@ -175,24 +175,27 @@ const openWhatsApp = () => {
         <!-- Nombre y favorito -->
         <div class="flex items-center justify-between gap-4">
           <h2
-            class="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-[#A2A2A2]"
+            class="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-[#A2A2A2] mode-title"
           >
             {{ profileData.name }}
           </h2>
           <button
             @click="toggleFavorite"
-            class="text-2xl sm:text-3xl transition-colors duration-300 focus:outline-none"
+            class="text-2xl sm:text-3xl transition-colors duration-300 focus:outline-none mode-heart"
             :class="profileData.isFavorite ? 'text-red-500' : 'text-gray-400'"
             aria-label="Marcar como favorito"
           >
             <font-awesome-icon
               :icon="profileData.isFavorite ? 'heart' : ['far', 'heart']"
+              class="mode-icon"
             />
           </button>
         </div>
 
         <!-- Categoría -->
-        <p class="text-[#FFD700] text-base sm:text-lg font-semibold -mt-2">
+        <p
+          class="text-[#FFD700] text-base sm:text-lg font-semibold -mt-2 mode-paragraph"
+        >
           {{ profileData.category }}
         </p>
 
@@ -207,11 +210,11 @@ const openWhatsApp = () => {
                 star <= Math.round(parseFloat(averageAssessment))
                   ? 'text-[#FFD700]'
                   : 'text-gray-600',
-                'w-4 h-4 sm:w-5 sm:h-5',
+                'w-4 h-4 sm:w-5 sm:h-5 mode-icon',
               ]"
             />
           </div>
-          <span class="text-gray-300 text-sm sm:text-base">
+          <span class="text-gray-300 text-sm sm:text-base mode-paragraph">
             {{ averageAssessment }} / 5 ({{ totalAssessments }}
             {{ totalAssessments === 1 ? "valoración" : "valoraciones" }})
           </span>
@@ -222,7 +225,7 @@ const openWhatsApp = () => {
           <span
             v-for="(char, index) in profileData.characteristics"
             :key="index"
-            class="px-3 sm:px-4 py-1.5 sm:py-2 border-2 border-[#FFD700] rounded-full text-white text-xs sm:text-sm font-medium hover:bg-[#FFD700] hover:text-black transition-all duration-300 cursor-default"
+            class="px-3 sm:px-4 py-1.5 sm:py-2 border-2 border-[#FFD700] rounded-full text-white text-xs sm:text-sm font-medium hover:bg-[#FFD700] hover:text-black transition-all duration-300 cursor-default mode-carac-btn"
           >
             {{ char }}
           </span>
@@ -232,16 +235,16 @@ const openWhatsApp = () => {
         <div class="flex gap-3 sm:gap-4 justify-center lg:justify-start">
           <button
             @click="callNumber"
-            class="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-all duration-300 text-sm sm:text-base font-medium cursor-pointer"
+            class="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-600 lg:hover:bg-gray-500 text-white rounded-lg transition-all duration-300 text-sm sm:text-base font-medium cursor-pointer mode-btn"
           >
-            <font-awesome-icon icon="phone" />
+            <font-awesome-icon icon="phone" class="mode-icon" />
             <span>Llamar</span>
           </button>
           <button
             @click="openWhatsApp"
-            class="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-all duration-300 text-sm sm:text-base font-medium cursor-pointer"
+            class="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-600 lg:hover:bg-gray-500 text-white rounded-lg transition-all duration-300 text-sm sm:text-base font-medium cursor-pointer mode-btn"
           >
-            <font-awesome-icon :icon="['fab', 'whatsapp']" />
+            <font-awesome-icon :icon="['fab', 'whatsapp']" class="mode-icon" />
             <span>whatsapp</span>
           </button>
         </div>

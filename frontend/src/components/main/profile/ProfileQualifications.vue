@@ -86,22 +86,24 @@ const qualificationCards = computed(() => [
         :class="[
           'flex flex-col items-center justify-center rounded-2xl',
           'w-24 h-24 md:w-30 md:h-30',
-          'bg-gray-800/50 hover:bg-gray-800 transition-colors duration-300',
+          'bg-gray-800/50 lg:hover:bg-gray-800 transition-colors duration-300',
           'border-2',
           card.isHighlight
-            ? 'border-[#FFD700] text-[#FFD700]'
-            : 'border-white text-white',
+            ? 'border-[#FFD700] text-[#FFD700] mode-card'
+            : 'border-white text-white mode-card',
         ]"
       >
         <!-- Número grande -->
-        <div class="text-2xl sm:text-3xl md:text-4xl font-bold">
+        <div
+          class="text-2xl sm:text-3xl md:text-4xl font-bold mode-title mode-profile-title"
+        >
           {{ card.value }}
         </div>
 
         <!-- Label -->
         <div
           :class="[
-            'text-xs sm:text-sm md:text-base text-center mt-2 whitespace-pre-line',
+            'text-xs sm:text-sm md:text-base text-center mt-2 whitespace-pre-line mode-paragraph',
             card.isHighlight ? 'text-[#FFD700]' : 'text-gray-300',
           ]"
         >

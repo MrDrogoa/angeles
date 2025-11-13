@@ -64,13 +64,13 @@ const isHeartActive = (heartNumber) => {
       v-if="totalAssessments > 0"
       class="text-center mb-8 md:mb-10 p-4 bg-gray-800/30 rounded-xl"
     >
-      <p class="text-gray-300 text-sm md:text-base mb-2">
+      <p class="text-gray-300 text-sm md:text-base mb-2 mode-paragraph">
         Promedio de valoraciones
       </p>
-      <p class="text-[#FFD700] text-3xl md:text-4xl font-bold">
+      <p class="text-[#FFD700] text-3xl md:text-4xl font-bold mode-paragraph">
         {{ averageRating }}
       </p>
-      <p class="text-gray-400 text-xs md:text-sm mt-2">
+      <p class="text-gray-400 text-xs md:text-sm mt-2 mode-paragraph">
         {{ totalAssessments }}
         {{ totalAssessments === 1 ? "valoración" : "valoraciones" }}
       </p>
@@ -84,7 +84,7 @@ const isHeartActive = (heartNumber) => {
         @click="selectHearts(heart)"
         @mouseenter="setHover(heart)"
         @mouseleave="setHover(0)"
-        class="transition-all duration-300 transform hover:scale-110 focus:outline-none cursor-pointer"
+        class="transition-all duration-300 transform hover:scale-110 focus:outline-none cursor-pointer mode-heart"
         :class="[isHeartActive(heart) ? 'opacity-100' : 'opacity-40']"
         :aria-label="`Valorar con ${heart} corazones`"
       >
@@ -92,7 +92,7 @@ const isHeartActive = (heartNumber) => {
           :icon="isHeartActive(heart) ? 'heart' : ['far', 'heart']"
           :class="[
             isHeartActive(heart) ? 'text-[#FFD700]' : 'text-white',
-            'text-2xl md:text-3xl lg:text-4xl xl:text-5xl',
+            'text-2xl md:text-3xl lg:text-4xl xl:text-5xl mode-icon',
           ]"
         />
       </button>

@@ -15,7 +15,7 @@ import Hero from "@/assets/hero.webp";
 
       <!-- overlay sombreado -->
       <div
-        class="hidden md:block absolute inset-0 bg-linear-to-b from-transparent via-black/60 to-black/60 pointer-events-none"
+        class="hidden md:block absolute inset-0 bg-linear-to-b from-transparent via-black/60 to-black/60 pointer-events-none mode-bg-hero"
       ></div>
     </div>
   </section>

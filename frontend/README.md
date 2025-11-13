@@ -419,6 +419,149 @@ Ruta base: `frontend/src`
 
 	Estos cambios completan la implementación del sistema de autenticación, proporcionando una experiencia de usuario más fluida y segura.
 
+	### Sistema de Accesibilidad Completo (13/11/2025 - NUEVO)
+
+	Se implementó un sistema integral de accesibilidad con 8 modos diferentes, botones flotantes y controles dinámicos de tamaño de texto:
+
+	- `src/composables/useAccessibilityStore.js` — composable/store para gestión de accesibilidad (NUEVO):
+		- `currentMode` ref: modo actual seleccionado (normal, blindness, dyslexia, etc.)
+		- `textSize` ref: tamaño actual del texto (80-200%)
+		- `textSizeConfig`: configuración personalizable de límites y pasos:
+			- `min: 80` — tamaño mínimo (80%)
+			- `max: 200` — tamaño máximo (200%)
+			- `step: 10` — incremento por click (10%)
+			- `default: 100` — tamaño por defecto (100%)
+		- Métodos principales:
+			- `setAccessibilityMode(modeId)` — cambia modo y aplica clase CSS
+			- `increaseTextSize()` / `decreaseTextSize()` — controla tamaño de h1-h6 y párrafos
+			- `resetTextSize()` — vuelve al 100%
+			- `applyTextSize(size)` — aplica estilos dinámicos solo a títulos y párrafos
+			- `loadAccessibilityMode()` — restaura configuración desde localStorage
+		- Computed properties:
+			- `isTextSizeAtMax` / `isTextSizeAtMin` — deshabilita botones en límites
+			- `getCurrentMode()` — obtiene modo actual
+		- Persistencia: guarda modo y tamaño en localStorage
+
+	- `src/components/AccessiblityComponents.vue` — componente flotante de accesibilidad (NUEVO):
+		- **Posicionamiento**: botón flotante dorado (#FFD700) en lado derecho, centrado verticalmente
+		- **Botón principal**: icono de accesibilidad universal (universal-access)
+		- **Panel desplegable**: 8 modos en grid flexible:
+			1. **Normal** (icono eye) — modo estándar
+			2. **Ceguera** (icono eye-slash) — optimizado para lectores de pantalla
+			3. **Dislexia** (icono book) — fuente amigable y espaciado aumentado
+			4. **Alto Contraste** (icono circle-half-stroke) — máximo contraste blanco/amarillo
+			5. **Texto Grande** (icono text-height) — **ESPECIAL**: muestra botones + y - para control dinámico
+			6. **Luz** (icono sun) — tema claro con máxima claridad
+			7. **Sin Movimiento** (icono pause) — desactiva todas las animaciones
+			8. **Descanso Visual** (icono moon) — tema oscuro relajante
+		- **Control de tamaño (Modo Texto Grande)**:
+			- Botón `-` para disminuir (deshabilitado al mínimo)
+			- Displays porcentaje actual (80%-200%)
+			- Botón `+` para aumentar (deshabilitado al máximo)
+			- Solo afecta títulos (h1-h6) y párrafos (p)
+		- **Interactividad**:
+			- Click en modo activa/desactiva
+			- Click fuera cierra panel
+			- Transiciones suaves
+			- Indicador visual de modo activo
+		- **Estilos con Tailwind**:
+			- Botones activos: fondo dorado, escala 110%, borde blanco
+			- Botones inactivos: gris oscuro, hover con dorado
+			- Panel: fondo gris oscuro, borde dorado, sombra 2xl
+			- Responsive: adapta tamaños en mobile
+
+	- `src/css/accessibilityBlindness.css` — modo ceguera:
+		- Fondo negro (#000000), texto blanco (#ffffff)
+		- Enlaces en amarillo (#ffff00) con subrayado
+		- Bordes amarillos en inputs y botones
+		- Oculta imágenes sin alt
+		- Mayor espaciado (letter-spacing, line-height)
+
+	- `src/css/accessibilityDyslexia.css` — modo dislexia:
+		- Fuente OpenDyslexic (alternativa: Trebuchet MS)
+		- Letter-spacing: 0.12em, line-height: 1.8-1.9
+		- Fondo gris claro (#f5f5f5), texto negro
+		- Enlaces azul (#0066cc) con subrayado
+		- Botones con mayor espaciado interno
+
+	- `src/css/accessibilityHighContrast.css` — modo alto contraste:
+		- Fondo negro, texto blanco/amarillo (#ffff00)
+		- Botones amarillo con texto negro (invertido)
+		- Bordes de 2px en todos los elementos
+		- Enlaces amarillo con subrayado
+		- Inputs con fondo oscuro y bordes amarillos
+
+	- `src/css/accessibilityLargeText.css` — modo texto grande:
+		- Solo estilos base (line-height: 1.6)
+		- El tamaño real se controla dinámicamente vía JavaScript
+		- Multiplica tamaños base:
+			- h1: 2x, h2: 1.75x, h3: 1.5x, h4: 1.25x, h5: 1.1x, h6: 1x
+			- p, span, li: 1x
+		- Configurable en `useAccessibilityStore.js`
+
+	- `src/css/accessibilityLight.css` — modo luz:
+		- Fondo blanco (#ffffff), texto negro (#000000)
+		- Enlaces azul (#0066cc) con subrayado
+		- Bordes negros en inputs (2px)
+		- Mayor legibilidad general
+		- Ideal para usuarios con sensibilidad a oscuridad
+
+	- `src/css/accessibilityReduceMotion.css` — modo sin movimiento:
+		- Desactiva todas las transiciones (transition: none !important)
+		- Desactiva todas las animaciones (animation: none !important)
+		- Elimina transforms y efectos de scroll suave
+		- Previene mareos y náuseas por movimiento
+
+	- `src/css/accessibilityVisualRest.css` — modo descanso visual:
+		- Fondo oscuro (#1a1a2e), texto gris claro (#e0e0e0)
+		- Acentos púrpura (#6c5ce7) y azul (#74b9ff)
+		- Botones con fondo oscuro (#16213e) y bordes púrpura
+		- Enlaces azul claro (#74b9ff)
+		- Inputs con tema oscuro
+		- Sin transiciones para reducir fatiga
+		- Overlay hero: gradiente gris suave (rgba(60-100, 60-100, 60-100, 0-0.5))
+
+	- `src/icons/icon.js` — actualizado:
+		- Se agregaron iconos: `faPlus`, `faMinus` para controles de tamaño
+		- Total de 40+ iconos Font Awesome disponibles globalmente
+
+	- `src/main.js` — actualizado:
+		- Importación de los 7 CSS de accesibilidad
+		- Registro global de `AccessibilityComponents`
+
+	### Características del sistema de accesibilidad (13/11/2025):
+
+	✅ **8 modos accesibles**:
+	- Normal, Ceguera, Dislexia, Alto Contraste, Texto Grande, Luz, Sin Movimiento, Descanso Visual
+	- Cada modo con estilos CSS completos y optimizados
+	- Transición suave entre modos
+
+	✅ **Control dinámico de tamaño**:
+	- Rango 80%-200% con incrementos de 10%
+	- Solo afecta títulos y párrafos
+	- Botones + y - se deshabilitan en límites
+	- Muestra porcentaje actual
+	- Persiste en localStorage
+
+	✅ **Interfaz intuitiva**:
+	- Botón flotante dorado en lado derecho
+	- Panel desplegable con 8 modos en grid
+	- Indicador visual de modo activo
+	- Click fuera para cerrar
+	- Responsive y accesible
+
+	✅ **Personalización sencilla**:
+	- Modificar límites en `textSizeConfig` (línea 11-14)
+	- Ajustar multiplicadores en `baseSizes` (línea 168-176)
+	- Agregar nuevos elementos (button, a, etc.)
+	- Cambiar colores en archivos CSS
+
+	✅ **Persistencia**:
+	- localStorage guarda modo activo
+	- localStorage guarda tamaño de texto
+	- Se restaura automáticamente al recargar
+	- Compatible con todos los navegadores modernos
+
 ## Dependencias principales usadas
 
 - Vue 3 (script setup)

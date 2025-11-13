@@ -69,10 +69,10 @@ const handleLogin = async () => {
     <return-components />
     <div class="flex flex-col items-center justify-center">
       <div
-        class="border-2 border-[#E6C200] px-6 py-10 lg:px-8 lg:py-13 xl:px-10 xl:py-15 rounded-2xl shadow-2xl w-full max-w-sm lg:max-w-md bg-gray-900/50"
+        class="mode-card border-2 border-[#E6C200] px-6 py-10 lg:px-8 lg:py-13 xl:px-10 xl:py-15 rounded-2xl shadow-2xl w-full max-w-sm lg:max-w-md bg-gray-900/50"
       >
         <h2
-          class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-8 text-center text-white"
+          class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-8 text-center text-white mode-title"
         >
           Iniciar Sesión
         </h2>
@@ -101,7 +101,9 @@ const handleLogin = async () => {
             v-if="submitError"
             class="w-full mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg"
           >
-            <p class="text-red-400 text-sm text-center">{{ submitError }}</p>
+            <p class="text-red-400 text-sm text-center mode-paragraph">
+              {{ submitError }}
+            </p>
           </div>
 
           <!-- Botón de Submit -->
@@ -115,7 +117,7 @@ const handleLogin = async () => {
 
           <!-- Enlace a registro -->
           <div class="text-center mt-6 w-full">
-            <p class="text-gray-300 text-sm">
+            <p class="text-gray-300 text-sm mode-paragraph">
               ¿No tienes cuenta?
               <router-link
                 to="/register"

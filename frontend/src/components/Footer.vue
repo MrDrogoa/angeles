@@ -59,7 +59,7 @@ const footerData = {
 </script>
 
 <template>
-  <footer class="border-t-2 border-[#DAA520]">
+  <footer class="border-t-2 border-[#DAA520] mode-footer-card">
     <div class="max-w-[1300px] mx-auto px-4 py-8 sm:py-10 md:py-12 lg:py-14">
       <!-- Grid principal del footer -->
       <div
@@ -68,7 +68,9 @@ const footerData = {
         <!-- Columna 1: Logo y Slogan -->
         <div class="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
           <Logo />
-          <h3 class="text-[#FFD700] text-lg sm:text-xl md:text-2xl font-bold">
+          <h3
+            class="text-[#FFD700] text-lg sm:text-xl md:text-2xl font-bold mode-title mode-title-footer"
+          >
             {{ footerData.slogan }}
           </h3>
         </div>
@@ -79,7 +81,9 @@ const footerData = {
           :key="index"
           class="flex flex-col gap-3"
         >
-          <h4 class="text-white text-base sm:text-lg font-semibold mb-2">
+          <h4
+            class="text-white text-base sm:text-lg font-semibold mb-2 mode-title mode-title-footer"
+          >
             {{ column.title }}
           </h4>
 
@@ -88,7 +92,7 @@ const footerData = {
             <li v-for="(link, linkIndex) in column.links" :key="linkIndex">
               <a
                 :href="link.url"
-                class="text-gray-400 hover:text-[#FFD700] transition-colors duration-200 text-sm sm:text-base"
+                class="text-gray-400 hover:text-[#FFD700] transition-colors duration-200 text-sm sm:text-base mode-paragraph mode-paragraph-footer"
               >
                 {{ link.text }}
               </a>
@@ -102,7 +106,9 @@ const footerData = {
         <div
           class="flex flex-col sm:flex-row items-center justify-between gap-6"
         >
-          <h4 class="text-white text-base sm:text-lg font-semibold">
+          <h4
+            class="text-white text-base sm:text-lg font-semibold mode-title mode-title-footer"
+          >
             {{ footerData.paymentMethods.title }}
           </h4>
 
@@ -127,7 +133,9 @@ const footerData = {
 
       <!-- Copyright (opcional) -->
       <div class="mt-8 pt-6 border-t border-gray-700 text-center">
-        <p class="text-gray-500 text-xs sm:text-sm">
+        <p
+          class="text-gray-500 text-xs sm:text-sm mode-paragraph mode-paragraph-footer"
+        >
           © {{ new Date().getFullYear() }} Angeles y Demonios. Todos los
           derechos reservados.
         </p>

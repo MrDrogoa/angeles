@@ -49,7 +49,7 @@ const goToPage = (path) => {
         v-for="card in newsCards"
         :key="card.id"
         @click="goToPage(card.path)"
-        class="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2"
+        class="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2 mode-card"
       >
         <!-- Imagen con overlay -->
         <div class="relative overflow-hidden aspect-3/4 group">
@@ -70,7 +70,7 @@ const goToPage = (path) => {
           class="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 lg:p-6 z-10 transform translate-y-0 transition-transform duration-300"
         >
           <h3
-            class="text-[#F5F5F5] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg text-center"
+            class="text-[#F5F5F5] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg text-center mode-title"
           >
             {{ card.title }}
           </h3>

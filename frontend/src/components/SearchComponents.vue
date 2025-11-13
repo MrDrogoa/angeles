@@ -2,16 +2,16 @@
 
 <template>
   <div class="flex justify-center items-center gap-4 relative">
-    <button class="icon">
+    <button class="icon mode-btn-icon">
       <font-awesome-icon
         icon="search"
-        class="text-lg lg:text-xl cursor-pointer text-white transition-colors duration-200"
+        class="text-lg lg:text-xl cursor-pointer text-white transition-colors duration-200 mode-icon"
       />
     </button>
     <input
       type="text"
       name="text"
-      class="input placeholder:text-white text-white w-7 h-7 lg:w-10 lg:h-10 rounded-full bg-[#DAA520]"
+      class="input placeholder:text-white w-7 h-7 lg:w-10 lg:h-10 rounded-full bg-[#DAA520] mode-input"
       placeholder="search.."
     />
   </div>
@@ -23,6 +23,7 @@
   outline: none;
   transition: 0.5s ease-in-out;
   padding-right: 40px;
+  color: #fff;
 }
 
 .icon {
@@ -47,6 +48,12 @@
   background-color: transparent;
   border-bottom: 3px solid #ffd700;
   transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+
+.blindness-mode .icon:focus ~ .input,
+.blindness-mode .input:focus {
+  border-color: #ffffff;
+  color: #fff !important;
 }
 
 @media (max-width: 768px) {

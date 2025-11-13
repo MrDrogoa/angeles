@@ -1,0 +1,44 @@
+/* Modo Alto Contraste - Mayor contraste de colores para baja visión */
+.high-contrast-mode .mode-title,
+.high-contrast-mode .mode-paragraph,
+.high-contrast-mode .mode-icon-menu {
+  color: #fff;
+}
+
+.high-contrast-mode .mode-card,
+.high-contrast-mode .mode-nav-card,
+.high-contrast-mode .mode-body,
+.high-contrast-mode .mode-access-card {
+  background-color: #000;
+}
+
+.high-contrast-mode .mode-footer-card {
+  background-color: #fff;
+}
+
+.high-contrast-mode .mode-paragraph-footer,
+.high-contrast-mode .mode-title-footer {
+  color: #000;
+}
+.high-contrast-mode .mode-logo {
+  background-color: #000;
+  border-radius: 20px;
+}
+
+.high-contrast-mode .mode-btn {
+  background-color: #ffee00;
+  color: #000;
+}
+
+.high-contrast-mode .mode-input,
+.high-contrast-mode .mode-btn-acces {
+  background-color: #ffee00;
+}
+
+.high-contrast-mode .mode-register-input {
+  background-color: #fff;
+}
+
+.high-contrast-mode .mode-icon-eyes {
+  background-color: transparent;
+}

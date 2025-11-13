@@ -60,7 +60,7 @@ const goToPage = (path) => {
               class="w-full max-w-[180px] sm:max-w-[200px] md:max-w-60 lg:max-w-[280px] xl:max-w-80 mx-auto"
             >
               <div
-                class="aspect-3/4 overflow-hidden border-2 border-[#FFD700] rounded-xl transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl"
+                class="aspect-3/4 overflow-hidden border-2 border-[#FFD700] rounded-xl transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl mode-card"
               >
                 <img
                   :src="card.img"
@@ -71,17 +71,17 @@ const goToPage = (path) => {
 
               <div class="p-2 sm:p-3 md:p-4">
                 <h3
-                  class="text-[#A2A2A2] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-center"
+                  class="text-[#A2A2A2] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-center mode-title"
                 >
                   {{ card.title }}
                 </h3>
                 <span
-                  class="block text-center text-xs md:text-sm lg:text-base xl:text-lg text-gray-400 mt-1 truncate"
+                  class="block text-center text-xs md:text-sm lg:text-base xl:text-lg text-gray-400 mt-1 truncate mode-paragraph"
                 >
                   {{ card.category }}
                 </span>
                 <p
-                  class="text-center text-xs md:text-base lg:text-lg xl:text-xl text-[#FFD700] mt-1 font-bold"
+                  class="text-center text-xs md:text-base lg:text-lg xl:text-xl text-[#FFD700] mt-1 font-bold mode-paragraph"
                 >
                   {{ card.location }}
                 </p>

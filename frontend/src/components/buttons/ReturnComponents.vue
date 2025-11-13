@@ -15,7 +15,7 @@ const goBack = () => {
 };
 
 const base =
-  "cursor-pointer text-[#FFD700] transition-colors duration-300 font-medium rounded-2xl text-sm lg:text-base xl:text-lg xl:hover:text-[#DAA520] mt-6 sm:mt-7 md:mt-8 xl:mt-9 mb-5 sm:mb-6 md:mb-9 lg:mb-11 xl:mb-13";
+  "cursor-pointer text-[#FFD700] transition-colors duration-300 font-medium rounded-2xl text-sm lg:text-base xl:text-lg xl:hover:text-[#DAA520] mt-6 sm:mt-7 md:mt-8 xl:mt-9 mb-5 sm:mb-6 md:mb-9 lg:mb-11 xl:mb-13 mode-btn-return";
 
 const classes = computed(() => {
   const extra = attrs.class || "";
@@ -33,7 +33,7 @@ const classes = computed(() => {
     <!-- Font Awesome icon (rotated) -->
     <font-awesome-icon
       icon="arrow-turn-down"
-      class="inline-block mr-2 transform rotate-90"
+      class="inline-block mr-2 transform rotate-90 mode-icon-return"
       aria-hidden="true"
     />
     Volver

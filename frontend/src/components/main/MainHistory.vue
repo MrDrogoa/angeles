@@ -167,7 +167,7 @@ function resumeStory() {
             />
           </div>
           <span
-            class="text-white text-xs sm:text-sm md:text-base font-medium truncate max-w-20"
+            class="text-white text-xs sm:text-sm md:text-base font-medium truncate max-w-20 mode-paragraph"
           >
             {{ story.user }}
           </span>
@@ -238,7 +238,7 @@ function resumeStory() {
               class="w-full h-full object-cover"
             />
           </div>
-          <span class="text-white font-semibold text-sm">
+          <span class="text-white font-semibold text-sm mode-paragraph">
             {{ stories[currentStory].user }}
           </span>
         </div>

@@ -29,20 +29,22 @@ const limitedComments = computed(() => {
       <div
         v-for="comment in limitedComments"
         :key="comment.user + comment.date"
-        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 bg-gray-800/30 hover:bg-gray-800/50 transition-all duration-300"
+        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 bg-gray-800/30 lg:hover:bg-gray-800/50 transition-all duration-300 mode-card"
       >
         <!-- Header: Usuario y Fecha -->
         <div class="flex items-start justify-between mb-3">
-          <h3 class="text-white font-semibold text-base md:text-lg">
+          <h3 class="text-white font-semibold text-base md:text-lg mode-title">
             {{ comment.user }}
           </h3>
-          <span class="text-gray-400 text-xs md:text-sm">
+          <span class="text-gray-400 text-xs md:text-sm mode-paragraph">
             {{ comment.date }}
           </span>
         </div>
 
         <!-- Comentario -->
-        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+        <p
+          class="text-gray-300 text-sm md:text-base leading-relaxed mode-paragraph"
+        >
           {{ comment.comment }}
         </p>
       </div>

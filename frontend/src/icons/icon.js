@@ -29,6 +29,15 @@ import {
   faMagnifyingGlass,
   faEye,
   faEyeSlash,
+  faUniversalAccess,
+  faCircleHalfStroke,
+  faTextHeight,
+  faSun,
+  faMoon,
+  faPause,
+  faBook,
+  faPlus,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
@@ -65,6 +74,15 @@ library.add(
   faMagnifyingGlass,
   faEye,
   faEyeSlash,
+  faUniversalAccess,
+  faCircleHalfStroke,
+  faTextHeight,
+  faSun,
+  faMoon,
+  faPause,
+  faBook,
+  faPlus,
+  faMinus,
   // Regular
   farHeart,
   // Brands

@@ -8,7 +8,7 @@ import Logo from "@/assets/logo.png";
       <img
         :src="Logo"
         alt="Angeles y Demonios"
-        class="w-30 lg:w-45 object-cover"
+        class="w-30 lg:w-45 object-cover mode-logo"
       />
     </router-link>
   </div>

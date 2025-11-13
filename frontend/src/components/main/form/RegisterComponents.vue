@@ -169,7 +169,7 @@ const resetForm = () => {
     <div class="flex flex-col items-center justify-center px-4">
       <!-- Contenedor principal del formulario -->
       <div
-        class="border-2 border-[#FFD700] rounded-3xl p-6 md:p-8 lg:p-10 w-full max-w-2xl bg-gray-900/50"
+        class="mode-card border-2 border-[#FFD700] rounded-3xl p-6 md:p-8 lg:p-10 w-full max-w-2xl bg-gray-900/50"
       >
         <!-- Formulario dinámico -->
         <form @submit.prevent="handleRegister" class="flex flex-col gap-6">
@@ -177,7 +177,7 @@ const resetForm = () => {
           <div>
             <label
               for="nombre"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Nombre
             </label>
@@ -186,7 +186,7 @@ const resetForm = () => {
               v-model="formData.nombre"
               type="text"
               placeholder="Tu nombre completo"
-              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input mode-register-input"
               :disabled="isSubmitting"
             />
           </div>
@@ -195,7 +195,7 @@ const resetForm = () => {
           <div>
             <label
               for="email"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Correo Electrónico
             </label>
@@ -204,7 +204,7 @@ const resetForm = () => {
               v-model="formData.email"
               type="email"
               placeholder="ejemplo@gmail.com"
-              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+              class="mode-input w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-register-input"
               :disabled="isSubmitting"
             />
           </div>
@@ -213,10 +213,12 @@ const resetForm = () => {
           <div>
             <label
               for="password"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Contraseña
-              <span class="text-gray-400 text-xs"> (Mínimo 6 caracteres) </span>
+              <span class="text-gray-400 text-xs mode-paragraph">
+                (Mínimo 6 caracteres)
+              </span>
             </label>
             <div class="relative">
               <input
@@ -224,18 +226,18 @@ const resetForm = () => {
                 v-model="formData.password"
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="Tu contraseña"
-                class="w-full px-4 py-3 pr-12 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+                class="mode-input w-full px-4 py-3 pr-12 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-register-input"
                 :disabled="isSubmitting"
               />
               <button
                 type="button"
                 @click="togglePasswordVisibility"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors mode-btn mode-icon-eyes"
                 :disabled="isSubmitting"
               >
                 <font-awesome-icon
                   :icon="showPassword ? 'eye' : 'eye-slash'"
-                  class="text-lg"
+                  class="text-lg mode-icon mode-icon-eyes"
                 />
               </button>
             </div>
@@ -244,7 +246,7 @@ const resetForm = () => {
               {{ formData.password.length }} / 6 caracteres mínimo
               <span
                 v-if="formData.password.length >= 6"
-                class="text-green-400 ml-2"
+                class="text-green-400 ml-2 mode-paragraph"
               >
                 ✓ Válido
               </span>
@@ -255,7 +257,7 @@ const resetForm = () => {
           <div>
             <label
               for="confirmPassword"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Confirmar Contraseña
             </label>
@@ -265,7 +267,7 @@ const resetForm = () => {
                 v-model="formData.confirmPassword"
                 :type="showConfirmPassword ? 'text' : 'password'"
                 placeholder="Repite tu contraseña"
-                class="w-full px-4 py-3 pr-12 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                class="w-full px-4 py-3 pr-12 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all mode-input mode-register-input"
                 :class="
                   formData.confirmPassword.length > 0
                     ? passwordsMatch
@@ -278,12 +280,12 @@ const resetForm = () => {
               <button
                 type="button"
                 @click="toggleConfirmPasswordVisibility"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors mode-btn mode-icon-eyes"
                 :disabled="isSubmitting"
               >
                 <font-awesome-icon
                   :icon="showConfirmPassword ? 'eye' : 'eye-slash'"
-                  class="text-lg"
+                  class="text-lg mode-icon"
                 />
               </button>
             </div>
@@ -292,10 +294,10 @@ const resetForm = () => {
               v-if="formData.confirmPassword.length > 0"
               class="mt-2 text-xs"
             >
-              <span v-if="passwordsMatch" class="text-green-400">
+              <span v-if="passwordsMatch" class="text-green-400 mode-paragraph">
                 ✓ Las contraseñas coinciden
               </span>
-              <span v-else class="text-red-400">
+              <span v-else class="text-red-400 mode-paragraph">
                 ✗ Las contraseñas no coinciden
               </span>
             </div>
@@ -305,7 +307,7 @@ const resetForm = () => {
           <div>
             <label
               for="fechaNacimiento"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Fecha de Nacimiento
             </label>
@@ -313,7 +315,7 @@ const resetForm = () => {
               id="fechaNacimiento"
               v-model="formData.fechaNacimiento"
               type="date"
-              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+              class="mode-input w-full px-4 py-3 bg-white rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-register-input"
               :disabled="isSubmitting"
             />
           </div>
@@ -338,7 +340,7 @@ const resetForm = () => {
             <button
               type="submit"
               :disabled="!isFormValid || isSubmitting"
-              class="px-8 py-3 font-semibold bg-gray-600 lg:hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="mode-btn px-8 py-3 font-semibold bg-gray-600 lg:hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {{ isSubmitting ? "Registrando..." : "Registrarse" }}
             </button>
@@ -346,7 +348,7 @@ const resetForm = () => {
               type="button"
               @click="resetForm"
               :disabled="isSubmitting"
-              class="px-8 py-3 bg-gray-600 lg:hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="mode-btn px-8 py-3 bg-gray-600 lg:hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               Limpiar
             </button>
@@ -354,7 +356,7 @@ const resetForm = () => {
 
           <!-- Enlace a login -->
           <div class="text-center">
-            <p class="text-gray-300 text-sm">
+            <p class="text-gray-300 text-sm mode-paragraph">
               ¿Ya tienes cuenta?
               <router-link
                 to="/login"
@@ -379,10 +381,10 @@ const resetForm = () => {
 
       <!-- Información adicional -->
       <div class="my-12 text-center">
-        <p class="text-gray-300 text-sm">
+        <p class="text-gray-300 text-sm mode-paragraph">
           Crea tu cuenta para acceder a todos nuestros servicios.
         </p>
-        <p class="text-gray-400 text-xs mt-2">
+        <p class="text-gray-400 text-xs mt-2 mode-paragraph">
           Tu información está segura con nosotros.
         </p>
       </div>

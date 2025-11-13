@@ -51,7 +51,7 @@ const goToPage = (path) => {
         :key="card.id"
         @click="goToPage(card.path)"
         :class="card.class"
-        class="w-[calc(30%-0.375rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2"
+        class="w-[calc(30%-0.375rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2 mode-card"
       >
         <!-- Imagen con overlay -->
         <div class="relative overflow-hidden aspect-3/4 group">
@@ -72,12 +72,12 @@ const goToPage = (path) => {
           class="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 lg:p-6 z-10 transform translate-y-0 transition-transform duration-300"
         >
           <h3
-            class="text-[#F5F5F5] font-bold text-xs sm:text-base md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg"
+            class="text-[#F5F5F5] font-bold text-xs sm:text-base md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg mode-title"
           >
             {{ card.title }}
           </h3>
           <p
-            class="text-[#A2A2A2] text-[8px] sm:text-xs md:text-sm lg:text-base xl:text-lg"
+            class="text-[#A2A2A2] text-[8px] sm:text-xs md:text-sm lg:text-base xl:text-lg mode-paragraph"
           >
             {{ card.description }}
           </p>

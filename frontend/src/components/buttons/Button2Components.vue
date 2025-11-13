@@ -6,7 +6,7 @@ const attrs = useAttrs();
 const emit = defineEmits(["click"]);
 
 const base =
-  "cursor-pointer bg-[#FFD000] hover:bg-none lg:hover:bg-[#FFB200] text-[#000000] transition-colors duration-300 font-medium rounded-2xl px-4 py-2 text-sm lg:text-base xl:text-lg";
+  "cursor-pointer bg-[#FFD000] hover:bg-none lg:hover:bg-[#FFB200] text-[#000000] transition-colors duration-300 font-medium rounded-2xl px-4 py-2 text-sm lg:text-base xl:text-lg mode-btn";
 
 const classes = computed(() => {
   const extra = attrs.class || "";

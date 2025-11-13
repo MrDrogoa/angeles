@@ -36,12 +36,12 @@ const toggleDropdown = () => {
   <div>
     <!-- DESKTOP: Barra horizontal -->
     <div
-      class="hidden m-auto lg:flex items-center justify-center gap-0 border-b border-[#FFD700] overflow-x-auto bg-[#1a1a1a]"
+      class="hidden m-auto lg:flex items-center justify-center gap-0 border-b border-[#FFD700] overflow-x-auto bg-[#1a1a1a] mode-nav-card"
     >
       <button
         @click="setLocation('HOME')"
         :class="[
-          'px-6 py-3 font-semibold text-white transition-colors duration-200 whitespace-nowrap',
+          'px-6 py-3 font-bold text-sm text-white transition-colors duration-200 whitespace-nowrap mode-btn',
           activeLocation === 'HOME'
             ? 'bg-[#DAA520]'
             : 'bg-[#DAA520] hover:bg-[#DAA520] transition-colors',
@@ -55,7 +55,7 @@ const toggleDropdown = () => {
         :key="location.id"
         @click="setLocation(location.name)"
         :class="[
-          'px-6 py-3 font-bold text-white transition-all duration-200 relative  whitespace-nowrap cursor-pointer',
+          'px-6 py-3 font-bold text-sm text-white transition-all duration-200 relative  whitespace-nowrap cursor-pointer mode-btn-location',
           activeLocation === location.name
             ? 'bg-[#DAA520]'
             : 'hover:bg-[#aa7b03]',
@@ -66,14 +66,17 @@ const toggleDropdown = () => {
     </div>
 
     <!-- MOBILE: Dropdown -->
-    <div class="lg:hidden relative border-b border-[#FFD700]">
+    <div class="lg:hidden relative border-b border-[#FFD700] mode-nav-card">
       <!-- Botón para abrir dropdown -->
       <button
         @click="toggleDropdown"
-        class="w-full bg-[#1a1a1a] text-white px-4 py-3 flex items-center border-b border-[#FFD700] justify-between transition-colors"
+        class="w-full bg-[#1a1a1a] text-white px-4 py-3 flex items-center border-b border-[#FFD700] justify-between transition-colors mode-nav-card"
       >
         <div class="flex items-center gap-2">
-          <font-awesome-icon icon="map-marker-alt" class="text-[#FFD700]" />
+          <font-awesome-icon
+            icon="map-marker-alt"
+            class="text-[#FFD700] mode-icon-profile"
+          />
           <span class="font-semibold text-xs md:text-base">Ciudad</span>
         </div>
         <font-awesome-icon
@@ -96,7 +99,7 @@ const toggleDropdown = () => {
       >
         <div
           v-if="isDropdownOpen"
-          class="absolute top-full left-0 right-0 bg-black shadow-lg z-50 max-h-96 overflow-y-auto border-b-2 border-r-2 border-l-2 border-[#ffd700]"
+          class="absolute top-full left-0 right-0 bg-black shadow-lg z-50 max-h-96 overflow-y-auto border-b-2 border-r-2 border-l-2 border-[#ffd700] mode-icon-profile mode-nav-card"
         >
           <button
             v-for="location in locations"
@@ -114,6 +117,11 @@ const toggleDropdown = () => {
         </div>
       </transition>
     </div>
+    <div
+      v-if="isDropdownOpen"
+      @click="toggleDropdown"
+      class="fixed inset-0 z-30"
+    ></div>
   </div>
 </template>
 

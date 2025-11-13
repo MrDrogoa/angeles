@@ -49,16 +49,19 @@ const labelLetters = computed(() => {
       v-model="inputValue"
       :type="type"
       required
-      class="bg-transparent border-0 rounded-lg border-b-2 border-white block w-full px-2 lg:px-4 py-[15px] text-lg text-white outline-none focus:border-[#E6C200]"
+      class="bg-transparent border-0 rounded-lg border-b-2 border-white block w-full px-2 lg:px-4 py-[15px] text-lg text-white outline-none focus:border-[#E6C200] mode-input"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
-    <label class="absolute top-[15px] left-0 pointer-events-none flex">
+    <label
+      class="absolute top-[15px] left-0 pointer-events-none flex mode-paragraph"
+    >
       <span
         v-for="(letter, index) in labelLetters"
         :key="index"
         :style="{ transitionDelay: `${letter.delay}ms` }"
         :class="['letter', { 'letter-active': isActive }]"
+        class="mode-paragraph"
       >
         {{ letter.char }}
       </span>

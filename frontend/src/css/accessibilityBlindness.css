@@ -1,0 +1,66 @@
+/* Modo Ceguera - Optimizado para lectores de pantalla y navegación por teclado */
+.blindness-mode .mode-title,
+.blindness-mode .mode-paragraph {
+  color: #fff;
+}
+
+.blindness-mode .mode-card,
+.blindness-mode .mode-nav-card,
+.blindness-mode .mode-footer-card {
+  border-color: #fff;
+}
+
+.blindness-mode .mode-card {
+  background-color: #1a1a1a;
+}
+
+.blindness-mode .mode-btn,
+.blindness-mode .mode-btn-acces {
+  background-color: #fff;
+  color: #000;
+}
+
+.blindness-mode .mode-btn:hover {
+  background-color: #a2a2a2;
+}
+
+.blindness-mode .mode-btn-location:hover {
+  background-color: #a2a2a2;
+  color: #000;
+}
+.blindness-mode .mode-btn-location:active {
+  background-color: #fff;
+  color: #000;
+}
+
+.blindness-mode .mode-input {
+  background-color: transparent;
+}
+
+.blindness-mode .mode-icon-menu,
+.blindness-mode .mode-icon-return,
+.blindness-mode .mode-btn-return {
+  color: #fff;
+}
+
+.blindness-mode .mode-carac-btn {
+  border-color: #fff;
+}
+
+.blindness-mode .mode-carac-btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.blindness-mode .mode-icon-profile {
+  color: #fff;
+}
+
+.blindness-mode .mode-access-card {
+  border-color: #fff;
+  background-color: #1a1a1a;
+}
+
+.blindness-mode .mode-register-input {
+  background-color: #fff;
+}

@@ -1,0 +1,105 @@
+/* Modo Sin Movimiento - Reduce animaciones y transiciones para evitar mareos */
+.reduce-motion-mode {
+  /* Remover todas las transiciones */
+  transition: none !important;
+  animation: none !important;
+}
+
+.reduce-motion-mode * {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Remover transiciones específicas */
+.reduce-motion-mode button,
+.reduce-motion-mode a,
+.reduce-motion-mode input {
+  transition: none !important;
+}
+
+.reduce-motion-mode button:hover,
+.reduce-motion-mode a:hover {
+  transition: none !important;
+}
+
+/* Remover hover effects con transiciones */
+.reduce-motion-mode [class*="hover"],
+.reduce-motion-mode .transition,
+.reduce-motion-mode [class*="transform"] {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Carruseles - hacer estáticos */
+.reduce-motion-mode .carousel,
+.reduce-motion-mode [class*="carousel"],
+.reduce-motion-mode [class*="slider"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Modales - sin transición de entrada */
+.reduce-motion-mode .modal,
+.reduce-motion-mode [class*="modal"] {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Dropdowns */
+.reduce-motion-mode [class*="dropdown"],
+.reduce-motion-mode [class*="menu"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Loading indicators */
+.reduce-motion-mode [class*="loading"],
+.reduce-motion-mode [class*="spinner"],
+.reduce-motion-mode [class*="loader"] {
+  animation: none !important;
+}
+
+/* Scroll smooth */
+.reduce-motion-mode {
+  scroll-behavior: auto !important;
+}
+
+/* Pulsating effects */
+.reduce-motion-mode [class*="pulse"],
+.reduce-motion-mode [class*="blink"],
+.reduce-motion-mode [class*="flash"] {
+  animation: none !important;
+  opacity: 1 !important;
+}
+
+/* Fade effects */
+.reduce-motion-mode [class*="fade"] {
+  animation: none !important;
+  opacity: 1 !important;
+}
+
+/* Bounce effects */
+.reduce-motion-mode [class*="bounce"],
+.reduce-motion-mode [class*="wiggle"],
+.reduce-motion-mode [class*="shake"] {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Transforms */
+.reduce-motion-mode [class*="transform"] {
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Prefixed animations */
+.reduce-motion-mode {
+  -webkit-animation: none !important;
+  -moz-animation: none !important;
+  animation: none !important;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  transition: none !important;
+}

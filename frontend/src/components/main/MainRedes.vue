@@ -62,21 +62,21 @@ const newsRedes = [
       <div
         v-for="redes in newsRedes"
         :key="redes.id"
-        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 xl:p-7 max-w-md cursor-pointer"
+        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 xl:p-7 max-w-md cursor-pointer mode-card"
       >
         <div class="flex justify-between items-center max-w-xs">
           <div class="flex flex-col gap-1 md:gap-2 xl:gap-3">
             <h3
-              class="text-[#F5F5F5] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg"
+              class="text-[#F5F5F5] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg mode-title"
             >
               {{ redes.title }}
             </h3>
             <span
-              class="text-xs md:text-base lg:text-lg xl:text-xl text-[#FFD700] font-bold"
+              class="text-xs md:text-base lg:text-lg xl:text-xl text-[#FFD700] font-bold mode-paragraph"
               >{{ redes.location }}</span
             >
             <p
-              class="text-[#A2A2A2] text-xs md:text-sm lg:text-base xl:text-lg"
+              class="text-[#A2A2A2] text-xs md:text-sm lg:text-base xl:text-lg mode-paragraph"
             >
               {{ redes.descripcion }}
             </p>

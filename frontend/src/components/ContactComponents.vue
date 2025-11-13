@@ -129,7 +129,7 @@ const resetForm = () => {
     <div class="flex flex-col items-center justify-center">
       <!-- Contenedor principal del formulario -->
       <div
-        class="border-2 border-[#FFD700] rounded-3xl p-6 md:p-8 lg:p-10 w-full max-w-2xl bg-gray-900/50"
+        class="mode-card border-2 border-[#FFD700] rounded-3xl p-6 md:p-8 lg:p-10 w-full max-w-2xl bg-gray-900/50"
       >
         <!-- Formulario dinámico -->
         <form @submit.prevent="handleSubmit" class="flex flex-col gap-6">
@@ -139,7 +139,7 @@ const resetForm = () => {
             <div class="flex-1">
               <label
                 for="nombre"
-                class="block text-white text-sm font-semibold mb-2"
+                class="block text-white text-sm font-semibold mb-2 mode-paragraph"
               >
                 Nombre
               </label>
@@ -148,7 +148,7 @@ const resetForm = () => {
                 v-model="formData.nombre"
                 type="text"
                 placeholder="Tu nombre"
-                class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+                class="mode-input w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-register-input"
                 :disabled="isSubmitting"
               />
             </div>
@@ -157,7 +157,7 @@ const resetForm = () => {
             <div class="flex-1">
               <label
                 for="apellido"
-                class="block text-white text-sm font-semibold mb-2"
+                class="block text-white text-sm font-semibold mb-2 mode-paragraph"
               >
                 Apellido
               </label>
@@ -166,7 +166,7 @@ const resetForm = () => {
                 v-model="formData.apellido"
                 type="text"
                 placeholder="Tu apellido"
-                class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+                class="mode-input w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-register-input"
                 :disabled="isSubmitting"
               />
             </div>
@@ -176,7 +176,7 @@ const resetForm = () => {
           <div>
             <label
               for="correo"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Correo
             </label>
@@ -185,7 +185,7 @@ const resetForm = () => {
               v-model="formData.correo"
               type="email"
               placeholder="example@gmail.com"
-              class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+              class="mode-input w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-register-input"
               :disabled="isSubmitting"
             />
           </div>
@@ -194,7 +194,7 @@ const resetForm = () => {
           <div>
             <label
               for="mensaje"
-              class="block text-white text-sm font-semibold mb-2"
+              class="block text-white text-sm font-semibold mb-2 mode-paragraph"
             >
               Mensaje
               <span class="text-gray-400 text-xs">
@@ -246,7 +246,7 @@ const resetForm = () => {
             <button
               type="submit"
               :disabled="!isFormValid || isSubmitting"
-              class="px-8 py-3 font-semibold bg-gray-600 lg:hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="mode-btn px-8 py-3 font-semibold bg-gray-600 lg:hover:bg-gray-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {{ isSubmitting ? "Enviando..." : "Enviar" }}
             </button>
@@ -254,7 +254,7 @@ const resetForm = () => {
               type="button"
               @click="resetForm"
               :disabled="isSubmitting"
-              class="px-8 py-3 bg-gray-600 lg:hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="mode-btn px-8 py-3 bg-gray-600 lg:hover:bg-gray-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               Limpiar
             </button>

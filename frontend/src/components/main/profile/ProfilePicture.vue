@@ -36,7 +36,7 @@ const limitedImages = computed(() => props.images.slice(0, 15));
     <!-- Mensaje si no hay imágenes -->
     <p
       v-if="limitedImages.length === 0"
-      class="text-center text-gray-400 text-sm sm:text-base mt-8"
+      class="text-center text-gray-400 text-sm sm:text-base mt-8 mode-paragraph"
     >
       No hay imágenes disponibles
     </p>

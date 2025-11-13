@@ -1,0 +1,13 @@
+/* Modo Dislexia - Fuente amigable y espaciado aumentado */
+.dyslexia-mode .mode-title {
+  letter-spacing: 0.6rem;
+}
+
+.dyslexia-mode .mode-paragraph {
+  letter-spacing: 0.3rem;
+}
+
+.dyslexia-mode .mode-btn,
+.dyslexia-mode .mode-carac-btn {
+  letter-spacing: 0.2rem;
+}
