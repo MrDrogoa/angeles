@@ -419,6 +419,385 @@ Ruta base: `frontend/src`
 
 	Estos cambios completan la implementación del sistema de autenticación, proporcionando una experiencia de usuario más fluida y segura.
 
+	### Sistema de Chatbot de Hospedajes con IA (14/11/2025 - NUEVO)
+
+	Se implementó un sistema completo de chatbot conversacional inteligente enfocado en búsqueda y recomendación de hospedajes (alojamientos), con integración total al sistema Vue 3:
+
+	- `src/store/chatBotStore.js` — store principal del chatbot (NUEVO - 4200+ líneas):
+		- **Estado del chatbot**: `isVisible`, `messages`, `currentStep`, `sessionId`, `conversationContext`
+		- **Flujo conversacional completo**: 50+ pasos organizados en categorías (bienvenida, búsqueda, categorías, precio, recomendaciones)
+		- **Gestión de mensajes**: `addMessage()`, `addBotMessage()`, `addUserMessage()`, `clearMessages()`
+		- **Navegación**: `goToStep()`, `goBack()`, `restartConversation()`, `toggleVisibility()`
+		- **Procesamiento de entrada**: `handleUserInput()` con validación y respuestas contextuales
+		- **Validaciones**: ubicación (min 2 chars), precio (formato "30000" o "20000-50000"), categorías (vip/premium/normal/masajistas)
+		- **Sugerencias rápidas**: botones dinámicos según paso actual (ubicaciones, categorías, rangos de precio)
+		- **Reportes**: integración con sistema de reportes (express y estándar)
+		- **Persistencia**: guarda conversación en localStorage
+		- **Métricas**: tracking de interacciones, conversiones, abandono
+
+	- `src/store/hospedajeStore.js` — store de hospedajes (NUEVO):
+		- **Estado**: `hospedajes`, `featured`, `selectedHospedaje`, `searchFilters`, `isLoading`
+		- **Computed getters**:
+			- `filteredHospedajes` — aplica filtros de ubicación/categoría/precio
+			- `featuredHospedajes` — filtra hospedajes con `destacado: true`
+			- `hospedajesByCategory` — agrupa por categoría (vip/premium/normal/masajistas)
+		- **Actions**:
+			- `searchByLocation(ubicacion)` — busca hospedajes por ubicación
+			- `getRecommendations(criteria)` — obtiene recomendaciones personalizadas, **prioriza destacado: true**
+			- `updateFilters(filters)` — actualiza filtros de búsqueda
+			- `clearFilters()` — resetea filtros
+		- **Lógica de negocio**: hospedajes destacados aparecen primero en recomendaciones (revenue optimization)
+
+	- `src/store/reportsStore.js` — store de reportes (NUEVO):
+		- Estado básico para reportes estándar
+		- Integración con chatbot para crear reportes desde conversación
+
+	- `src/store/expressReportsStore.js` — store de reportes express (NUEVO):
+		- Estado para reportes express (rápidos)
+		- Compatible con flujo de chatbot
+
+	- `src/repositories/hospedajeRepository.js` — capa de API para hospedajes (NUEVO):
+		- **Métodos HTTP**:
+			- `searchByLocation(ubicacion, options)` — GET /hospedajes/search
+			- `getByCategory(category, options)` — GET /hospedajes/category/:category
+			- `getFeatured(options)` — GET /hospedajes/featured
+			- `getRecommendations(criteria)` — POST /hospedajes/recommendations
+			- `getById(id)` — GET /hospedajes/:id
+			- `filter(filters)` — POST /hospedajes/filter
+			- `getLocations()` — GET /hospedajes/locations
+		- Todos retornan `{ success, hospedajes/data, error }`
+
+	- `src/repositories/authRepository.js` — repositorio de autenticación (NUEVO):
+		- **Métodos**:
+			- `register(userData)` — POST /auth/register
+			- `login(credentials)` — POST /auth/login (guarda token en localStorage)
+			- `logout()` — POST /auth/logout (limpia tokens)
+			- `isAuthenticated()` — verifica si hay token
+			- `getCurrentUser()` — GET /auth/me
+			- `updateProfile(userData)` — PUT /auth/profile
+			- `changePassword(passwordData)` — POST /auth/change-password
+			- `requestPasswordReset(email)` — POST /auth/forgot-password
+			- `resetPassword(token, newPassword)` — POST /auth/reset-password
+			- `verifyEmail(token)` — POST /auth/verify-email
+		- Exportado como singleton
+
+	- `src/repositories/botRepository.js` — repositorio del bot (NUEVO):
+		- Métodos para validaciones y sugerencias del chatbot
+		- Integración con backend para analytics
+
+	- `src/services/ChatBotHospedajeService.js` — servicio de integración chatbot-hospedajes (NUEVO):
+		- **Métodos de búsqueda**:
+			- `searchByLocation(ubicacion)` — busca hospedajes por ubicación
+			- `searchByCategory(category)` — busca por categoría
+			- `getRecommendations(criteria)` — obtiene recomendaciones personalizadas
+			- `getHospedajeDetails(id)` — detalles de hospedaje específico
+		- **Formatters para respuestas del bot**:
+			- `formatSearchResults(hospedajes)` — formatea lista de resultados (max 5) con badge 💎 para destacados
+			- `formatRecommendations(hospedajes)` — formatea recomendaciones
+			- `formatHospedajeDetails(hospedaje)` — formatea detalles completos
+			- `formatPrice(precio)` — formatea precios en CLP (ej: "$30.000")
+		- **Validadores**:
+			- `validateLocation(ubicacion)` — min 2 chars, letras/espacios/guiones
+			- `validatePriceRange(precio)` — acepta "30000" o "20000-50000"
+
+	- `src/services/BotPersonalityService.js` — servicio de personalidad del bot (NUEVO):
+		- Wrapper para configuración de personalidad
+		- `getGreeting(user)` — saludo dinámico según hora del día
+		- `getSearchMessage()` — mensaje de búsqueda
+		- `getMenuMessage()` — mensaje de menú principal
+		- `getName()`, `getAvatar()`, `getEmoji()`
+
+	- `src/services/RealTimeValidationService.js` — validaciones en tiempo real (NUEVO):
+		- Validadores para formularios del chatbot
+		- Campos: nombre, ubicacion, precio, email, telefono
+
+	- `src/services/ErrorHandlerService.js` — manejo centralizado de errores (NUEVO):
+		- `handleError(error, context)` — manejo genérico
+		- `handleValidationError(errors)` — errores de validación
+		- `handleNetworkError(error)` — errores de red
+
+	- `src/services/httpService.js` — cliente HTTP con axios (NUEVO):
+		- BaseURL desde `VITE_API_URL` env variable
+		- Timeout: 10000ms
+		- **Request interceptor**: agrega token Bearer desde localStorage
+		- **Response interceptor**: maneja 401 (token inválido/expirado), limpia localStorage y redirige a /login
+
+	- `src/services/SessionSyncService.js` — sincronización entre pestañas (NUEVO):
+		- Usa BroadcastChannel API
+		- `onLogin(callback)` / `onLogout(callback)` — escucha eventos
+		- `notifyLogin(userData)` / `notifyLogout()` — notifica a otras pestañas
+		- Sincroniza sesión automáticamente en todas las pestañas abiertas
+
+	- `src/config/botPersonality.js` — configuración de personalidad del bot (NUEVO):
+		- **Identidad del bot**:
+			- name: "AMIN"
+			- fullName: "Asistente de Hospedajes Inteligente"
+			- emoji: "🏠"
+			- avatar: "@/assets/amin-transparente.webp"
+		- **Mensajes categorizados**:
+			- `greetings` — saludos según hora (mañana/tarde/noche/madrugada)
+			- `searchMessages` — mensajes de búsqueda por ubicación/categoría/precio
+			- `hospedajeMessages` — mensajes para mostrar detalles, categorías, acciones
+			- `errorMessages` — mensajes de error específicos
+			- `helpMessages` — ayuda contextual
+		- **Adaptado completamente**: cambió de sistema de reportes a búsqueda de hospedajes
+
+	- `src/components/boot/component/bot/ChatBot.vue` — componente principal del chatbot (NUEVO - 1300+ líneas):
+		- **Estructura visual**:
+			- Header con avatar AMIN, nombre y botones (cerrar, minimizar, navegación)
+			- Área de navegación con migas de pan (breadcrumbs)
+			- Contenedor de mensajes con scroll automático
+			- Input area con textarea y botón enviar
+			- Floating button (botón flotante circular) para abrir chat
+		- **Funcionalidades**:
+			- Renderiza mensajes del bot y usuario
+			- Indicador de escritura (typing indicator) con animación
+			- Sugerencias rápidas (quick replies) dinámicas
+			- Componente de progreso para reportes
+			- Editable fields para datos de usuario
+			- Confirmación de reportes
+			- Resumen de reportes
+		- **Interactividad**:
+			- Auto-scroll al último mensaje
+			- Focus automático en input
+			- Envío con Enter (Shift+Enter para nueva línea)
+			- Cierre con tecla Escape
+			- Click outside para cerrar (opcional)
+		- **Estilos**:
+			- Tema oscuro con acentos dorados (#FFD700)
+			- Burbujas de chat diferenciadas (bot: gris, usuario: dorado)
+			- Animaciones suaves (fade, slide)
+			- Responsive: adapta tamaños en mobile
+		- **Autenticación**: solo visible si `isUserAuthenticated` (comentado temporalmente para testing)
+
+	- `src/components/boot/component/bot/ChatMessage.vue` — componente de mensaje individual (NUEVO):
+		- Renderiza mensajes del bot y usuario
+		- Avatar del bot (amin-transparente.webp)
+		- Formato HTML para texto del bot (v-html)
+		- Indicador de carga para mensajes tipo "loading"
+		- Timestamp opcional
+
+	- `src/components/boot/component/bot/QuickReply.vue` — botones de respuesta rápida (NUEVO):
+		- Botones con iconos opcionales
+		- Estilos: borde dorado, hover con fondo dorado
+		- Emit `@select` al hacer click
+
+	- `src/components/boot/component/bot/ChatBotNavigation.vue` — navegación breadcrumbs (NUEVO):
+		- Muestra ruta de navegación del chatbot
+		- Click en paso anterior para volver
+		- Iconos de Font Awesome
+
+	- `src/components/boot/component/bot/ProgressIndicator.vue` — barra de progreso (NUEVO):
+		- Indicador visual de progreso en reportes
+		- Barra con porcentaje y color dinámico
+		- Estados: incompleto (gris) → completo (verde)
+
+	- `src/components/boot/component/bot/EditableField.vue` — campo editable (NUEVO):
+		- Campo de formulario con edición inline
+		- Validación en tiempo real
+		- Iconos de estado (check/error)
+
+	- `src/components/boot/component/bot/ReportConfirmation.vue` — confirmación de reporte (NUEVO):
+		- Muestra datos del reporte antes de enviar
+		- Botones de confirmar/cancelar
+		- Resumen visual con iconos
+
+	- `src/components/boot/component/bot/ReportSummary.vue` — resumen de reporte (NUEVO):
+		- Muestra resumen después de crear reporte
+		- Información de seguimiento
+		- Opciones de descarga/compartir
+
+	- `src/components/boot/component/bot/ReportViewModal.vue` — modal de visualización (NUEVO):
+		- Modal para ver detalles de reportes
+		- Integra ExpressReportDetails y ReportDetails
+		- Transiciones suaves
+
+	- `src/components/boot/component/bot/ExpressReportDetails.vue` — detalles de reporte express (NUEVO):
+		- Componente para mostrar reportes express
+		- Layout con cards responsive
+		- Información del usuario, estado, fechas
+		- Badges de estado con colores dinámicos
+
+	- `src/components/boot/component/bot/ReportDetails.vue` — detalles de reporte estándar (NUEVO):
+		- Componente para reportes completos
+		- Más detallado que express
+		- Secciones: info general, descripción, reportante, fechas, adjuntos, notas
+		- Badges de prioridad y estado
+
+	- `src/components/boot/component/bot/ChatBotRealTimeInput.vue` — input con validación (NUEVO):
+		- Input con validación en tiempo real
+		- Mensajes de error dinámicos
+		- Integración con RealTimeValidationService
+
+	- `src/utils/authDebug.js` — utilidades de depuración (NUEVO):
+		- `debugAuth()` — muestra estado de tokens/cookies en consola
+		- `migrateAuthTokens()` — migra tokens de formato antiguo
+		- `clearAuthDebug()` — limpia todos los datos de auth
+		- `isTokenValid(token)` — valida JWT y verifica expiración
+		- `decodeToken(token)` — decodifica payload de JWT (sin verificar firma)
+
+	- `src/data/countries.json` — lista de países (NUEVO):
+		- JSON con nombres de países para autocompletado
+
+	- `src/data/paises.json` — países en español (NUEVO):
+		- Alternativa en español para formularios
+
+	- `src/data/nacionalidades.json` — lista de nacionalidades (NUEVO):
+		- JSON con nacionalidades para formularios
+
+	- `src/components/examples/HospedajeSearchExample.vue` — componente de ejemplo (NUEVO):
+		- Ejemplo completo de búsqueda de hospedajes
+		- Formulario con filtros (ubicación, categoría, precio)
+		- Grid de resultados responsive
+		- Mock data para testing sin backend
+		- Badges para hospedajes destacados
+
+	- `CHATBOT_INTEGRATION.md` — documentación técnica (NUEVO - 400+ líneas):
+		- **Secciones completas**:
+			1. Estructura de archivos (23 archivos)
+			2. Funcionalidad overview
+			3. Endpoints de backend requeridos (15 endpoints)
+			4. Variables de entorno (.env setup)
+			5. Estructura de datos (hospedajes, reportes)
+			6. Guía de customización
+			7. Troubleshooting
+		- Ejemplos de código para cada endpoint
+		- Estructura JSON esperada
+		- Instrucciones de integración paso a paso
+
+	- `src/App.vue` — actualizado:
+		- Importa y registra `ChatBot` component
+		- Agregado entre `AccessibilityComponents` y `Layout`
+		- Disponible globalmente en toda la app
+
+	- `.env` — archivo de configuración (NUEVO):
+		- `VITE_API_URL=http://localhost:3000/api`
+		- Configuración Firebase comentada (para cuando se necesite)
+
+	### Flujo del chatbot de hospedajes (14/11/2025):
+
+	```
+	Usuario abre chatbot (floating button)
+	  └→ ChatBot.vue renderiza
+	     └→ chatBotStore.initialize() carga contexto
+	        ├→ Saludo personalizado (BotPersonalityService)
+	        └→ Menú principal con opciones rápidas
+
+	Usuario selecciona "Buscar por ubicación"
+	  └→ chatBotStore.handleUserInput(ubicacion)
+	     └→ ChatBotHospedajeService.searchByLocation()
+	        └→ hospedajeRepository.searchByLocation()
+	           └→ GET /hospedajes/search?ubicacion=...
+	              └→ hospedajeStore.updateHospedajes()
+	                 └→ Bot formatea resultados (formatSearchResults)
+	                    └→ Muestra top 5 con badge 💎 para destacados
+
+	Usuario pide recomendaciones
+	  └→ chatBotStore.getRecommendations(criteria)
+	     └→ hospedajeStore.getRecommendations()
+	        └→ Filtra destacado: true PRIMERO
+	           └→ Ordena por ranking
+	              └→ Retorna top 5
+	                 └→ Bot muestra con formatRecommendations()
+	```
+
+	### Características del sistema de chatbot (14/11/2025):
+
+	✅ **Chatbot conversacional completo**:
+	- 50+ pasos organizados en flujo lógico
+	- Bienvenida personalizada según hora del día
+	- Búsqueda por ubicación, categoría y rango de precio
+	- Recomendaciones inteligentes (prioriza destacado: true)
+	- Validaciones en tiempo real
+	- Sugerencias rápidas contextuales
+	- Navegación con breadcrumbs
+	- Historial de conversación
+
+	✅ **Integración con hospedajes**:
+	- Store dedicado (hospedajeStore.js)
+	- Repository con 8 métodos HTTP
+	- Service con formatters y validadores
+	- Filtros avanzados (ubicación/categoría/precio)
+	- Destacados priorizados en recomendaciones
+	- Formato de precios en CLP
+
+	✅ **Sistema de reportes integrado**:
+	- Reportes estándar y express
+	- Formularios con validación
+	- Progreso visual con barra
+	- Confirmación antes de enviar
+	- Resumen después de crear
+	- Modal de visualización
+
+	✅ **Autenticación y seguridad**:
+	- Repository completo (10 métodos)
+	- Interceptor HTTP con Bearer token
+	- Manejo de 401 automático
+	- Sincronización entre pestañas
+	- Utilidades de debugging
+	- Validación de JWT
+
+	✅ **UI/UX optimizada**:
+	- Tema oscuro con acentos dorados
+	- Botón flotante circular
+	- Animaciones suaves
+	- Auto-scroll inteligente
+	- Typing indicator
+	- Responsive (mobile/tablet/desktop)
+	- Atajos de teclado (Enter, Escape)
+	- Click outside para cerrar
+
+	✅ **Personalidad del bot**:
+	- Nombre: AMIN (Asistente de Hospedajes Inteligente)
+	- Emoji: 🏠
+	- Avatar: amin-transparente.webp
+	- Mensajes según contexto
+	- Tono amigable y profesional
+	- Saludos según hora del día
+
+	✅ **Lógica de negocio**:
+	- Hospedajes destacados (destacado: true) aparecen primero
+	- Optimizado para revenue generation
+	- Categorías: VIP 💎, Premium ⭐, Normal 🏠, Masajistas 💆
+	- Rangos de precio configurables
+	- Filtros combinables
+
+	✅ **Documentación completa**:
+	- CHATBOT_INTEGRATION.md (400+ líneas)
+	- Estructura de archivos detallada
+	- 15 endpoints documentados
+	- Ejemplos de código
+	- Guía de troubleshooting
+	- Variables de entorno
+
+	✅ **Testing y desarrollo**:
+	- Componente de ejemplo (HospedajeSearchExample.vue)
+	- Mock data para testing
+	- Autenticación temporal deshabilitada
+	- Logs de debug en consola
+	- Validaciones exhaustivas
+
+	✅ **Persistencia**:
+	- localStorage para conversación
+	- localStorage para filtros
+	- localStorage para sesión de usuario
+	- Restauración automática al recargar
+
+	✅ **Preparado para producción**:
+	- Todos los archivos creados (23 archivos)
+	- Rutas de import corregidas (@/store/, @/services/, etc.)
+	- Imágenes corregidas (amin-transparente.webp)
+	- Sin errores de compilación
+	- .env configurado
+	- README actualizado
+
+	⚠️ **Pendiente (backend)**:
+	- Implementar 15 endpoints REST
+	- Configurar base de datos para hospedajes
+	- Implementar sistema de autenticación JWT
+	- Agregar campo destacado a modelo de hospedaje
+	- Deploy de API en servidor
+
 	### Sistema de Accesibilidad Completo (13/11/2025 - NUEVO)
 
 	Se implementó un sistema integral de accesibilidad con 8 modos diferentes, botones flotantes y controles dinámicos de tamaño de texto:

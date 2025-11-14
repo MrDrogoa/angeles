@@ -13,10 +13,13 @@ import App from "./App.vue";
 import router from "./router";
 import FontAwesomeIcon from "./icons/icon.js";
 import AccessibilityComponents from "./components/AccessiblityComponents.vue";
+import { createPinia } from "pinia";
 
 const app = createApp(App);
+const pinia = createPinia();
 
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("AccessibilityComponents", AccessibilityComponents);
 app.use(router);
+app.use(pinia);
 app.mount("#app");

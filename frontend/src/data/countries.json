@@ -1,0 +1,10 @@
+[
+  { "code": "CL", "name": "Chile", "dial_code": "+56" },
+  { "code": "AR", "name": "Argentina", "dial_code": "+54" },
+  { "code": "PE", "name": "Perú", "dial_code": "+51" },
+  { "code": "CO", "name": "Colombia", "dial_code": "+57" },
+  { "code": "MX", "name": "México", "dial_code": "+52" },
+  { "code": "ES", "name": "España", "dial_code": "+34" },
+  { "code": "US", "name": "Estados Unidos", "dial_code": "+1" },
+  { "code": "BR", "name": "Brasil", "dial_code": "+55" }
+]

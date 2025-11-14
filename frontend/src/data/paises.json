@@ -1,0 +1,10 @@
+[
+  { "code": "CL", "nombre": "Chile" },
+  { "code": "AR", "nombre": "Argentina" },
+  { "code": "PE", "nombre": "Perú" },
+  { "code": "CO", "nombre": "Colombia" },
+  { "code": "MX", "nombre": "México" },
+  { "code": "ES", "nombre": "España" },
+  { "code": "US", "nombre": "Estados Unidos" },
+  { "code": "BR", "nombre": "Brasil" }
+]
