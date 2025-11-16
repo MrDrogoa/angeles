@@ -165,7 +165,7 @@
 
       <div class="message-avatar">
         <div class="user-avatar">
-          <i class="fas fa-user"></i>
+          <font-awesome-icon icon="user" class="text-base text-white" />
         </div>
       </div>
     </div>

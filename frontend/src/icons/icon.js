@@ -38,6 +38,7 @@ import {
   faBook,
   faPlus,
   faMinus,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
@@ -86,7 +87,8 @@ library.add(
   // Regular
   farHeart,
   // Brands
-  faWhatsapp
+  faWhatsapp,
+  faPaperPlane
 );
 
 export default FontAwesomeIcon;

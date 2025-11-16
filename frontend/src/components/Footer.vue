@@ -37,7 +37,7 @@ const footerData = {
     {
       title: "Contactanos",
       links: [
-        { text: "Contacto", url: "/" },
+        { text: "Contacto", url: "/contact" },
         { text: "Soporte", url: "/" },
         { text: "FAQ", url: "/" },
         { text: "Privacidad", url: "/" },

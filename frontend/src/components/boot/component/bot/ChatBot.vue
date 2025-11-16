@@ -26,7 +26,7 @@
               class="btn btn-sm btn-ghost"
               title="Cerrar"
             >
-              <i class="fas fa-times"></i>
+              <font-awesome-icon icon="xmark" class="text-base text-white" />
             </button>
           </div>
         </div>
@@ -134,7 +134,10 @@
                 :disabled="!canSendMessage"
                 class="btn btn-primary send-button"
               >
-                <i class="fas fa-paper-plane"></i>
+                <font-awesome-icon
+                  icon="paper-plane"
+                  class="text-base text-white"
+                />
               </button>
             </div>
 

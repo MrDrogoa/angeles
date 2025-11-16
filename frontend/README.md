@@ -798,6 +798,106 @@ Ruta base: `frontend/src`
 	- Agregar campo destacado a modelo de hospedaje
 	- Deploy de API en servidor
 
+	### Desactivación Temporal de Autenticación del Chatbot (16/11/2025 - NUEVO)
+
+	Se desactivó temporalmente la autenticación del chatbot para permitir testing y pruebas sin necesidad de login:
+
+	- `src/store/chatBotStore.js` — modificado (3 puntos clave):
+		- **Línea ~143** - `isUserAuthenticated()`:
+			- ✅ Ahora retorna siempre `true` (forzado para testing)
+			- 🔄 Para revertir: cambiar `return true` por `return authStore.isAuthenticated`
+			- Comentario agregado: `⚠️ TEMPORAL: Forzando autenticación para testing`
+			- Comentario agregado: `⚠️ REVERTIR: Cambiar 'return true' por 'return authStore.isAuthenticated'`
+		
+		- **Línea ~715** - `checkPermissionForAction()`:
+			- ✅ Validación de login completamente comentada
+			- Bloque `if (!this.isUserAuthenticated)` convertido a comentario multilínea
+			- 🔄 Para revertir: descomentar el bloque de validación
+			- Comentario agregado: `⚠️ TEMPORAL: Autenticación desactivada para testing`
+			- Comentario agregado: `⚠️ REVERTIR: Descomentar las siguientes 6 líneas`
+		
+		- **Línea ~1883** - `getQuickReplies()`:
+			- ✅ Filtro de menú para usuarios no autenticados comentado
+			- Bloque `if (!authStore.isAuthenticated)` que limitaba opciones a "Ayuda" e "Iniciar sesión" desactivado
+			- 🔄 Para revertir: descomentar el bloque de filtrado
+			- Comentario agregado: `⚠️ TEMPORAL: Autenticación desactivada para testing`
+			- Comentario agregado: `⚠️ REVERTIR: Descomentar las siguientes 7 líneas`
+
+	- `REVERTIR_AUTENTICACION.md` — archivo de instrucciones creado (NUEVO):
+		- **Propósito**: Guía detallada para reactivar la autenticación cuando sea necesario
+		- **Contenido**:
+			- Descripción de los 3 cambios realizados
+			- Código "antes" y "después" de cada modificación
+			- Números de línea exactos en chatBotStore.js
+			- Instrucciones paso a paso para revertir
+			- Resumen rápido de cambios
+			- Lista de verificación post-reversión
+		- **Marcadores visuales**: Todos los cambios en el código tienen `⚠️ TEMPORAL` y `⚠️ REVERTIR`
+		- **Búsqueda rápida**: Usar Ctrl+F con "⚠️ TEMPORAL" o "⚠️ REVERTIR" para encontrar los puntos modificados
+
+	### Características de la desactivación temporal (16/11/2025):
+
+	✅ **Acceso sin restricciones**:
+	- Chatbot completamente funcional sin necesidad de login
+	- Todas las funciones de búsqueda disponibles:
+		- Búsqueda por ubicación
+		- Búsqueda por categoría (VIP, Premium, Normal, Masajistas)
+		- Búsqueda por rango de precio
+		- Recomendaciones personalizadas
+	- Sistema de reportes accesible sin autenticación
+	- Menú completo visible para todos los usuarios
+
+	✅ **Documentación clara para revertir**:
+	- Archivo dedicado `REVERTIR_AUTENTICACION.md` con instrucciones completas
+	- Marcadores visuales en el código (⚠️ TEMPORAL y ⚠️ REVERTIR)
+	- 3 cambios específicos documentados con números de línea
+	- Código completo "antes y después" para cada cambio
+	- Lista de verificación para confirmar que la reversión funcionó
+
+	✅ **Testing facilitado**:
+	- Permite probar el chatbot AMIN sin configurar backend de autenticación
+	- Ideal para desarrollo y pruebas de funcionalidad
+	- No requiere crear usuarios de prueba
+	- Acceso inmediato a todas las características
+
+	✅ **Reversión sencilla**:
+	- Solo 3 puntos a modificar en un único archivo
+	- Búsqueda rápida con marcadores especiales
+	- Documentación detallada en REVERTIR_AUTENTICACION.md
+	- Puede revertirse en menos de 5 minutos
+
+	⚠️ **Importante**:
+	- Esta configuración es **solo para desarrollo/testing**
+	- **NO usar en producción** sin reactivar autenticación
+	- Revertir cambios antes de deployment
+	- El archivo REVERTIR_AUTENTICACION.md puede eliminarse después de revertir
+
+	### Flujo actual del chatbot (16/11/2025 - SIN AUTENTICACIÓN):
+
+	```
+	Usuario accede a la aplicación
+	  └→ Botón flotante de AMIN visible inmediatamente
+	     └→ Click en botón flotante
+	        └→ Chatbot se abre sin verificar autenticación
+	           ├→ Saludo personalizado
+	           └→ Menú completo con todas las opciones:
+	              ├→ 🔍 Buscar hospedaje por ubicación
+	              ├→ 🏷️ Buscar hospedaje por categoría
+	              ├→ 💰 Buscar por rango de precio
+	              ├→ ⭐ Ver hospedajes destacados
+	              ├→ 📋 Crear reporte estándar
+	              ├→ ⚡ Crear reporte express
+	              ├→ 🏠 Navegar en la app
+	              └→ ❓ Ayuda
+
+	Usuario puede:
+	  ✅ Buscar hospedajes libremente
+	  ✅ Recibir recomendaciones
+	  ✅ Ver detalles de hospedajes
+	  ✅ Crear reportes
+	  ✅ Usar todas las funciones sin restricción
+	```
+
 	### Sistema de Accesibilidad Completo (13/11/2025 - NUEVO)
 
 	Se implementó un sistema integral de accesibilidad con 8 modos diferentes, botones flotantes y controles dinámicos de tamaño de texto:
