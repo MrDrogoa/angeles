@@ -13,6 +13,10 @@ export function useProfileStore() {
     return profileComments.value;
   };
 
+  const addComment = (comment) => {
+    profileComments.value.push(comment);
+  };
+
   const addAssessment = (hearts) => {
     profileAssessments.value.push({
       hearts,
@@ -25,7 +29,7 @@ export function useProfileStore() {
   };
 
   const getAverageAssessment = () => {
-    if (profileAssessments.value.length === 0) return 0;
+    if (profileAssessments.value.length === 0) return "0.0";
     const total = profileAssessments.value.reduce(
       (sum, assessment) => sum + assessment.hearts,
       0
@@ -37,12 +41,19 @@ export function useProfileStore() {
     return profileAssessments.value.length;
   };
 
+  const reset = () => {
+    profileComments.value = [];
+    profileAssessments.value = [];
+  };
+
   return {
     setComments,
     getComments,
+    addComment,
     addAssessment,
     getAssessments,
     getAverageAssessment,
     getTotalAssessments,
+    reset,
   };
 }

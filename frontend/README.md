@@ -798,6 +798,245 @@ Ruta base: `frontend/src`
 	- Agregar campo destacado a modelo de hospedaje
 	- Deploy de API en servidor
 
+	### Sistema de Calificación y Valoración de Perfiles (18/11/2025 - NUEVO)
+
+	Se implementó un sistema completo de calificación con modal de estrellas (1-7), comentarios obligatorios y visualización de valoraciones en los perfiles:
+
+	- `src/components/main/profile/RatingModal.vue` — modal de calificación (NUEVO - 300+ líneas):
+		- **3 categorías de calificación** con 7 estrellas cada una:
+			- 📍 Lugar y Presencia (1-7)
+			- 💪 Físico (1-7)
+			- 🛎️ Servicio (1-7)
+		- **Nota Final automática**: promedio de las 3 categorías (X.X/7)
+		- **Comentario obligatorio**: validación 15-500 caracteres
+		- **Características**:
+			- Estrellas interactivas con hover preview (Font Awesome)
+			- Colores dinámicos: dorado (#FFD700) activo, gris inactivo
+			- Contador de caracteres con validación visual (rojo < 15, verde ≥ 15)
+			- Validación completa del formulario (isFormValid computed)
+			- Usuario de prueba (TODO: integrar con authStore)
+			- Fecha automática en formato español
+			- Botón submit deshabilitado hasta completar todo
+		- **Emisión de eventos**: @close, @submit
+		- **Estructura de datos guardada**:
+			```javascript
+			{
+			  user: "Usuario Prueba",
+			  date: "18/11/2025",
+			  rating: 6.3,
+			  category: "general",
+			  comment: "Excelente servicio...",
+			  ratings: { lugar: 7, fisico: 6, servicio: 6 }
+			}
+			```
+		- **Responsive**: Tailwind con breakpoints sm/md/lg
+		- **Tema**: Borde dorado 2px, fondo oscuro, scrollbar personalizado
+
+	- `src/components/main/profile/ProfileQualifications.vue` — refactorizado completamente:
+		- **ANTES**: Calculaba promedios de datos hardcodeados en props.qualifications
+		- **AHORA**: Calcula promedios solo de calificaciones del usuario desde useProfileStore
+		- **Cambios clave**:
+			- Importa `useProfileStore` para acceso reactivo a datos
+			- `userQualifications` computed obtiene comentarios del store
+			- Promedios calculados desde `ratings.lugar`, `ratings.fisico`, `ratings.servicio`
+			- Inicia en 0.0 cuando no hay calificaciones del usuario
+			- Integración completa con RatingModal (estado, apertura, cierre)
+		- **Funcionalidad del modal**:
+			- `showRatingModal` ref controla visibilidad
+			- `openRatingModal()` abre modal al click en "Calificar"
+			- `closeRatingModal()` cierra modal
+			- `handleRatingSubmit(newRating)` callback después de envío
+		- **Tarjetas dinámicas**: 3 categorías + Nota Final (misma estructura, datos diferentes)
+
+	- `src/components/main/profile/ProfileAssessment.vue` — rediseñado:
+		- **ANTES**: Mostraba corazones interactivos para valorar
+		- **AHORA**: Muestra la Nota Final del sistema de calificación
+		- **Mensaje por defecto**: "Aún no hay valoraciones" cuando totalAssessments === 0
+			- Borde gris, fondo oscuro transparente
+		- **Con valoraciones**: Muestra nota final en escala 1-7
+			- Borde dorado (#FFD700)
+			- Texto grande: "Nota Final X.X/7"
+			- Contador de valoraciones: "N valoración(es)"
+		- **Sin corazones**: Se eliminó el sistema de 5 corazones
+		- **Datos desde store**: `getAverageAssessment()` retorna promedio en escala 1-7
+
+	- `src/components/main/profile/ProfileComents.vue` — actualizado:
+		- **ANTES**: Mostraba comentarios desde props.qualifications
+		- **AHORA**: Muestra comentarios desde `profileStore.getComments()`
+		- **Mensaje por defecto**: "Aún no hay comentarios" cuando array vacío
+			- Mismo estilo que ProfileAssessment (borde gris)
+		- **Cuando hay comentarios**:
+			- Muestra primeros 3 comentarios (limitedComments.slice(0, 3))
+			- Espaciado entre tarjetas: `space-y-4 md:space-y-5`
+			- Word-wrap en textos largos: `break-words` → `wrap-break-word`
+			- Fecha con `whitespace-nowrap` (no se rompe)
+			- Gap en header: `gap-2` entre usuario y fecha
+		- **Layout responsive**: Grid 50%-50% en desktop (desde ProfileComponents)
+
+	- `src/components/ComentsComponents.vue` — reescrito completamente:
+		- **ANTES**: Flexbox con basis-[calc(...)] para 2 columnas
+		- **AHORA**: Grid nativo CSS con `grid-cols-1 md:grid-cols-2`
+		- **Orden del DOM**:
+			1. Mensaje "No hay comentarios disponibles" (si array vacío)
+			2. Grid de comentarios (si hay datos)
+		- **Correcciones**:
+			- Word-wrap correcto: `wrap-break-word` (Tailwind v4)
+			- Espaciado consistente: `gap-4 md:gap-5 lg:gap-6`
+			- Fecha protegida: `whitespace-nowrap`
+			- Gap en header: `gap-2`
+		- **Responsive perfecto**:
+			- Mobile: 1 columna vertical
+			- Tablet/Desktop: 2 columnas balanceadas
+		- **Mensaje por defecto mejorado**: padding, borde gris, rounded-xl
+
+	- `src/composables/useProfileStore.js` — actualizado:
+		- **Método agregado**: `reset()` limpia comentarios y valoraciones
+		- **Método mejorado**: `getAverageAssessment()` retorna "0.0" en lugar de 0
+		- **Flujo de reset**: Llamado en ProfileComponents onMounted
+		- **Persistencia**: Sin localStorage, solo state reactivo en memoria
+		- **Escala actualizada**: Valoraciones guardadas en escala 1-7 (no convertidas a 1-5)
+
+	- `src/components/ProfileComponents.vue` — modificado:
+		- **ANTES**: Inicializaba store con `setComments(profileData.qualifications)` en onMounted
+		- **AHORA**: Resetea store con `profileStore.reset()` en onMounted
+		- **Layout actualizado**: Grid 50%-50% en desktop
+			- Cambio de `flex gap-4 flex-col lg:flex-row` a `grid grid-cols-1 lg:grid-cols-2`
+			- Gap aumentado: `gap-6 lg:gap-8`
+			- Ambas columnas con `flex flex-col` para alineación
+		- **Efecto**: Al recargar página, todas las calificaciones vuelven a 0
+
+	- `src/icons/icon.js` — actualizado:
+		- Se agregaron iconos para el sistema de estrellas:
+			- `faStar` (solid) — estrella llena dorada
+			- `farStar` (regular) — estrella vacía gris
+		- Total de 42+ iconos Font Awesome disponibles
+
+	- `SISTEMA_CALIFICACION.md` — documentación completa creada (NUEVO - 400+ líneas):
+		- **Secciones**:
+			1. ¿Qué se implementó? (resumen de funcionalidad)
+			2. Archivos creados/modificados (RatingModal, ProfileQualifications, etc.)
+			3. Características del modal (header, categorías, nota final, comentario)
+			4. Flujo de datos completo (diagrama paso a paso)
+			5. Estructura de datos guardada (JSON examples)
+			6. Estilos y responsive (breakpoints, colores, scrollbar)
+			7. Checklist de funcionalidad (25+ items)
+			8. TODOs para producción (usuario real, backend, restricciones)
+			9. Troubleshooting (problemas comunes y soluciones)
+			10. Capturas de funcionalidad (estados del modal)
+			11. Cómo usar (guía paso a paso)
+		- **Código de ejemplo**: snippets para integración con authStore y backend
+		- **Configuración**: límites, validaciones, estilos personalizables
+
+	### Características del sistema de calificación (18/11/2025):
+
+	✅ **Modal de calificación completo**:
+	- 3 categorías con 7 estrellas cada una
+	- Nota final calculada automáticamente
+	- Comentario obligatorio (15-500 chars)
+	- Validación completa antes de enviar
+	- Fecha automática en español
+	- Usuario de prueba (preparado para authStore)
+
+	✅ **Sistema de valoraciones**:
+	- Escala 1-7 (sin conversión a corazones)
+	- Promedios calculados por categoría
+	- Nota final como promedio de las 3
+	- ProfileAssessment muestra nota final
+	- Mensaje por defecto cuando no hay datos
+
+	✅ **Gestión de comentarios**:
+	- Store reactivo centralizado (useProfileStore)
+	- Comentarios se agregan al enviar modal
+	- Primeros 3 en perfil (ProfileComents)
+	- Todos en página dedicada (ComentsComponents)
+	- Grid responsive 2 columnas en desktop
+
+	✅ **Reset automático al recargar**:
+	- ProfileComponents resetea store en onMounted
+	- Todas las calificaciones vuelven a 0
+	- Datos no persisten en localStorage
+	- Ideal para desarrollo y testing
+
+	✅ **UI/UX optimizada**:
+	- Hover effects en estrellas (preview antes de seleccionar)
+	- Contador de caracteres con feedback visual
+	- Botones deshabilitados hasta validar
+	- Mensajes por defecto cuando no hay datos
+	- Word-wrap en textos largos
+	- Layout equilibrado 50%-50% en desktop
+
+	✅ **Responsive completo**:
+	- Mobile: 1 columna, estrellas compactas
+	- Tablet: transición suave
+	- Desktop: 2 columnas balanceadas, estrellas grandes
+	- Breakpoints: sm/md/lg optimizados
+
+	✅ **Documentación exhaustiva**:
+	- SISTEMA_CALIFICACION.md con 400+ líneas
+	- Guía de uso paso a paso
+	- Troubleshooting completo
+	- TODOs para producción
+	- Ejemplos de código
+
+	⚠️ **Pendiente para producción**:
+	- Integrar con authStore para usuario real
+	- Conectar con backend (POST /api/ratings)
+	- Restringir a una calificación por usuario
+	- Implementar edición/eliminación de ratings
+	- Agregar persistencia en base de datos
+	- Reemplazar alerts por toast notifications
+
+	### Flujo completo del sistema de calificación (18/11/2025):
+
+	```
+	Usuario carga perfil
+	  └→ ProfileComponents.onMounted()
+	     └→ profileStore.reset() — limpia datos anteriores
+	        ├→ ProfileQualifications muestra 0.0 en todas las tarjetas
+	        ├→ ProfileAssessment muestra "Aún no hay valoraciones"
+	        └→ ProfileComents muestra "Aún no hay comentarios"
+
+	Usuario hace click en "Calificar"
+	  └→ RatingModal se abre (showRatingModal = true)
+	     ├→ Usuario califica 3 categorías (1-7 estrellas)
+	     ├→ Nota Final se calcula automáticamente (promedio)
+	     ├→ Usuario escribe comentario (15+ caracteres)
+	     └→ Usuario hace click en "Enviar Calificación"
+	        ├→ Validación: ¿Todo completo?
+	        │  ├→ NO: Botón deshabilitado
+	        │  └→ SÍ: Continúa
+	        ├→ Crea objeto newRating con todas las datos
+	        ├→ profileStore.addComment(newRating)
+	        ├→ profileStore.addAssessment(notaFinal) — guarda en escala 1-7
+	        ├→ Muestra alert de confirmación
+	        └→ Cierra modal y resetea formulario
+
+	ProfileQualifications se actualiza reactivamente
+	  ├→ userQualifications computed detecta nuevo comentario
+	  ├→ Recalcula promedios por categoría
+	  ├→ Muestra nuevas notas en las 4 tarjetas
+	  └→ Tarjeta "Nota final" con borde dorado
+
+	ProfileAssessment se actualiza reactivamente
+	  ├→ totalAssessments computed detecta nueva valoración
+	  ├→ averageRating computed calcula promedio
+	  ├→ Muestra "Nota Final X.X/7"
+	  └→ Muestra "N valoración(es)"
+
+	ProfileComents se actualiza reactivamente
+	  ├→ limitedComments computed detecta nuevo comentario
+	  ├→ Muestra primeros 3 comentarios
+	  └→ Cada tarjeta: usuario, fecha, comentario
+
+	Usuario navega a /coments
+	  └→ ComentsComponents se renderiza
+	     ├→ comments computed obtiene todos desde store
+	     ├→ Grid 2 columnas en desktop
+	     └→ Muestra todos los comentarios con word-wrap
+	```
+
+	---
+
 	### Desactivación Temporal de Autenticación del Chatbot (16/11/2025 - NUEVO)
 
 	Se desactivó temporalmente la autenticación del chatbot para permitir testing y pruebas sin necesidad de login:

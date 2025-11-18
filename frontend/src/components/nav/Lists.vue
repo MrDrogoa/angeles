@@ -18,7 +18,6 @@ const closeMenu = () => {
 const menuItems = [
   { label: "Inicio", url: "/" },
   { label: "Novedades", url: "/news" },
-  { label: "Disponibles ahora!", url: "#" },
   { label: "Masajistas", url: "/masajistas" },
   { label: "Redes", url: "/social" },
   { label: "Enterprise", url: "#" },

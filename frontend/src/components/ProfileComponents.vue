@@ -120,9 +120,9 @@ const profileData = ref({
   ],
 });
 
-// Inicializar el store con los comentarios al montar
+// Resetear el store al montar (para que inicie vacío cada vez que se recarga la página)
 onMounted(() => {
-  profileStore.setComments(profileData.value.qualifications);
+  profileStore.reset();
 });
 
 // Función para marcar como favorito
@@ -257,14 +257,14 @@ const openWhatsApp = () => {
     <!-- profile fotos -->
     <profile-picture :images="profileData.img" />
 
-    <div class="flex gap-4 flex-col lg:flex-row">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
       <!-- Calificaciones -->
-      <div>
+      <div class="flex flex-col">
         <profile-qualifications :qualifications="profileData.qualifications" />
         <profile-assessment />
       </div>
-      <div>
-        <!-- Comentarios -->
+      <!-- Comentarios -->
+      <div class="flex flex-col">
         <profile-coments :qualifications="profileData.qualifications" />
       </div>
     </div>

@@ -39,10 +39,14 @@ import {
   faPlus,
   faMinus,
   faPaperPlane,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
-import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+  faHeart as farHeart,
+  faStar as farStar,
+} from "@fortawesome/free-regular-svg-icons";
 
 // Brands icons
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
@@ -84,11 +88,13 @@ library.add(
   faBook,
   faPlus,
   faMinus,
+  faPaperPlane,
+  faStar,
   // Regular
   farHeart,
+  farStar,
   // Brands
-  faWhatsapp,
-  faPaperPlane
+  faWhatsapp
 );
 
 export default FontAwesomeIcon;

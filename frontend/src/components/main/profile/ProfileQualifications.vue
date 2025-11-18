@@ -1,7 +1,9 @@
 <script setup>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import TitleH2Components from "@/components/TitleH2Components.vue";
 import ButtonComponents from "@/components/buttons/ButtonComponents.vue";
+import RatingModal from "./RatingModal.vue";
+import { useProfileStore } from "@/composables/useProfileStore";
 
 const props = defineProps({
   qualifications: {
@@ -11,31 +13,59 @@ const props = defineProps({
   },
 });
 
-// Calcular promedios por categoría
+const profileStore = useProfileStore();
+
+// Estado del modal
+const showRatingModal = ref(false);
+
+// Función para abrir el modal
+const openRatingModal = () => {
+  showRatingModal.value = true;
+};
+
+// Función para cerrar el modal
+const closeRatingModal = () => {
+  showRatingModal.value = false;
+};
+
+// Función cuando se envía la calificación
+const handleRatingSubmit = (newRating) => {
+  console.log("Nueva calificación enviada:", newRating);
+  // Los datos ya se guardan en el store dentro del modal
+  // Aquí podrías agregar lógica adicional si es necesario
+};
+
+// Obtener calificaciones del usuario desde el store
+const userQualifications = computed(() => profileStore.getComments());
+
+// Calcular promedios por categoría solo de las calificaciones del usuario
 const averageLugarPresencia = computed(() => {
-  const lugarRatings = props.qualifications.filter(
-    (q) => q.category === "lugar"
-  );
+  if (userQualifications.value.length === 0) return "0.0";
+  const lugarRatings = userQualifications.value
+    .map((q) => q.ratings?.lugar || 0)
+    .filter((r) => r > 0);
   if (lugarRatings.length === 0) return "0.0";
-  const sum = lugarRatings.reduce((acc, q) => acc + q.rating, 0);
+  const sum = lugarRatings.reduce((acc, val) => acc + val, 0);
   return (sum / lugarRatings.length).toFixed(1);
 });
 
 const averageFisico = computed(() => {
-  const fisicoRatings = props.qualifications.filter(
-    (q) => q.category === "fisico"
-  );
+  if (userQualifications.value.length === 0) return "0.0";
+  const fisicoRatings = userQualifications.value
+    .map((q) => q.ratings?.fisico || 0)
+    .filter((r) => r > 0);
   if (fisicoRatings.length === 0) return "0.0";
-  const sum = fisicoRatings.reduce((acc, q) => acc + q.rating, 0);
+  const sum = fisicoRatings.reduce((acc, val) => acc + val, 0);
   return (sum / fisicoRatings.length).toFixed(1);
 });
 
 const averageServicio = computed(() => {
-  const servicioRatings = props.qualifications.filter(
-    (q) => q.category === "servicio"
-  );
+  if (userQualifications.value.length === 0) return "0.0";
+  const servicioRatings = userQualifications.value
+    .map((q) => q.ratings?.servicio || 0)
+    .filter((r) => r > 0);
   if (servicioRatings.length === 0) return "0.0";
-  const sum = servicioRatings.reduce((acc, q) => acc + q.rating, 0);
+  const sum = servicioRatings.reduce((acc, val) => acc + val, 0);
   return (sum / servicioRatings.length).toFixed(1);
 });
 
@@ -45,6 +75,7 @@ const notaFinal = computed(() => {
     parseFloat(averageFisico.value),
     parseFloat(averageServicio.value),
   ];
+  if (values.every((v) => v === 0)) return "0.0";
   const avg = values.reduce((a, b) => a + b, 0) / values.length;
   return Math.min(avg, 7.0).toFixed(1);
 });
@@ -114,8 +145,17 @@ const qualificationCards = computed(() => [
 
     <!-- Botón Calificar -->
     <div class="flex justify-center mt-8 md:mt-12">
-      <button-components> Calificar </button-components>
+      <button-components @click="openRatingModal">
+        Calificar
+      </button-components>
     </div>
+
+    <!-- Modal de calificación -->
+    <rating-modal
+      :show="showRatingModal"
+      @close="closeRatingModal"
+      @submit="handleRatingSubmit"
+    />
   </section>
 </template>
 

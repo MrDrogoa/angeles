@@ -19,36 +19,42 @@ const comments = computed(() => profileStore.getComments());
       class="text-center mb-8 md:mb-12"
     />
 
-    <!-- Grid de 2 columnas con Flexbox y Tailwind -->
-    <div class="flex flex-col md:flex-row md:flex-wrap gap-4 md:gap-5 lg:gap-6">
+    <!-- Mensaje si no hay comentarios -->
+    <div
+      v-if="comments.length === 0"
+      class="text-center p-6 bg-gray-800/30 rounded-xl border-2 border-gray-700"
+    >
+      <p class="text-gray-400 text-base md:text-lg">
+        No hay comentarios disponibles
+      </p>
+    </div>
+
+    <!-- Grid de 2 columnas en desktop, 1 columna en mobile -->
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6">
       <div
         v-for="comment in comments"
         :key="comment.user + comment.date"
-        class="flex-1 md:basis-[calc(50%-0.625rem)] lg:basis-[calc(50%-0.75rem)] border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 bg-gray-800/30 hover:bg-gray-800/50 transition-all duration-300"
+        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 bg-gray-800/30 hover:bg-gray-800/50 transition-all duration-300"
       >
         <!-- Header: Usuario y Fecha -->
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="text-white font-semibold text-base md:text-lg lg:text-xl">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3
+            class="text-white font-semibold text-base md:text-lg lg:text-xl wrap-break-word"
+          >
             {{ comment.user }}
           </h3>
-          <span class="text-gray-400 text-xs md:text-sm">
+          <span class="text-gray-400 text-xs md:text-sm whitespace-nowrap">
             {{ comment.date }}
           </span>
         </div>
 
         <!-- Comentario -->
-        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+        <p
+          class="text-gray-300 text-sm md:text-base leading-relaxed wrap-break-word"
+        >
           {{ comment.comment }}
         </p>
       </div>
-    </div>
-
-    <!-- Mensaje si no hay comentarios -->
-    <div
-      v-if="comments.length === 0"
-      class="text-center text-gray-400 text-lg py-12"
-    >
-      No hay comentarios disponibles
     </div>
   </section>
 </template>
