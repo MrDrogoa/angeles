@@ -5,8 +5,8 @@ import ChatBot from "@/components/boot/component/bot/ChatBot.vue";
 </script>
 
 <template>
-  <AccessibilityComponents />
   <ChatBot />
+  <AccessibilityComponents />
   <Layout>
     <RouterView />
   </Layout>

@@ -5,15 +5,15 @@
   <div>
     <div v-if="isVisible" class="chatbot-container">
       <!-- Header del chat -->
-      <div class="chatbot-header">
+      <div class="chatbot-header mode-chat">
         <div class="header-content">
           <div class="bot-info">
             <div class="bot-avatar">
-              <img :src="Amin" alt="AMIN" class="bot-avatar-img" />
+              <img :src="Amin" alt="Ayda" class="bot-avatar-img" />
             </div>
             <div class="bot-details">
-              <h6 class="bot-name">AMIN</h6>
-              <span class="bot-subtitle">Agente Mundo Informativo</span>
+              <h6 class="bot-name">AYDA</h6>
+              <span class="bot-subtitle">Agente Angeles y Demonios</span>
               <span class="bot-status" :class="{ typing: isTyping }">
                 {{ isTyping ? "Escribiendo..." : "En línea" }}
               </span>
@@ -26,7 +26,7 @@
               class="btn btn-sm btn-ghost"
               title="Cerrar"
             >
-              <font-awesome-icon icon="xmark" class="text-base text-white" />
+              <font-awesome-icon icon="xmark" class="text-base text-black" />
             </button>
           </div>
         </div>
@@ -74,7 +74,7 @@
               <div class="typing-avatar">
                 <img
                   src="@/assets/amin-transparente.webp"
-                  alt="AMIN"
+                  alt="Ayda"
                   class="typing-avatar-img"
                 />
               </div>
@@ -145,18 +145,20 @@
             <div class="input-actions">
               <button
                 @click="goBackToMenu"
-                class="btn btn-sm btn-outline-secondary"
+                class="btn btn-sm btn-outline-secondary text-white"
                 title="Volver al menú"
               >
-                <i class="fas fa-home"></i> Menú
+                <font-awesome-icon icon="home" class="text-base text-white" />
+                Menú
               </button>
 
               <button
                 @click="clearConversation"
-                class="btn btn-sm btn-outline-warning"
+                class="btn btn-sm btn-outline-warning text-white"
                 title="Limpiar conversación"
               >
-                <i class="fas fa-broom"></i> Limpiar
+                <font-awesome-icon icon="broom" class="text-base text-white" />
+                Limpiar
               </button>
             </div>
           </div>
@@ -185,7 +187,7 @@
       >
         <img
           src="@/assets/amin-transparente.webp"
-          alt="AMIN"
+          alt="Ayda"
           class="bot-floating-img"
         />
         <span v-if="hasNotifications" class="notification-badge">!</span>
@@ -693,11 +695,11 @@ onUnmounted(() => {
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border: 1px solid #e0e0e0;
-  z-index: 1050;
+  z-index: 42;
   display: flex;
   flex-direction: column;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  border: 2px solid #ffd700;
   overflow: hidden; /* Importante para evitar desbordamiento */
 }
 
@@ -705,12 +707,11 @@ onUnmounted(() => {
 .chatbot-header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: linear-gradient(135deg, #ffc107, #ff9800);
+  z-index: 42;
+  background-color: #ffd700;
   color: #212529;
   padding: 12px 16px; /* Reducido de 16px */
   border-radius: 12px 12px 0 0;
-  border-bottom: 1px solid #e0e0e0;
   flex-shrink: 0; /* No permitir compresión */
 }
 
@@ -760,9 +761,9 @@ onUnmounted(() => {
 .bot-subtitle {
   font-size: 10px;
   opacity: 0.7;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.2;
-  color: rgba(255, 255, 255, 0.9);
+  color: #000;
 }
 
 .bot-status {
@@ -822,8 +823,7 @@ onUnmounted(() => {
 
 /* Área de navegación compacta (fuera del header) */
 .chatbot-navigation-area {
-  background: #fff;
-  border-bottom: 1px solid #e0e0e0;
+  background: #daa520;
   padding: 8px 12px; /* Compacto */
   flex-shrink: 0; /* No permitir compresión */
   max-height: 80px; /* Limitar altura máxima */
@@ -844,7 +844,7 @@ onUnmounted(() => {
   overflow-y: auto;
   overflow-x: hidden; /* Nuevo: evitar scroll horizontal */
   padding: 16px;
-  background: #f8f9fa;
+  background: #1a1a1a;
   min-height: 200px; /* Nuevo: altura mínima para el área de mensajes */
 }
 
@@ -922,8 +922,8 @@ onUnmounted(() => {
 
 /* Área de input */
 .input-area {
-  background: white;
-  border-top: 1px solid #e0e0e0;
+  background: #1a1a1a;
+  border-top: 2px solid #ffd700;
   padding: 16px;
   flex-shrink: 0; /* NUEVO: Evitar compresión */
 }
@@ -965,7 +965,7 @@ onUnmounted(() => {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffc107, #ff9800);
+  background: #ffd700;
   border: none;
   color: #212529;
   font-size: 16px;
@@ -999,15 +999,14 @@ onUnmounted(() => {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1040;
+  z-index: 40;
 }
 
 .btn-floating {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffc107, #ff9800);
-  border: none;
+  border: 2px solid #ffd700;
   color: #212529;
   font-size: 24px;
   box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
@@ -1180,12 +1179,7 @@ onUnmounted(() => {
 /* Responsive */
 @media (max-width: 768px) {
   .chatbot-container {
-    width: calc(100vw - 20px);
-    max-height: calc(100vh - 40px); /* Altura máxima respetando viewport */
-    height: auto;
-    bottom: 10px;
-    right: 10px;
-    border-radius: 12px;
+    max-height: 500px; /* Altura máxima respetando viewport */
   }
 
   .chatbot-header {
@@ -1226,14 +1220,10 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .chatbot-container {
-    width: 100vw;
-    height: 100vh;
-    max-height: 100vh; /* Ocupar toda la pantalla pero con límite */
-    bottom: 0;
-    right: 0;
-    border-radius: 0;
-    display: flex;
-    flex-direction: column;
+    width: 280px;
+    max-height: 370px;
+    bottom: 10px;
+    right: 10px;
   }
 
   .chatbot-header {

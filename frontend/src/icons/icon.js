@@ -40,6 +40,7 @@ import {
   faMinus,
   faPaperPlane,
   faStar,
+  faBroom,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
@@ -94,7 +95,8 @@ library.add(
   farHeart,
   farStar,
   // Brands
-  faWhatsapp
+  faWhatsapp,
+  faBroom
 );
 
 export default FontAwesomeIcon;

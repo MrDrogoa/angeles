@@ -51,7 +51,7 @@ const goToPage = (path) => {
         snap-align="center"
         :breakpoints="{
           0: { itemsToShow: 2, snapAlign: 'center' },
-          1024: { itemsToShow: 3, snapAlign: 'center' },
+          768: { itemsToShow: 3, snapAlign: 'center' },
         }"
       >
         <Slide v-for="card in destacadasCards" :key="card.id">

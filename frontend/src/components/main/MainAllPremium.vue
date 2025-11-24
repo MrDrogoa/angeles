@@ -53,7 +53,7 @@ const goToPage = (path) => {
         :key="card.id"
         @click="goToPage(card.path)"
         :class="card.class"
-        class="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2 mode-card"
+        class="w-full md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] max-w-[180px] md:max-w-[260px] lg:max-w-[300px] relative border-2 border-[#FFD700] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 lg:hover:border-white lg:hover:shadow-2xl lg:hover:-translate-y-2 mode-card"
       >
         <!-- Imagen con overlay -->
         <div class="relative overflow-hidden aspect-3/4 group">

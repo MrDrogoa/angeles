@@ -1,16 +1,21 @@
 <template>
   <!-- Botón flotante de accesibilidad (lado derecho, centrado verticalmente) -->
-  <div class="fixed right-4 top-1/2 transform -translate-y-1/2 z-40">
+  <div
+    class="fixed right-5 bottom-13 md:bottom-15 lg:bottom-70 transform -translate-y-1/2 z-40"
+  >
     <!-- Botón principal de accesibilidad -->
     <button
       @click="toggleAccessibilityPanel"
-      class="bg-[#FFD700] hover:bg-[#FFC700] text-black p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center w-14 h-14 font-bold text-lg mode-btn-acces"
+      class="bg-[#FFD700] hover:bg-[#FFC700] text-black p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center w-11 h-11 md:w-14 md:h-14 font-bold text-lg cursor-pointer mode-btn-acces"
       :title="
         isAccessibilityOpen ? 'Cerrar accesibilidad' : 'Abrir accesibilidad'
       "
       aria-label="Abrir panel de accesibilidad"
     >
-      <font-awesome-icon icon="universal-access" class="text-lg md:text-xl" />
+      <font-awesome-icon
+        icon="universal-access"
+        class="text-xl md:text-2xl lg:text-2xl"
+      />
     </button>
 
     <!-- Panel de modos (aparece en fila horizontal) -->

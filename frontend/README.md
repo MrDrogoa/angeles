@@ -1317,6 +1317,139 @@ Si usas `npm` o `yarn`, reemplaza `pnpm` por tu gestor de paquetes preferido.
 - Si agregas más tarjetas al carrusel o más logos al footer, el diseño se adaptará por las clases Tailwind; para agregar rutas reales, editar `path` dentro de los arrays en cada componente.
 - Al modificar `tailwind.config.cjs`, vuelve a reiniciar el dev server para que las clases se recompilen.
 
+## Sistema de Touch Events para Móviles (24/11/2025 - NUEVO)
+
+Se implementó un sistema completo de directivas Vue personalizadas para eventos touch, optimizado para todos los navegadores móviles modernos y desktop.
+
+### 🌐 Navegadores Soportados
+
+✅ Chrome | ✅ Safari | ✅ Firefox | ✅ Edge | ✅ Samsung Internet  
+✅ Opera | ✅ Brave | ✅ Vivaldi | ✅ DuckDuckGo | ✅ UC Browser
+
+### 📱 Directivas Implementadas
+
+- `src/directives/touch.js` — Sistema completo de directivas touch (NUEVO):
+	- **v-tap**: Tap optimizado sin delay de 300ms
+		- Reemplaza `@click` para mejor performance en móviles
+		- Detecta automáticamente si el usuario se movió (no ejecuta si hay swipe)
+		- Fallback a click en dispositivos sin touch
+		- Uso: `v-tap="handler"` o `v-tap="{ handler, preventDefault: true }"`
+	
+	- **v-swipe**: Detectar deslizamientos en 4 direcciones
+		- Soporta: left, right, up, down
+		- Threshold configurable (50px por defecto)
+		- Retorna información detallada: dirección, deltaX, deltaY, duración
+		- Uso: `v-swipe="{ left: handler1, right: handler2 }"` o `v-swipe:left="handler"`
+	
+	- **v-pinch**: Zoom con dos dedos (pinch to zoom)
+		- Detecta pinch in (acercar) y pinch out (alejar)
+		- Calcula escala y delta en tiempo real
+		- Ideal para galerías de imágenes
+		- Uso: `v-pinch="{ in: zoomIn, out: zoomOut }"`
+	
+	- **v-long-press**: Mantener presionado
+		- Timeout configurable (500ms por defecto)
+		- Cancela automáticamente si hay movimiento
+		- Ideal para menús contextuales
+		- Uso: `v-long-press="handler"`
+
+- `src/composables/useTouchGestures.js` — Composables avanzados para lógica compleja (NUEVO):
+	- `useTouchGestures()` — Hook genérico con estado de touch completo
+	- `useSwipeDetection()` — Swipe con detección de velocidad
+	- `useTouchDrag()` — Drag and drop táctil
+	- `usePullToRefresh()` — Pull to refresh (deslizar para actualizar)
+	- `useMultiTouch()` — Multi-touch con pinch y rotate
+
+- `TOUCH_DIRECTIVES.md` — Documentación completa con ejemplos (NUEVO - 400+ líneas):
+	- Guía de uso para cada directiva
+	- Ejemplos reales de implementación
+	- Aplicación en componentes existentes
+	- Configuración personalizada
+	- Troubleshooting
+
+### ✨ Características del Sistema
+
+✅ **Sin delay de 300ms**: Tap instantáneo en todos los dispositivos
+✅ **Detección inteligente**: Diferencia entre tap, swipe y long press
+✅ **Cancelación automática**: No ejecuta tap si hay movimiento
+✅ **Multi-touch support**: Pinch to zoom con dos dedos
+✅ **Configuración global**: TOUCH_CONFIG editable en touch.js
+✅ **Event listeners optimizados**: Passive listeners para mejor performance
+✅ **Fallback automático**: Click normal en dispositivos sin touch
+✅ **Memory leak prevention**: Limpieza automática de listeners en unmount
+
+### 🎯 Aplicaciones Recomendadas
+
+**RatingModal.vue** - Calificar con estrellas:
+\`\`\`vue
+<font-awesome-icon
+  v-tap="() => rate(star)"
+  :icon="isStarActive(star) ? 'star' : ['far', 'star']"
+/>
+\`\`\`
+
+**MainHistory.vue** - Carrusel de historias:
+\`\`\`vue
+<div 
+  v-swipe="{ left: nextStory, right: prevStory }"
+  v-long-press="pauseStory"
+>
+  <!-- Contenido -->
+</div>
+\`\`\`
+
+**ProfilePicture.vue** - Galería con zoom:
+\`\`\`vue
+<div v-pinch="{ in: zoomIn, out: zoomOut }">
+  <img :style="{ transform: \`scale(\${scale})\` }" />
+</div>
+\`\`\`
+
+**ChatBot.vue** - Navegación táctil:
+\`\`\`vue
+<button v-tap="sendMessage">Enviar</button>
+<div v-swipe:down="closeChatBot">Desliza para cerrar</div>
+\`\`\`
+
+**NavbarComponents.vue** - Menú hamburguesa:
+\`\`\`vue
+<button v-tap="toggleMenu">☰</button>
+<div v-swipe:left="closeMenu">Menu</div>
+\`\`\`
+
+### ⚙️ Configuración
+
+Editar `src/directives/touch.js`:
+\`\`\`javascript
+const TOUCH_CONFIG = {
+  tapTimeout: 200,        // ms - tiempo máximo para tap
+  swipeThreshold: 50,     // px - distancia mínima para swipe
+  longPressTimeout: 500,  // ms - tiempo para long press
+  pinchThreshold: 10,     // px - sensibilidad del pinch
+};
+\`\`\`
+
+### 📚 Documentación Completa
+
+Ver `TOUCH_DIRECTIVES.md` para:
+- Ejemplos detallados de cada directiva
+- Aplicación en todos los componentes
+- Troubleshooting común
+- Best practices para touch events
+- Configuración avanzada con composables
+
+### 🔧 Integración en main.js
+
+\`\`\`javascript
+import TouchDirectives from "./directives/touch.js";
+
+app.use(TouchDirectives); // Registra todas las directivas globalmente
+\`\`\`
+
+Ahora puedes usar `v-tap`, `v-swipe`, `v-pinch` y `v-long-press` en cualquier componente sin imports adicionales.
+
+---
+
 ## Siguientes pasos sugeridos
 
 1. Conectar componentes a un backend para obtener datos dinámicos (stories, noticias, destacadas).

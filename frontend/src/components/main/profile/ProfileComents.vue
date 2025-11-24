@@ -46,9 +46,7 @@ const limitedComments = computed(() => {
       >
         <!-- Header: Usuario y Fecha -->
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3
-            class="text-white font-semibold text-base md:text-lg mode-title break-words"
-          >
+          <h3 class="text-white font-semibold text-base md:text-lg mode-title">
             {{ comment.user }}
           </h3>
           <span
@@ -60,7 +58,7 @@ const limitedComments = computed(() => {
 
         <!-- Comentario -->
         <p
-          class="text-gray-300 text-sm md:text-base leading-relaxed mode-paragraph break-words"
+          class="text-gray-300 text-sm md:text-base leading-relaxed mode-paragraph"
         >
           {{ comment.comment }}
         </p>

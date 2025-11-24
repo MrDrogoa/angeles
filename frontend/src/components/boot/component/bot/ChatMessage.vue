@@ -6,7 +6,7 @@
         <div class="bot-avatar">
           <img
             src="@/assets/amin-transparente.webp"
-            alt="AMIN"
+            alt="Ayda"
             class="bot-avatar-img"
           />
         </div>
@@ -464,7 +464,7 @@ const handleSummaryAction = (action) => {
 }
 
 .bot-avatar {
-  background: linear-gradient(135deg, #ffc107, #ff9800);
+  border: 2px solid #ffd700;
   color: #212529;
 }
 
@@ -475,7 +475,7 @@ const handleSummaryAction = (action) => {
 }
 
 .user-avatar {
-  background: #007bff;
+  background: #daa520;
   color: white;
   font-size: 14px;
 }
@@ -502,17 +502,18 @@ const handleSummaryAction = (action) => {
 }
 
 .bot-bubble {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: #1a1a1a;
+  border: 2px solid #ffd700;
+  color: #fff;
   border-radius: 18px 18px 18px 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .user-bubble {
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  background: #daa520;
   color: white;
   border-radius: 18px 18px 4px 18px;
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.3);
 }
 
 /* Texto del mensaje */
