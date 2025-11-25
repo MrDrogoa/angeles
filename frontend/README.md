@@ -1450,11 +1450,424 @@ Ahora puedes usar `v-tap`, `v-swipe`, `v-pinch` y `v-long-press` en cualquier co
 
 ---
 
+## Sistema de Navegación por Regiones y Foro de Experiencias (25/11/2025 - NUEVO)
+
+Se implementó un sistema completo de navegación por regiones geográficas y un foro de experiencias con categorías, filtros y sistema de votación.
+
+### 🗺️ Sistema de Regiones Geográficas
+
+- `src/components/nav/Location.vue` — Selector de ubicación con regiones (ACTUALIZADO):
+	- **3 regiones principales**: Norte, Centro, Sur
+	- **8 ciudades por región** (24 ciudades totales):
+		- **Norte**: Arica, Iquique, Antofagasta, Calama, Copiapó, Vallenar, Chañaral, Tocopilla
+		- **Centro**: La Serena, Coquimbo, Ovalle, Valparaíso, Viña del Mar, Santiago, Rancagua, Talca
+		- **Sur**: Concepción, Temuco, Valdivia, Puerto Montt, Osorno, Punta Arenas, Coyhaique, Castro
+	- **Accordion behavior**: Click en región expande ciudades, otras se cierran automáticamente
+	- **Estilos diferenciados**:
+		- Región activa: solo texto dorado (#FFD700)
+		- Ciudad activa: background dorado (#DAA520), texto negro, font-semibold
+		- Ciudades con indentación (pl-8) para jerarquía visual
+	- **Persistencia**: localStorage guarda última ciudad seleccionada
+	- **Animaciones suaves**: Transiciones de 300ms en expand/collapse
+	- **Botón principal**: Texto "Regiones" con icono map-marker-alt
+	- **Dropdown compacto**: max-h-96 con scroll automático
+	- **onMounted**: Carga ciudad guardada automáticamente
+
+### 📝 Sistema de Foro de Experiencias
+
+- `src/components/ForoComponents.vue` — Componente principal del foro (NUEVO - 700+ líneas):
+	- **Categorías con tabs** (estilo MainNews.vue):
+		- "Todos", "Clientes", "Chicas"
+		- Separadores "|" entre categorías
+		- Activo: bg-[#DAA520], text-white, shadow-lg
+		- Inactivo: text-[#FFD700], hover con opacidad
+		- Filtrado automático de posts por categoría seleccionada
+	
+	- **Filtros avanzados**:
+		- **Dropdown de Ciudades**: 
+			- Opción "Todas las ciudades" en la parte superior
+			- 3 regiones (Norte, Centro, Sur) con accordion
+			- Ciudades indentadas bajo cada región
+			- Región activa: texto dorado
+			- Ciudad activa: background #DAA520
+			- max-h-80 con scroll
+		- **Select de Ordenamiento**:
+			- "Más recientes" (ordena por fecha descendente)
+			- "Más votados" (ordena por cantidad de likes)
+			- Dropdown simple con estilos consistentes
+	
+	- **Modal "Crear nuevo post"**:
+		- **Campos del formulario**:
+			- Alias (input text)
+			- Ciudad (dropdown con 3 regiones en accordion, igual que Location.vue)
+			- Categoría (select: Clientes/Chicas)
+			- Título del post (input text)
+			- Comentario (textarea, 6 filas)
+		- **Validación completa**: alert si faltan campos
+		- **Diseño**: Borde dorado 2px, rounded-2xl, max-w-2xl
+		- **Header**: Título + botón cerrar (X)
+		- **Footer**: Botón "Publicar" dorado full-width
+		- **Comportamiento**: 
+			- Click en input de ciudad abre dropdown de regiones
+			- Select de categoría con opciones predefinidas
+			- Close con X o click fuera del modal
+			- Reset completo del formulario al cerrar
+	
+	- **Botón "Nuevo Post"**:
+		- Ubicado debajo del párrafo descriptivo
+		- Icono plus (#plus) + texto "Nuevo Post"
+		- Estilo: bg-[#FFD000], hover bg-[#FFB200]
+		- Abre modal al hacer click
+	
+	- **Estados y lógica**:
+		- `posts` ref: array de posts guardados en localStorage
+		- `activeCategory` ref: categoría activa (todos/clientes/chicas)
+		- `selectedCity` ref: ciudad seleccionada para filtrar
+		- `sortBy` ref: criterio de ordenamiento (recientes/votados)
+		- `filterRegions` ref: regiones para el dropdown de filtro (separadas del modal)
+		- `regions` ref: regiones para el modal de crear post
+		- `filteredPosts` computed: aplica filtros + ordenamiento
+		- `toggleFilterRegion()`: accordion en filtro de ciudades
+		- `selectCity()`: selecciona ciudad y cierra regiones
+		- `publishPost()`: valida, crea post, guarda en localStorage
+	
+	- **Estructura de post guardado**:
+		```javascript
+		{
+		  id: Date.now(),
+		  alias: "Usuario1",
+		  city: "Santiago",
+		  category: "Clientes",
+		  title: "Excelente experiencia",
+		  comment: "Muy buena atención...",
+		  date: new Date().toISOString(),
+		  likes: 0,
+		  dislikes: 0
+		}
+		```
+
+- `src/components/main/ForoCards.vue` — Tarjetas de posts del foro (NUEVO):
+	- **Grid responsive**: 1 col mobile, 2 cols tablet, 3 cols desktop
+	- **Mensaje por defecto**: "Aún no hay foros disponibles" con icono comments
+	- **Cada tarjeta incluye**:
+		- **Header**:
+			- Icono user-circle + alias del usuario
+			- Ciudad + fecha (formatDate en español)
+			- Badge de categoría (Clientes: azul, Chicas: rosa)
+		- **Contenido**:
+			- Título del post (text-[#FFD700], font-bold)
+			- Comentario con line-clamp-3 (máx 3 líneas)
+		- **Footer** (votación):
+			- Botón like (thumbs-up) con contador
+			- Botón dislike (thumbs-down) con contador
+			- Contador de comentarios (0 por ahora)
+			- Hover: like verde, dislike rojo
+	- **Emisión de eventos**: @vote con { postId, voteType }
+	- **Estilos**:
+		- Borde dorado 2px, rounded-xl
+		- Hover: shadow-lg con sombra dorada
+		- Transiciones suaves (300ms)
+		- Gap de 4-6px entre tarjetas
+
+- `src/components/TitleForoComponents.vue` — Título del foro (NUEVO):
+	- Componente reutilizable para título H2
+	- Props: `title` (required)
+	- Clases base: text-xl → text-5xl responsive
+	- Color: text-[#A2A2A2]
+	- Acepta clases adicionales via attrs.class
+	- Uso: `<title-foro-components title="Foro de experiencias..." />`
+
+- `src/components/buttons/Button4Components.vue` — Botón rojo (NUEVO):
+	- Botón rojo para destacar "Foro" en el menú
+	- bg-[#FF2600], hover bg-[#FF5700]
+	- Mismo patrón que Button2Components y Button3Components
+	- Computed classes con soporte para disabled
+	- Emite evento @click
+	- Uso: `<button4-components>Texto</button4-components>`
+
+- `src/views/ForoViews.vue` — Vista del foro (NUEVO):
+	- Vista simple que renderiza ForoComponents
+	- Registrada en router como `/forum`
+	- Meta title: "Foro - Angeles y Demonios"
+
+- `src/components/nav/Lists.vue` — Menú hamburguesa (ACTUALIZADO):
+	- Agregado botón "Foro" en sección "Acciones"
+	- Importa Button4Components (botón rojo)
+	- router-link a `/forum`
+	- Icono message + texto "Foro"
+	- Orden: Acceder → Registro → Publicar → Contacto → **Foro**
+
+- `src/router/index.js` — Router (ACTUALIZADO):
+	- Nueva ruta `/forum`:
+		- name: "Foro"
+		- component: ForoViews
+		- meta.title: "Foro - Angeles y Demonios"
+	- Importa ForoViews desde `@/views/ForoViews.vue`
+
+- `src/icons/icon.js` — Iconos (ACTUALIZADO):
+	- **7 nuevos iconos agregados**:
+		- `faUserCircle` — avatar de usuario en posts
+		- `faComments` — mensaje "sin posts"
+		- `faThumbsUp` — like en posts
+		- `faThumbsDown` — dislike en posts
+		- `faComment` — contador de comentarios
+		- `faTimes` — cerrar modal
+		- `faSort` — icono de ordenamiento
+	- Total: 49+ iconos Font Awesome disponibles
+
+### ✨ Características del Sistema de Foro (25/11/2025)
+
+✅ **Sistema completo de posts**:
+- Crear posts con alias, ciudad, categoría, título y comentario
+- Validación completa de campos obligatorios
+- Modal con diseño consistente (borde dorado)
+- Formulario con regiones en accordion
+- localStorage para persistencia de posts
+
+✅ **Filtros avanzados**:
+- Filtro por categoría (Todos/Clientes/Chicas) con tabs
+- Filtro por ciudad con 3 regiones en accordion
+- Ordenamiento por más recientes o más votados
+- Opción "Todas las ciudades" para ver todos
+- Filtros combinables (categoría + ciudad + orden)
+
+✅ **Sistema de votación**:
+- Like y dislike con contadores independientes
+- Actualización en tiempo real
+- Persistencia en localStorage
+- Hover effects (verde para like, rojo para dislike)
+- Preparado para futuro sistema de comentarios
+
+✅ **Navegación mejorada**:
+- Location.vue con 3 regiones (Norte, Centro, Sur)
+- 8 ciudades por región (24 totales)
+- Accordion: una región abierta a la vez
+- Persistencia de última ciudad seleccionada
+- Botón "Foro" en menú hamburguesa
+
+✅ **UI/UX optimizada**:
+- Tabs con separadores "|" estilo MainNews.vue
+- Grid responsive 1/2/3 columnas
+- Line-clamp en comentarios (máx 3 líneas)
+- Badges de categoría con colores diferenciados
+- Animaciones suaves (300ms)
+- Mensaje por defecto cuando no hay posts
+
+✅ **Diseño consistente**:
+- Paleta dorada (#FFD700, #DAA520, #FFD000)
+- Bordes dorados en modales y tarjetas
+- Hover effects en todos los elementos interactivos
+- Clases mode- para compatibilidad con accesibilidad
+- Responsive mobile/tablet/desktop
+
+✅ **Persistencia completa**:
+- Posts guardados en localStorage (key: "foroPosts")
+- Última ciudad guardada (key: "selectedCity")
+- Categoría activa restaurada al navegar
+- Filtros preservados durante la sesión
+
+### 📊 Estructura de Datos del Foro (25/11/2025)
+
+**Post completo en localStorage**:
+```javascript
+{
+  id: 1732582400000,
+  alias: "Juan123",
+  city: "Santiago",
+  category: "Clientes",
+  title: "Excelente servicio en Santiago Centro",
+  comment: "Muy buena atención, ambiente agradable y profesionalismo...",
+  date: "2025-11-25T14:30:00.000Z",
+  likes: 5,
+  dislikes: 1
+}
+```
+
+**Regiones disponibles** (Norte, Centro, Sur):
+```javascript
+[
+  {
+    id: "norte",
+    name: "Norte",
+    isOpen: false,
+    cities: ["Arica", "Iquique", "Antofagasta", "Calama", "Copiapó", "Vallenar", "Chañaral", "Tocopilla"]
+  },
+  {
+    id: "centro",
+    name: "Centro",
+    isOpen: false,
+    cities: ["La Serena", "Coquimbo", "Ovalle", "Valparaíso", "Viña del Mar", "Santiago", "Rancagua", "Talca"]
+  },
+  {
+    id: "sur",
+    name: "Sur",
+    isOpen: false,
+    cities: ["Concepción", "Temuco", "Valdivia", "Puerto Montt", "Osorno", "Punta Arenas", "Coyhaique", "Castro"]
+  }
+]
+```
+
+### 🔄 Flujo Completo del Foro (25/11/2025)
+
+```
+Usuario navega a /forum
+  └→ ForoViews renderiza ForoComponents
+     ├→ onMounted() carga posts desde localStorage
+     ├→ Muestra tabs de categorías (Todos activo por defecto)
+     ├→ Muestra filtros (ciudad + ordenamiento)
+     └→ Renderiza ForoCards con filteredPosts
+
+Usuario hace click en "Nuevo Post"
+  └→ Modal se abre (isModalOpen = true)
+     ├→ Usuario llena formulario:
+     │  ├→ Alias: "Usuario1"
+     │  ├→ Ciudad: Click → abre regiones → selecciona "Santiago"
+     │  ├→ Categoría: Select → "Clientes"
+     │  ├→ Título: "Excelente servicio"
+     │  └→ Comentario: "Muy buena atención..."
+     ├→ Click en "Publicar"
+     ├→ Validación: ¿Todos los campos completos?
+     │  ├→ NO: Alert "Por favor completa todos los campos"
+     │  └→ SÍ: Continúa
+     ├→ Crea objeto newPost con id único (Date.now())
+     ├→ posts.unshift(newPost) — agrega al inicio del array
+     ├→ localStorage.setItem("foroPosts", JSON.stringify(posts))
+     ├→ closeModal() — resetea formulario
+     └→ ForoCards se actualiza reactivamente
+
+Usuario filtra por categoría "Clientes"
+  └→ setCategory("clientes")
+     ├→ activeCategory.value = "clientes"
+     ├→ filteredPosts computed se recalcula
+     ├→ Filtra posts donde post.category === "Clientes"
+     └→ ForoCards muestra solo posts de clientes
+
+Usuario selecciona ciudad "Valparaíso" (región Centro)
+  └→ Click en dropdown de ciudad
+     ├→ isCityDropdownOpen = true
+     ├→ Click en región "Centro"
+     │  └→ toggleFilterRegion("centro") — expande ciudades
+     ├→ Click en "Valparaíso"
+     │  ├→ selectedCity.value = "Valparaíso"
+     │  ├→ Cierra todas las regiones
+     │  └→ isCityDropdownOpen = false
+     ├→ filteredPosts computed se recalcula
+     ├→ Filtra posts donde post.city === "Valparaíso"
+     └→ ForoCards muestra solo posts de Valparaíso
+
+Usuario cambia ordenamiento a "Más votados"
+  └→ changeSortBy("votados")
+     ├→ sortBy.value = "votados"
+     ├→ filteredPosts computed se recalcula
+     ├→ Ordena posts: [...filtered].sort((a, b) => b.likes - a.likes)
+     └→ ForoCards muestra posts ordenados por likes
+
+Usuario hace like en un post
+  └→ handleVote({ postId: 123, voteType: "like" })
+     ├→ Encuentra post en array: posts.find(p => p.id === 123)
+     ├→ Incrementa post.likes++
+     ├→ localStorage.setItem("foroPosts", JSON.stringify(posts))
+     └→ ForoCards se actualiza con nuevo contador
+```
+
+### ⚙️ Configuración y Personalización (25/11/2025)
+
+**Agregar más ciudades a una región**:
+```javascript
+// En ForoComponents.vue, líneas 20-67
+const filterRegions = ref([
+  {
+    id: "norte",
+    name: "Norte",
+    isOpen: false,
+    cities: [
+      "Arica",
+      "Iquique",
+      "Antofagasta",
+      "Calama",
+      "Copiapó",
+      "Vallenar",
+      "Chañaral",
+      "Tocopilla",
+      // Agregar aquí nuevas ciudades
+      "Taltal",
+      "Diego de Almagro"
+    ],
+  },
+  // ... otras regiones
+]);
+```
+
+**Cambiar colores de categorías**:
+```javascript
+// En ForoCards.vue, líneas 100-105
+post.category === 'Clientes'
+  ? 'bg-blue-500/20 text-blue-400'  // Cambiar azul aquí
+  : 'bg-pink-500/20 text-pink-400'  // Cambiar rosa aquí
+```
+
+**Agregar nueva categoría**:
+```javascript
+// En ForoComponents.vue, líneas 131-135
+const categories = [
+  { id: "todos", label: "Todos" },
+  { id: "clientes", label: "Clientes" },
+  { id: "chicas", label: "Chicas" },
+  { id: "trans", label: "Trans" }, // Nueva categoría
+];
+```
+
+**Modificar ordenamiento**:
+```javascript
+// En ForoComponents.vue, líneas 138-141
+const sortOptions = [
+  { value: "recientes", label: "Más recientes" },
+  { value: "votados", label: "Más votados" },
+  { value: "comentados", label: "Más comentados" }, // Nueva opción
+];
+```
+
+### 🎯 TODOs para Producción (25/11/2025)
+
+⚠️ **Backend requerido**:
+- Crear endpoint POST /api/forum/posts (crear post)
+- Crear endpoint GET /api/forum/posts (listar posts con filtros)
+- Crear endpoint PUT /api/forum/posts/:id/vote (votar post)
+- Crear endpoint GET /api/forum/cities (obtener ciudades dinámicas)
+- Implementar autenticación: solo usuarios logueados pueden postear
+- Implementar límite de posts por usuario/día
+
+⚠️ **Mejoras UI/UX**:
+- Sistema de comentarios en cada post (modal o página dedicada)
+- Editar/eliminar posts propios
+- Reportar posts inapropiados
+- Imágenes en posts (opcional)
+- Reacciones más allá de like/dislike (emojis)
+- Notificaciones de nuevos comentarios
+
+⚠️ **Seguridad**:
+- Sanitizar inputs antes de guardar (prevenir XSS)
+- Validación de datos en backend
+- Rate limiting para evitar spam
+- Moderación de contenido inapropiado
+- Bloqueo de usuarios abusivos
+
+⚠️ **Optimización**:
+- Paginación de posts (cargar de 10 en 10)
+- Infinite scroll en lugar de "Ver más"
+- Lazy loading de imágenes en posts
+- Debounce en filtros de búsqueda
+- Cache de posts en memoria (Vuex/Pinia)
+
+---
+
 ## Siguientes pasos sugeridos
 
-1. Conectar componentes a un backend para obtener datos dinámicos (stories, noticias, destacadas).
-2. Añadir tests unitarios para componentes clave (carrusel, navbar, footer).
+1. Conectar componentes a un backend para obtener datos dinámicos (stories, noticias, destacadas, foro).
+2. Añadir tests unitarios para componentes clave (carrusel, navbar, footer, foro).
 3. Optimizar imágenes y usar lazy-loading en las cards para mejorar rendimiento.
+4. Implementar sistema de comentarios en posts del foro.
+5. Agregar autenticación completa para crear posts (integrar con authStore).
 
 ---
 
