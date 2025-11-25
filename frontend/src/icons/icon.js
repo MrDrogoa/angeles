@@ -41,6 +41,14 @@ import {
   faPaperPlane,
   faStar,
   faBroom,
+  faMessage,
+  faUserCircle,
+  faComments,
+  faThumbsUp,
+  faThumbsDown,
+  faComment,
+  faTimes,
+  faSort,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
@@ -91,12 +99,20 @@ library.add(
   faMinus,
   faPaperPlane,
   faStar,
+  faBroom,
+  faMessage,
+  faUserCircle,
+  faComments,
+  faThumbsUp,
+  faThumbsDown,
+  faComment,
+  faTimes,
+  faSort,
   // Regular
   farHeart,
   farStar,
   // Brands
-  faWhatsapp,
-  faBroom
+  faWhatsapp
 );
 
 export default FontAwesomeIcon;

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import ButtonComponents from "@/components/buttons/ButtonComponents.vue";
 import Button2Components from "@/components/buttons/Button2Components.vue";
 import Button3Components from "@/components/buttons/Button3Components.vue";
+import Button4Components from "@/components/buttons/Button4Components.vue";
 import SearchComponents from "@/components/SearchComponents.vue";
 
 const isMenuOpen = ref(false);
@@ -168,10 +169,16 @@ const menuCategories = [
                   ><font-awesome-icon icon="dollar-sign" class="mode-icon" />
                   Publicar</button3-components
                 >
-                <router-link to="/contact">
+                <router-link to="/contact" class="block">
                   <button-components class="w-full"
                     ><font-awesome-icon icon="envelope" class="mode-icon" />
                     Contacto</button-components
+                  >
+                </router-link>
+                <router-link to="/forum" class="block">
+                  <button4-components class="w-full"
+                    ><font-awesome-icon icon="message" class="mode-icon" />
+                    Foro</button4-components
                   >
                 </router-link>
               </div>
