@@ -1861,6 +1861,265 @@ const sortOptions = [
 
 ---
 
+## Mejoras en Accesibilidad y Componentes (26/11/2025 - NUEVO)
+
+Se implementaron múltiples mejoras en accesibilidad, estilos de componentes y correcciones de diseño responsive.
+
+### 🎨 Mejoras en Sistema de Accesibilidad
+
+- `src/components/AccessiblityComponents.vue` — Panel de accesibilidad (ACTUALIZADO):
+	- **Diseño responsive mejorado**:
+		- Botones: 12x12px (mobile) → 16x16px (desktop)
+		- Panel: `max-w-2xs sm:max-w-xs md:max-w-sm` con flex-wrap
+		- Gap reducido a 2px entre botones para compactar en mobile
+	- **Modo Large Text optimizado**:
+		- Controles + y - con diseño compacto
+		- Display de porcentaje actual (80%-200%)
+		- Botones deshabilitados en límites con opacity-50
+		- Icons minus/plus con text-xs
+		- Espaciado interno reducido (p-1)
+
+- `src/css/accessibilityHighContrast.css` — Modo Alto Contraste (ACTUALIZADO):
+	- **Nuevas clases agregadas**:
+		- `.mode-select` — background negro para selects/dropdowns
+		- `.mode-login` — background transparente para inputs de login
+	- **Estilos existentes preservados**:
+		- mode-title, mode-paragraph, mode-icon-menu (blanco)
+		- mode-card, mode-nav-card, mode-body (negro)
+		- mode-btn (amarillo con texto negro)
+		- mode-input, mode-btn-acces (amarillo)
+		- mode-register-input (blanco)
+		- mode-icon-eyes (transparente)
+
+- `src/css/accessibilityVisualRest.css` — Modo Descanso Visual (ACTUALIZADO):
+	- **Nueva clase agregada**:
+		- `.mode-foro` — background #2a2a2a (gris oscuro) para componentes del foro
+	- **Estilos existentes preservados**:
+		- mode-card, mode-nav-card, mode-body, mode-access-card (gris oscuro #2a2a2a)
+		- mode-title, mode-paragraph, mode-icon-menu (gris claro #d9d9d9)
+		- mode-bg-hero (gradiente gris suave)
+
+### 🔧 Mejoras en Componentes del Foro
+
+- `src/components/ForoComponents.vue` — Componente principal del foro (ACTUALIZADO):
+	- **Clases de accesibilidad agregadas**:
+		- Categorías (tabs): `mode-paragraph` en botones y separadores
+		- Botones activos: `mode-btn`
+		- Botones inactivos: `mode-btn-location cursor-pointer`
+		- Separador "|": text-sm md:text-base font-bold
+		- Párrafo descriptivo: text-sm → text-2xl responsive
+	- **Filtros mejorados**:
+		- Dropdown ciudad: `mode-carac-btn mode-select mode-foro`
+		- Chevron: `cursor-pointer` en todos los iconos de rotación
+		- Panel dropdown: `mode-icon-profile mode-nav-card`
+		- Dropdown ordenamiento: `mode-carac-btn mode-select mode-foro`
+	- **Modal actualizado**:
+		- Background: `bg-black/70 backdrop-blur-sm` (antes bg-black/80)
+		- Container: `mode-card bg-gray-900/50` (antes bg-[#1a1a1a])
+		- Botón cerrar: `cursor-pointer mode-icon` + aria-label
+		- Inputs: `mode-input mode-register-input` (fondo blanco, texto gris oscuro)
+		- Select categoría: `mode-input mode-register-input cursor-pointer`
+		- Textarea: `mode-input mode-register-input`
+		- Chevron ciudad: `cursor-pointer` (antes pointer-events-none)
+		- Placeholder colors: `placeholder-gray-400`
+
+- `src/components/main/ForoCards.vue` — Tarjetas del foro (ACTUALIZADO):
+	- **Clase de accesibilidad**:
+		- Tarjetas: `mode-card` agregado para compatibilidad con modos
+	- **Eliminado**:
+		- Hover effect `lg:hover:shadow-lg lg:hover:shadow-[#FFD700]/20`
+		- Simplificación de estilos para mejor performance
+
+### 📝 Mejoras en Componentes de Comentarios y Perfiles
+
+- `src/components/ComentsComponents.vue` — Página de comentarios (ACTUALIZADO):
+	- **Clases de accesibilidad agregadas**:
+		- Tarjetas: `mode-card`
+		- Título (usuario): `mode-title`
+		- Fecha: `mode-paragraph`
+	- **Sin cambios en estructura**: Grid 2 columnas preservado
+
+- `src/components/ProfileComponents.vue` — Perfil completo (ACTUALIZADO):
+	- **Características actualizadas**:
+		- Badges: font-semibold en lugar de font-medium
+		- Hover: `lg:hover:bg-[#FFD700] lg:hover:text-black` (solo desktop)
+	- **Comentario agregado**:
+		- Datos de API comentados con ejemplo de axios
+		- useRoute y fetchProfile preparados para integración
+
+- `src/components/main/profile/RatingModal.vue` — Modal de calificación (ACTUALIZADO):
+	- **Diseño optimizado**:
+		- Container: `mode-card` agregado
+		- Header/Footer: sin sticky (antes sticky top-0/bottom-0)
+		- Botón cerrar: `cursor-pointer mode-icon` + aria-label
+		- Botón cancelar: `cursor-pointer mode-paragraph`
+	- **Sin cambios funcionales**: Lógica de calificación preservada
+
+### 🗺️ Mejoras en Navegación
+
+- `src/components/nav/Location.vue` — Selector de regiones (ACTUALIZADO):
+	- **Wrapper actualizado**:
+		- Div principal: `mode-nav-card` agregado (antes solo borde)
+	- **Chevrons mejorados**:
+		- Todos los chevron-down: `cursor-pointer` agregado
+	- **Botones de ciudad**:
+		- `cursor-pointer` agregado para consistencia
+	- **Sin cambios en lógica**: Accordion de regiones preservado
+
+### 🎭 Mejoras en Componentes Visuales
+
+- `src/components/main/MainNews.vue` — Carrusel de novedades (ACTUALIZADO):
+	- **Categorías (tabs) mejoradas**:
+		- Botones: `mode-paragraph` agregado
+		- Activos: `mode-btn`
+		- Inactivos: `mode-btn-location cursor-pointer`
+		- Separador "|": `mode-paragraph`
+	- **Estilos preservados**: Layout responsive, grid, transiciones
+
+- `src/components/buttons/ButtonAnimatedComponent.vue` — Input animado (ACTUALIZADO):
+	- **Clases de accesibilidad**:
+		- Input: `mode-input mode-login` agregado
+		- Label span: `mode-paragraph`
+	- **Sin cambios en animación**: Letter-by-letter animation preservada
+
+- `src/components/main/form/LoginComponents.vue` — Formulario de login (ACTUALIZADO):
+	- **Componentes actualizados**:
+		- ButtonAnimatedComponent → button-animated-component (kebab-case)
+	- **Sin cambios funcionales**: Validación y lógica preservadas
+
+### ✨ Características de las Mejoras (26/11/2025)
+
+✅ **Accesibilidad mejorada**:
+- Todas las clases mode- aplicadas consistentemente
+- Compatibilidad con 8 modos de accesibilidad
+- Estilos diferenciados para alto contraste y descanso visual
+- Inputs y selects con backgrounds correctos en cada modo
+
+✅ **Responsive optimizado**:
+- Panel de accesibilidad compacto en mobile
+- Botones escalables según breakpoint
+- Texto responsive en todos los componentes
+- Gap reducido para mejor uso del espacio
+
+✅ **UX mejorada**:
+- Cursor pointer en todos los elementos clickeables
+- Aria-labels en botones de cerrar
+- Hover effects solo en desktop (lg:hover)
+- Placeholders con colores consistentes
+
+✅ **Consistencia visual**:
+- Separadores "|" con font-bold
+- Chevrons con cursor-pointer
+- Clases mode- en todos los componentes
+- Estilos uniformes en modales
+
+✅ **Performance**:
+- Eliminados hover effects innecesarios
+- Backdrop-blur en modales
+- Transitions optimizadas
+- Clases reutilizables
+
+✅ **Preparación para backend**:
+- Comentarios con ejemplos de API
+- useRoute preparado en ProfileComponents
+- fetchProfile comentado para futura integración
+- Estructura de datos documentada
+
+### 🎯 Componentes Actualizados (26/11/2025)
+
+**Total: 11 archivos modificados**
+
+1. **AccessiblityComponents.vue** — Panel responsive mejorado
+2. **accessibilityHighContrast.css** — mode-select y mode-login
+3. **accessibilityVisualRest.css** — mode-foro
+4. **ForoComponents.vue** — Clases de accesibilidad completas
+5. **ForoCards.vue** — mode-card agregado
+6. **ComentsComponents.vue** — mode-card y mode-title
+7. **ProfileComponents.vue** — Hover solo desktop
+8. **RatingModal.vue** — mode-card y cursor-pointer
+9. **Location.vue** — mode-nav-card y cursor-pointer
+10. **MainNews.vue** — mode-paragraph en tabs
+11. **ButtonAnimatedComponent.vue** — mode-input mode-login
+
+### 📊 Clases de Accesibilidad Implementadas (26/11/2025)
+
+**Nuevas clases agregadas a CSS**:
+- `mode-select` — Backgrounds para selects en alto contraste
+- `mode-login` — Inputs transparentes para formularios de login
+- `mode-foro` — Background oscuro para componentes del foro
+
+**Clases aplicadas en componentes**:
+- `mode-card` — Todas las tarjetas y modales
+- `mode-paragraph` — Textos descriptivos, labels, separadores
+- `mode-title` — Títulos de secciones y nombres de usuario
+- `mode-btn` — Botones activos y principales
+- `mode-btn-location` — Botones inactivos de navegación
+- `mode-input` — Todos los inputs y textareas
+- `mode-register-input` — Inputs de formularios (fondo blanco)
+- `mode-icon` — Iconos de Font Awesome
+- `mode-icon-profile` — Iconos en dropdowns y perfiles
+- `mode-nav-card` — Componentes de navegación
+- `mode-carac-btn` — Botones de características
+- `mode-foro` — Dropdowns y selects del foro
+
+### 🔄 Flujo de Accesibilidad Completo (26/11/2025)
+
+```
+Usuario activa modo "Alto Contraste"
+  └→ AccessibilityComponents aplica clase "high-contrast-mode" al body
+     ├→ ForoComponents: mode-select aplica bg negro a dropdowns
+     ├→ ButtonAnimatedComponent: mode-login hace inputs transparentes
+     ├→ ComentsComponents: mode-card aplica bg negro a tarjetas
+     ├→ ProfileComponents: mode-carac-btn aplica bg amarillo a badges
+     └→ Location.vue: mode-nav-card aplica bg negro a navegación
+
+Usuario activa modo "Descanso Visual"
+  └→ AccessibilityComponents aplica clase "visual-rest-mode" al body
+     ├→ ForoComponents: mode-foro aplica bg #2a2a2a a dropdowns
+     ├→ MainNews.vue: mode-paragraph aplica color #d9d9d9 a textos
+     ├→ ForoCards: mode-card aplica bg #2a2a2a a tarjetas
+     └→ RatingModal: mode-card aplica bg #2a2a2a al modal
+
+Usuario activa modo "Texto Grande"
+  └→ AccessibilityComponents muestra controles + y -
+     ├→ Click en "+" incrementa textSize de 100% a 110%
+     ├→ useAccessibilityStore aplica estilos dinámicos:
+     │  ├→ h1-h6 escalan según multiplicadores
+     │  └→ p, span, li escalan a 110%
+     ├→ Todos los textos con mode-paragraph se agrandan
+     └→ Layout responsive se ajusta automáticamente
+```
+
+### ⚙️ Configuración de Estilos de Accesibilidad (26/11/2025)
+
+**Agregar nueva clase mode en Alto Contraste**:
+```css
+/* En accessibilityHighContrast.css */
+.high-contrast-mode .mode-nueva-clase {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #ffff00;
+}
+```
+
+**Agregar nueva clase mode en Descanso Visual**:
+```css
+/* En accessibilityVisualRest.css */
+.visual-rest-mode .mode-nueva-clase {
+  background-color: #2a2a2a;
+  color: #d9d9d9;
+}
+```
+
+**Aplicar clase en componente**:
+```vue
+<div class="mode-nueva-clase">
+  <!-- Contenido adaptable a modos de accesibilidad -->
+</div>
+```
+
+---
+
 ## Siguientes pasos sugeridos
 
 1. Conectar componentes a un backend para obtener datos dinámicos (stories, noticias, destacadas, foro).
@@ -1868,6 +2127,9 @@ const sortOptions = [
 3. Optimizar imágenes y usar lazy-loading en las cards para mejorar rendimiento.
 4. Implementar sistema de comentarios en posts del foro.
 5. Agregar autenticación completa para crear posts (integrar con authStore).
+6. Implementar backend para sistema de calificaciones (POST /api/ratings).
+7. Agregar paginación en lista de comentarios (ComentsComponents).
+8. Crear tests para modos de accesibilidad (verificar contraste, tamaños).
 
 ---
 

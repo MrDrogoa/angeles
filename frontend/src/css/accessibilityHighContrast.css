@@ -8,7 +8,8 @@
 .high-contrast-mode .mode-card,
 .high-contrast-mode .mode-nav-card,
 .high-contrast-mode .mode-body,
-.high-contrast-mode .mode-access-card {
+.high-contrast-mode .mode-access-card,
+.high-contrast-mode .mode-select {
   background-color: #000;
 }
 
@@ -39,6 +40,7 @@
   background-color: #fff;
 }
 
-.high-contrast-mode .mode-icon-eyes {
+.high-contrast-mode .mode-icon-eyes,
+.high-contrast-mode .mode-login {
   background-color: transparent;
 }

@@ -40,7 +40,7 @@ const formatDate = (date) => {
     <div
       v-for="post in posts"
       :key="post.id"
-      class="bg-[#1a1a1a] border-2 border-[#FFD700] rounded-xl p-4 md:p-5 transition-all duration-300 lg:hover:shadow-lg lg:hover:shadow-[#FFD700]/20 mode-card"
+      class="bg-[#1a1a1a] border-2 border-[#FFD700] rounded-xl p-4 md:p-5 mode-card"
     >
       <!-- Header del post -->
       <div class="flex items-start justify-between mb-3">

@@ -142,18 +142,18 @@ const categories = [
   >
     <!-- Modal container -->
     <div
-      class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-2 border-[#FFD700] rounded-2xl shadow-2xl"
+      class="mode-card relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-2 border-[#FFD700] rounded-2xl shadow-2xl"
     >
       <!-- Header -->
       <div
-        class="sticky top-0 z-10 flex items-center justify-between p-4 md:p-6 bg-gray-900 border-b-2 border-[#FFD700]"
+        class="top-0 z-10 flex items-center justify-between p-4 md:p-6 border-b-2 border-[#FFD700]"
       >
         <h2 class="text-xl md:text-2xl font-bold text-[#FFD700] mode-title">
           ⭐ Calificar Perfil
         </h2>
         <button
           @click="closeModal"
-          class="text-gray-400 hover:text-white transition-colors duration-200 text-2xl"
+          class="text-gray-400 lg:hover:text-white transition-colors text-xl cursor-pointer mode-icon"
           aria-label="Cerrar modal"
         >
           ✕
@@ -278,11 +278,11 @@ const categories = [
 
       <!-- Footer con botones -->
       <div
-        class="sticky bottom-0 flex flex-col sm:flex-row gap-3 p-4 md:p-6 bg-gray-900 border-t-2 border-[#FFD700]"
+        class="bottom-0 flex flex-col sm:flex-row gap-3 p-4 md:p-6 border-t-2 border-[#FFD700]"
       >
         <button
           @click="closeModal"
-          class="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition-colors duration-200 mode-paragraph"
+          class="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition-colors duration-200 cursor-pointer mode-paragraph"
         >
           Cancelar
         </button>

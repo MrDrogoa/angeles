@@ -10,6 +10,24 @@ import ProfileQualifications from "@/components/main/profile/ProfileQualificatio
 import ProfileComents from "@/components/main/profile/ProfileComents.vue";
 import ProfileAssessment from "@/components/main/profile/ProfileAssessment.vue";
 import { useProfileStore } from "@/composables/useProfileStore";
+// // Datos de api (temporalmente estáticos)
+// import { useRoute } from "vue-router";
+// import axios from "axios";
+
+// const route = useRoute();
+
+// const fetchProfile = async () => {
+//   try {
+//     const { data } = await axios.get(`/api/perfiles/${route.params.id}`);
+//     profileData.value = data;
+//   } catch (error) {
+//     console.error("Error al cargar perfil:", error);
+//   }
+// };
+
+// onMounted(() => {
+//   fetchProfile();
+// });
 
 const profileStore = useProfileStore();
 
@@ -22,22 +40,27 @@ const profileData = ref({
   name: "Nombre",
   isFavorite: false,
   category: "Category",
-  images: [
+  imagesCarousel: [
     { id: 1, url: Hero, alt: "Imagen 1" },
     { id: 2, url: Hero, alt: "Imagen 2" },
     { id: 3, url: Hero, alt: "Imagen 3" },
     { id: 4, url: Hero, alt: "Imagen 4" },
   ],
   characteristics: [
-    "Caract.",
-    "Caract.",
-    "Caract.",
-    "Caract.",
-    "Caract.",
-    "Caract.",
-    "Caract.",
-    "Caract.",
-    "Caract.",
+    "Edad:",
+    "Estatura:",
+    "Peso:",
+    "Color de ojos:",
+    "Color de cabello:",
+    "Color de piel:",
+    "Tamaño de los senos:",
+    "Nalgas:",
+    "Depilación:",
+    "Contextura:",
+    "Intereses:",
+    "Nacionalidad:",
+    "Fuma:",
+    "Toma:",
   ],
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -153,7 +176,7 @@ const openWhatsApp = () => {
 
       <div class="relative overflow-hidden">
         <Carousel :items-to-show="1" :wrap-around="true" snap-align="center">
-          <Slide v-for="image in profileData.images" :key="image.id">
+          <Slide v-for="image in profileData.imagesCarousel" :key="image.id">
             <div class="overflow-hidden">
               <img
                 :src="image.url"
@@ -225,7 +248,7 @@ const openWhatsApp = () => {
           <span
             v-for="(char, index) in profileData.characteristics"
             :key="index"
-            class="px-3 sm:px-4 py-1.5 sm:py-2 border-2 border-[#FFD700] rounded-full text-white text-xs sm:text-sm font-medium hover:bg-[#FFD700] hover:text-black transition-all duration-300 cursor-default mode-carac-btn"
+            class="px-3 sm:px-4 py-1.5 sm:py-2 border-2 border-[#FFD700] rounded-full text-white text-xs sm:text-sm font-semibold lg:hover:bg-[#FFD700] lg:hover:text-black transition-all duration-300 cursor-default mode-carac-btn"
           >
             {{ char }}
           </span>

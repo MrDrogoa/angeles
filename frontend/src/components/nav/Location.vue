@@ -84,9 +84,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="border-b-2 border-[#DAA520]">
+  <div class="border-b-2 border-[#DAA520] mode-nav-card">
     <!-- MOBILE: Dropdown -->
-    <div class="relative max-w-[1300px] mx-auto mode-nav-card">
+    <div class="relative max-w-[1300px] mx-auto">
       <!-- Botón para abrir dropdown -->
       <button
         @click="toggleDropdown"
@@ -102,7 +102,7 @@ onMounted(() => {
         <font-awesome-icon
           icon="chevron-down"
           :class="[
-            'transition-transform duration-300',
+            'transition-transform duration-300 cursor-pointer',
             isDropdownOpen ? 'rotate-180' : '',
           ]"
         />
@@ -141,7 +141,7 @@ onMounted(() => {
               <font-awesome-icon
                 icon="chevron-down"
                 :class="[
-                  'transition-transform duration-300 text-xs',
+                  'transition-transform duration-300 text-xs cursor-pointer',
                   region.isOpen ? 'rotate-180' : '',
                 ]"
               />
@@ -162,7 +162,7 @@ onMounted(() => {
                   :key="city"
                   @click="setCity(city)"
                   :class="[
-                    'w-full text-left pl-8 pr-4 py-2 transition-colors border-t border-gray-800 text-sm md:text-base',
+                    'w-full text-left pl-8 pr-4 py-2 transition-colors border-t border-gray-800 text-sm md:text-base cursor-pointer',
                     activeLocation === city
                       ? 'bg-[#DAA520] text-[#000000] font-semibold'
                       : 'text-gray-400 lg:hover:text-[#FFD700] lg:hover:bg-[#1a1a1a]',

@@ -3,7 +3,8 @@
 .visual-rest-mode .mode-card,
 .visual-rest-mode .mode-nav-card,
 .visual-rest-mode .mode-body,
-.visual-rest-mode .mode-access-card {
+.visual-rest-mode .mode-access-card,
+.visual-rest-mode .mode-foro {
   background-color: #2a2a2a;
 }
 

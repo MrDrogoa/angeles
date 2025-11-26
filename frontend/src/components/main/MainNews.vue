@@ -104,10 +104,10 @@ const goToPage = (path) => {
         <button
           @click="setCategory(category.id)"
           :class="[
-            'px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold text-[8px] sm:text-xs md:text-sm lg:text-base transition-all duration-300 mode-title',
+            'px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold text-[8px] sm:text-xs md:text-sm lg:text-base transition-all duration-300 mode-paragraph',
             activeCategory === category.id
-              ? 'bg-[#DAA520] text-white shadow-lg'
-              : 'bg-transparent text-[#FFD700] lg:hover:bg-[#FFD700]/20',
+              ? 'bg-[#DAA520] text-white shadow-lg mode-btn'
+              : 'bg-transparent text-[#FFD700] lg:hover:bg-[#FFD700]/20 mode-btn-location cursor-pointer',
           ]"
         >
           {{ category.label }}
@@ -116,7 +116,7 @@ const goToPage = (path) => {
         <!-- Separador | -->
         <span
           v-if="index < categories.length - 1"
-          class="text-[#FFD700] text-sm md:text-base font-bold"
+          class="text-[#FFD700] text-sm md:text-base font-bold mode-paragraph"
         >
           |
         </span>

@@ -34,16 +34,18 @@ const comments = computed(() => profileStore.getComments());
       <div
         v-for="comment in comments"
         :key="comment.user + comment.date"
-        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 bg-gray-800/30 hover:bg-gray-800/50 transition-all duration-300"
+        class="mode-card border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 bg-gray-800/30 hover:bg-gray-800/50 transition-all duration-300"
       >
         <!-- Header: Usuario y Fecha -->
         <div class="flex items-start justify-between mb-3 gap-2">
           <h3
-            class="text-white font-semibold text-base md:text-lg lg:text-xl wrap-break-word"
+            class="text-white font-semibold text-base md:text-lg lg:text-xl wrap-break-word mode-title"
           >
             {{ comment.user }}
           </h3>
-          <span class="text-gray-400 text-xs md:text-sm whitespace-nowrap">
+          <span
+            class="text-gray-400 text-xs md:text-sm whitespace-nowrap mode-paragraph"
+          >
             {{ comment.date }}
           </span>
         </div>

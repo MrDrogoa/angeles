@@ -37,13 +37,15 @@
         </p>
 
         <!-- Botones de modos en fila -->
-        <div class="flex gap-2 flex-wrap justify-center max-w-xs md:max-w-sm">
+        <div
+          class="flex gap-2 flex-wrap justify-center max-w-2xs sm:max-w-xs md:max-w-sm"
+        >
           <button
             v-for="mode in modes"
             :key="mode.id"
             @click="handleModeChange(mode.id)"
             :class="[
-              'p-1 md:p-2 rounded-lg transition-all duration-200 flex flex-col items-center justify-center w-16 h-16 relative',
+              'p-1 md:p-2 rounded-lg transition-all duration-200 flex flex-col items-center justify-center w-12 h-12 md:w-16 md:h-16 relative',
               currentMode === mode.id
                 ? 'bg-[#FFD700] text-black border-2 border-white shadow-lg scale-110'
                 : 'bg-gray-700 text-gray-300 border-2 border-gray-600 hover:border-[#FFD700] hover:bg-gray-600',

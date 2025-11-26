@@ -81,7 +81,7 @@ const handleLogin = async () => {
           class="flex flex-col items-center w-full sm:w-60 md:w-70 lg:w-80 m-auto"
         >
           <!-- Email Input Animado -->
-          <ButtonAnimatedComponent
+          <button-animated-component
             v-model="email"
             label="Email"
             type="email"
@@ -89,7 +89,7 @@ const handleLogin = async () => {
           />
 
           <!-- Password Input Animado -->
-          <ButtonAnimatedComponent
+          <button-animated-component
             v-model="password"
             label="Password"
             type="password"

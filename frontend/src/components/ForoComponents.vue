@@ -312,7 +312,7 @@ onMounted(() => {
       class=""
     />
     <p
-      class="mt-3 text-lg lg:text-xl xl:text-2xl text-[#A2A2A2] font-medium md:mt-3 mb-3 md:mb-4 lg:mt-4 lg:mb-5 xl:mt-5 xl:mb-6 mode-paragraph"
+      class="mt-3 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-[#A2A2A2] font-medium md:mt-3 mb-3 md:mb-4 lg:mt-4 lg:mb-5 xl:mt-5 xl:mb-6 mode-paragraph"
     >
       Comparte y descubre experiencias en Ángeles y Demonios
     </p>
@@ -332,17 +332,17 @@ onMounted(() => {
         <button
           @click="setCategory(category.id)"
           :class="[
-            'px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base transition-all duration-300',
+            'px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base transition-all duration-300 mode-paragraph',
             activeCategory === category.id
               ? 'bg-[#DAA520] text-white shadow-lg mode-btn'
-              : 'bg-transparent text-[#FFD700] lg:hover:bg-[#FFD700]/20',
+              : 'bg-transparent text-[#FFD700] lg:hover:bg-[#FFD700]/20 mode-btn-location cursor-pointer',
           ]"
         >
           {{ category.label }}
         </button>
         <span
           v-if="index < categories.length - 1"
-          class="text-[#FFD700] text-xl font-thin"
+          class="text-[#FFD700] text-sm md:text-base font-bold mode-paragraph"
         >
           |
         </span>
@@ -355,7 +355,7 @@ onMounted(() => {
       <div class="relative flex-1">
         <button
           @click="toggleCityDropdown"
-          class="w-full bg-[#1a1a1a] text-white px-4 py-3 rounded-lg flex items-center justify-between transition-colors lg:hover:bg-[#2a2a2a] border border-[#FFD700]"
+          class="mode-carac-btn mode-select w-full bg-[#1a1a1a] text-white px-4 py-3 rounded-lg flex items-center justify-between transition-colors lg:hover:bg-[#2a2a2a] border border-[#FFD700] mode-foro"
         >
           <div class="flex items-center gap-2">
             <font-awesome-icon icon="map-marker-alt" class="text-[#FFD700]" />
@@ -368,7 +368,7 @@ onMounted(() => {
           <font-awesome-icon
             icon="chevron-down"
             :class="[
-              'transition-transform duration-300',
+              'transition-transform duration-300 cursor-pointer',
               isCityDropdownOpen ? 'rotate-180' : '',
             ]"
           />
@@ -385,7 +385,7 @@ onMounted(() => {
         >
           <div
             v-if="isCityDropdownOpen"
-            class="absolute top-full left-0 right-0 mt-2 bg-black border-2 border-[#FFD700] rounded-lg shadow-lg z-40 max-h-80 overflow-y-auto"
+            class="absolute top-full left-0 right-0 mt-2 bg-black border-2 border-[#FFD700] rounded-lg shadow-lg z-40 max-h-80 overflow-y-auto mode-icon-profile mode-nav-card"
           >
             <!-- Opción "Todas las ciudades" -->
             <button
@@ -420,7 +420,7 @@ onMounted(() => {
                 <font-awesome-icon
                   icon="chevron-down"
                   :class="[
-                    'transition-transform duration-300 text-xs',
+                    'transition-transform duration-300 text-xs cursor-pointer',
                     region.isOpen ? 'rotate-180' : '',
                   ]"
                 />
@@ -460,7 +460,7 @@ onMounted(() => {
       <div class="relative flex-1">
         <button
           @click="toggleSortDropdown"
-          class="w-full bg-[#1a1a1a] text-white px-4 py-3 rounded-lg flex items-center justify-between transition-colors lg:hover:bg-[#2a2a2a] border border-[#FFD700]"
+          class="mode-carac-btn mode-select w-full bg-[#1a1a1a] text-white px-4 py-3 rounded-lg flex items-center justify-between transition-colors lg:hover:bg-[#2a2a2a] border border-[#FFD700] mode-foro"
         >
           <div class="flex items-center gap-2">
             <font-awesome-icon icon="sort" class="text-[#FFD700]" />
@@ -471,7 +471,7 @@ onMounted(() => {
           <font-awesome-icon
             icon="chevron-down"
             :class="[
-              'transition-transform duration-300',
+              'transition-transform duration-300 cursor-pointer',
               isSortDropdownOpen ? 'rotate-180' : '',
             ]"
           />
@@ -488,7 +488,7 @@ onMounted(() => {
         >
           <div
             v-if="isSortDropdownOpen"
-            class="absolute top-full left-0 right-0 mt-2 bg-black border-2 border-[#FFD700] rounded-lg shadow-lg z-40"
+            class="absolute top-full left-0 right-0 mt-2 bg-black border-2 border-[#FFD700] rounded-lg shadow-lg z-40 mode-icon-profile mode-nav-card"
           >
             <button
               v-for="option in sortOptions"
@@ -522,11 +522,11 @@ onMounted(() => {
     >
       <div
         v-if="isModalOpen"
-        class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-4"
         @click.self="closeModal"
       >
         <div
-          class="bg-[#1a1a1a] border-2 border-[#FFD700] rounded-2xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto mode-card"
+          class="mode-card bg-gray-900/50 border-2 border-[#FFD700] rounded-2xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto mode-card"
         >
           <!-- Header del modal -->
           <div class="flex justify-between items-start mb-4">
@@ -540,7 +540,8 @@ onMounted(() => {
             </div>
             <button
               @click="closeModal"
-              class="text-gray-400 lg:hover:text-white transition-colors text-xl"
+              class="text-gray-400 lg:hover:text-white transition-colors text-xl cursor-pointer mode-icon"
+              aria-label="Cerrar modal"
             >
               <font-awesome-icon icon="times" />
             </button>
@@ -559,7 +560,7 @@ onMounted(() => {
                 v-model="formData.alias"
                 type="text"
                 placeholder="Tu nombre de usuario"
-                class="w-full bg-black text-white border-2 border-[#FFD700] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input"
+                class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 border-[#FFD700] focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input mode-register-input"
               />
             </div>
 
@@ -578,7 +579,7 @@ onMounted(() => {
                     type="text"
                     placeholder="Selecciona una ciudad"
                     readonly
-                    class="w-full bg-black text-white border-2 border-[#FFD700] rounded-lg px-4 py-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input"
+                    class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 border-[#FFD700] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input mode-register-input"
                     @click="
                       regions[0].isOpen =
                         !regions[0].isOpen ||
@@ -588,7 +589,7 @@ onMounted(() => {
                   />
                   <font-awesome-icon
                     icon="chevron-down"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 text-[#FFD700] pointer-events-none"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-[#FFD700] cursor-pointer"
                   />
                 </div>
 
@@ -655,7 +656,7 @@ onMounted(() => {
                 </label>
                 <select
                   v-model="formData.category"
-                  class="w-full bg-black text-white border-2 border-[#FFD700] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input cursor-pointer"
+                  class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 border-[#FFD700] focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input mode-register-input cursor-pointer"
                 >
                   <option value="" disabled selected>
                     Selecciona tu categoría
@@ -677,7 +678,7 @@ onMounted(() => {
                 v-model="formData.title"
                 type="text"
                 placeholder="Escribe un título descriptivo"
-                class="w-full bg-black text-white border-2 border-[#FFD700] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input"
+                class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all mode-input mode-register-input"
               />
             </div>
 
@@ -692,7 +693,7 @@ onMounted(() => {
                 v-model="formData.comment"
                 placeholder="Comparte tu experiencia..."
                 rows="6"
-                class="w-full bg-black text-white border-2 border-[#FFD700] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all resize-none mode-input"
+                class="w-full px-4 py-3 bg-white rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all resize-none mode-input mode-register-input"
               ></textarea>
             </div>
 
