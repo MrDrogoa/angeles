@@ -9,13 +9,14 @@ import ButtonComponents from "@/components/buttons/ButtonComponents.vue";
         <h1
           class="text-5xl lg:text-6xl xl:text-7xl font-bold text-[#A2A2A2] mode-title"
         >
-          Ángeles y Demonios
+          Puedes poner tu anuncio aquí
         </h1>
 
         <p
           class="mt-3 text-xl lg:text-2xl xl:text-3xl text-[#FFD700] font-medium md:mt-3 md:mb-4 lg:mt-4 lg:mb-5 xl:mt-5 xl:mb-6 mode-paragraph"
         >
-          “Tu mejor lugar de encuentros”
+          subtitulo opcional
+          <!-- “Tu mejor sitio de encuentros” -->
         </p>
         <!-- button de action -->
 

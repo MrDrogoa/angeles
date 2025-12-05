@@ -33,7 +33,7 @@ const totalAssessments = computed(() => profileStore.getTotalAssessments());
         Nota Final
       </p>
       <p class="text-[#FFD700] text-4xl md:text-5xl font-bold mode-paragraph">
-        {{ averageRating }}/7
+        {{ averageRating }} / 7.0
       </p>
       <p class="text-gray-400 text-xs md:text-sm mt-2 mode-paragraph">
         {{ totalAssessments }}

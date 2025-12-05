@@ -71,6 +71,7 @@ const profileData = ref({
     { icon: "credit-card", label: "Pago", value: "Tarjeta" },
     { icon: "clock", label: "Horas", value: "24/7" },
     { icon: "map-marker-alt", label: "Ubicación", value: "Ciudad" },
+    { icon: "book-medical", label: "Examenes", value: "si" },
   ],
   phoneNumber: "+1234567890",
   whatsappNumber: "+1234567890",

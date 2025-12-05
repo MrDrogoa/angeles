@@ -25,6 +25,11 @@ class BotPersonalityService {
     return this.personality.searchMessages[key] || "";
   }
 
+  getProfileMessage(key, ...args) {
+    const message = this.personality.profileMessages[key];
+    return typeof message === "function" ? message(...args) : message || "";
+  }
+
   getCreateMessage(key) {
     return this.personality.createReportMessages?.[key] || "";
   }

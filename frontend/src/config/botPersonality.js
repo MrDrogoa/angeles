@@ -1,50 +1,50 @@
 /**
- * Configuración de personalidad de AMIN
- * Asistente de Hospedajes
+ * Configuración de personalidad de AYDA
+ * Asistente para búsqueda de acompañantes - Angeles y Demonios
  */
 
 export const botPersonality = {
   // Identidad
-  name: "AMIN",
-  fullName: "Asistente de Hospedajes Inteligente",
-  meaning: "Tu guía confiable para encontrar el hospedaje perfecto",
-  avatar: "@/assets/amin-transparente.webp",
-  emoji: "🏠",
+  name: "AYDA",
+  fullName: "Angeles y Demonios Asistente",
+  meaning: "Tu guía confiable para encontrar tu encuentro perfecto",
+  avatar: "@/assets/ayda-transparente.webp",
+  emoji: "💋",
 
   // Saludos personalizados por hora
   greetings: {
     morning: (userName) =>
-      `¡Buenos días, ${userName}! 🌅\n\nSoy AMIN, tu Asistente de Hospedajes. ¿Buscas un lugar donde quedarte?`,
+      `¡Buenos días, ${userName}! 🌅\n\nSoy AYDA, estoy aquí para ayudarte a encontrar perfiles que se ajusten a lo que buscas.`,
 
     afternoon: (userName) =>
-      `¡Buenas tardes, ${userName}! ☀️\n\nSoy AMIN, tu Asistente de Hospedajes. ¿En qué ubicación buscas alojamiento?`,
+      `¡Buenas tardes, ${userName}! ☀️\n\nSoy AYDA, ¿necesitas ayuda para encontrar el perfil perfecto?`,
 
     evening: (userName) =>
-      `¡Buenas noches, ${userName}! 🌙\n\nSoy AMIN, tu Asistente de Hospedajes. Estoy aquí para ayudarte a encontrar el lugar perfecto.`,
+      `¡Buenas noches, ${userName}! 🌙\n\nSoy AYDA, ¿te ayudo a buscar acompañantes?`,
 
     default: (userName) =>
-      `¡Hola, ${userName}! 👋\n\nSoy AMIN 🏠, tu Asistente de Hospedajes. ¿Dónde quieres quedarte?`,
+      `¡Hola, ${userName}! 👋\n\nSoy AYDA 💋, estoy aquí para ayudarte a encontrar perfiles que se ajusten a lo que buscas.`,
 
     anonymous: () =>
-      `¡Hola! 👋\n\nSoy AMIN 🏠, tu Asistente de Hospedajes.\n\nPuedo ayudarte a buscar alojamientos sin necesidad de iniciar sesión, pero para reservar necesitarás una cuenta.`,
+      `¡Hola! 👋\n\nSoy AYDA 💋, tu Asistente Inteligente.\n\nPuedo ayudarte a buscar las mejores opciones sin necesidad de iniciar sesión, pero para contactarte necesitarás una cuenta.`,
   },
 
-  // Frases comunes (todas en género neutro)
+  // Frases comunes
   phrases: {
-    introduction: "Tu asistente personal de hospedajes",
-    help: "¿Qué tipo de alojamiento buscas?",
+    introduction: "Tu asistente personal para encontrar acompañantes",
+    help: "¿Qué tipo de perfil buscas?",
     confirmation: "¿Confirmas esta selección?",
-    confirmAction: "¿Deseas ver más detalles de este hospedaje?",
-    error: "No encontré ese hospedaje. ¿Intentamos con otra búsqueda?",
+    confirmAction: "¿Deseas ver más detalles de este perfil?",
+    error: "No encontré ese perfil. ¿Intentamos con otra búsqueda?",
     errorGeneral: "Algo salió mal. ¿Probamos de nuevo?",
     success: "¡Perfecto! Aquí están tus resultados",
-    successAction: "¡Listo! Hospedaje encontrado",
+    successAction: "¡Listo! Perfil encontrado",
     thinking: "Buscando en nuestra base de datos...",
     typing: "Escribiendo...",
     validating: "Verificando disponibilidad...",
-    searching: "Buscando hospedajes en la ubicación...",
-    goodbye: "Hasta pronto. Estoy aquí cuando necesites alojamiento 👋",
-    thanks: "¡Gracias por usar AMIN! 🏠",
+    searching: "Buscando perfiles en la ubicación...",
+    goodbye: "Hasta pronto. Estoy aquí cuando necesites 👋",
+    thanks: "¡Gracias por usar AYDA! 💋",
     welcome: "Te doy la bienvenida",
     pleaseWait: "Un momento, buscando opciones...",
     almostDone: "¡Ya casi! Preparando tus recomendaciones",
@@ -53,47 +53,47 @@ export const botPersonality = {
 
   // Preguntas del flujo de búsqueda
   questions: {
-    // Búsqueda de hospedajes
-    location: "¿En qué ubicación buscas hospedaje?",
+    // Búsqueda de perfiles
+    region: "¿En qué región buscas? (Norte, Centro, Sur)",
+    city: "¿En qué ciudad específicamente?",
     category: "¿Qué categoría prefieres?",
     priceRange: "¿Cuál es tu presupuesto aproximado?",
-    services: "¿Qué servicios necesitas?",
-    dates: "¿Para qué fechas?",
-    guests: "¿Cuántas personas?",
     confirmSearch: "¿Esta búsqueda es correcta?",
     showMore: "¿Quieres ver más opciones?",
-    needDetails: "¿Quieres ver los detalles de algún hospedaje?",
+    needDetails: "¿Quieres ver los detalles de algún perfil?",
   },
 
   // Mensajes de búsqueda
   searchMessages: {
-    howToSearch: "🔍 ¿Cómo quieres buscar hospedaje?",
+    howToSearch: "📍 ¿Cómo quieres buscar?",
     searchAgain:
-      "🔍 Perfecto, hagamos otra búsqueda. ¿Qué ubicación te interesa?",
-    searching: "🔍 Buscando hospedajes disponibles...",
-    noResults: "❌ No encontré hospedajes en esa ubicación.",
+      "✨ Perfecto, hagamos otra búsqueda. ¿Qué ubicación te interesa?",
+    searching: "📍 Buscando perfiles disponibles...",
+    noResults: "❌ No encontré perfiles en esa ubicación.",
     foundResults: (count) =>
-      `✅ Encontré ${count} hospedaje${count !== 1 ? "s" : ""} disponible${
+      `✅ Encontré ${count} perfil${count !== 1 ? "es" : ""} disponible${
         count !== 1 ? "s" : ""
       }:`,
-    selectResult: "Selecciona el hospedaje que te interesa:",
+    selectResult: "Selecciona el perfil que te interesa:",
 
     // Tipos de búsqueda
-    byLocation:
-      "📍 **Búsqueda por Ubicación**\n\n¿En qué ciudad o zona buscas hospedaje?\n\n*Ejemplo: Santiago Centro, Providencia, Las Condes*",
+    byRegion:
+      "📍 **Búsqueda por Región**\n\n¿En qué región buscas?\n\n• Norte 🏜️\n• Centro 🏙️\n• Sur 🏔️",
+    byCity:
+      "📍 **Búsqueda por Ciudad**\n\n¿En qué ciudad específicamente?\n\n*Ejemplo: Santiago, Valparaíso, Concepción*",
     byCategory:
-      "🏷️ **Búsqueda por Categoría**\n\n¿Qué tipo de hospedaje prefieres?\n\n• VIP 💎\n• Premium ⭐\n• Normal 🏠\n• Masajistas 💆",
+      "🏷️ **Búsqueda por Categoría**\n\n¿Qué categoría prefieres?\n\n• Enterprise 👑\n• VIP 💎\n• Premium ⭐\n• Top 🔥\n• Normal 💃",
     byPrice:
       "💰 **Búsqueda por Precio**\n\n¿Cuál es tu presupuesto?\n\n*Ingresa un rango (ej: 20000-50000)*",
 
     // Recomendaciones
     recommendationsTitle: "⭐ **Recomendaciones para ti**",
-    featuredTitle: "💎 **Hospedajes Destacados**",
+    featuredTitle: "💎 **Agencias Destacadas (Versión Beta)**",
     showingRecommendations: (count) =>
       `Mostrando ${count} recomendaciones basadas en tu búsqueda:`,
 
     // Detalles
-    showDetails: "¿Quieres ver los detalles de algún hospedaje?",
+    showDetails: "¿Quieres ver los detalles de algún perfil?",
     selectToView: "Selecciona un número para ver más información",
 
     // Errores de búsqueda
@@ -102,21 +102,21 @@ export const botPersonality = {
       "Por favor ingresa una ubicación válida (ej: Santiago, Viña del Mar)",
     enterValidPrice:
       "Por favor ingresa un presupuesto válido (ej: 30000 o 20000-50000)",
-    noLocationProvided: "No ingresaste una ubicación. ¿Dónde buscas hospedaje?",
+    noLocationProvided: "No ingresaste una ubicación. ¿Dónde buscas?",
   },
 
   // Mensajes del menú principal
   menuMessages: {
-    mainMenu: "🏠 **Menú Principal**\n\n¿Qué necesitas?",
+    mainMenu: "💋 **Menú Principal**\n\n¿Qué necesitas?",
     help: (fullName) =>
-      `❓ **Ayuda de AMIN**\n\nSoy tu ${fullName}, aquí para ayudarte con:\n\n🔍 **Buscar por ubicación**: Encuentra hospedajes en la ciudad o zona que prefieras\n\n⭐ **Ver recomendaciones**: Hospedajes destacados seleccionados para ti\n\n🏷️ **Buscar por categoría**: VIP, Premium, Normal o Masajistas\n\n💰 **Buscar por presupuesto**: Encuentra opciones según tu rango de precio\n\n¿Qué te gustaría hacer?`,
+      `❓ **Ayuda de AYDA**\n\nSoy tu ${fullName}, aquí para ayudarte con:\n\n🔍 **Buscar por región**: Norte, Centro o Sur\n\n⭐ **Ver recomendaciones**: Agencias destacadas (versión beta)\n\n🏷️ **Buscar por categoría**: Enterprise, VIP, Premium, Top o Normal\n\n💰 **Buscar por presupuesto**: Encuentra opciones según tu rango de precio\n\n¿Qué te gustaría hacer?`,
     invalidOption:
       "No entendí tu selección. Por favor elige una opción del menú:",
-    returnToMenu: "🏠 Volviendo al menú principal...",
+    returnToMenu: "💋 Volviendo al menú principal...",
 
     // Login
     needLogin:
-      "🔑 **Iniciar Sesión**\n\nPara reservar hospedajes necesitas iniciar sesión.\n\nPuedes buscar sin cuenta, pero para contactar a los anfitriones necesitarás:\n\n1. Crear una cuenta o **iniciar sesión**\n2. Seleccionar el hospedaje que te interesa\n3. Hacer tu reserva\n\n¿Quieres buscar hospedajes primero?",
+      "🔑 **Iniciar Sesión**\n\nPara contactar perfiles necesitas iniciar sesión.\n\nPuedes buscar sin cuenta, pero para contactar necesitarás:\n\n1. Crear una cuenta o **iniciar sesión**\n2. Seleccionar el perfil que te interesa\n3. Ver información de contacto\n\n¿Quieres buscar perfiles primero?",
   },
 
   // Mensajes de validación (género neutro)
@@ -134,9 +134,9 @@ export const botPersonality = {
     didYouMean: "¿Quisiste decir",
   },
 
-  // Mensajes de hospedajes
-  hospedajeMessages: {
-    showingDetails: "📋 **Detalles del Hospedaje**",
+  // Mensajes de perfiles
+  profileMessages: {
+    showingDetails: "📋 **Detalles del Perfil**",
     location: "📍 Ubicación",
     category: "🏷️ Categoría",
     price: "💰 Precio",
@@ -144,19 +144,28 @@ export const botPersonality = {
     availability: "📅 Disponibilidad",
     rating: "⭐ Calificación",
     contact: "📞 Contacto",
-    featured: "💎 Hospedaje Destacado",
+    featured: "💎 Agencia Destacada (Beta)",
     recommended: "⭐ Recomendado para ti",
+    profileLink: "🔗 Ver Perfil Completo",
+
+    // Mensajes de resultados de búsqueda
+    resultsFound: (count, city, category) =>
+      `✅ Encontré **${count} perfiles** en ${city} de categoría ${category}`,
+    noResultsFound:
+      "❌ No encontré perfiles que coincidan con tus criterios. Intenta ajustar tus filtros.",
+    searchingProfiles: "🔍 Buscando perfiles disponibles...",
 
     // Categorías
-    vip: "💎 VIP - Experiencia premium",
-    premium: "⭐ Premium - Confort superior",
-    normal: "🏠 Normal - Relación calidad-precio",
-    masajistas: "💆 Masajistas - Servicios especializados",
+    enterprise: "👑 Enterprise - Exclusivo y premium",
+    vip: "💎 VIP - Experiencia de lujo",
+    premium: "⭐ Premium - Calidad superior",
+    top: "🔥 Top - Las más solicitadas",
+    normal: "💃 Normal - Excelente relación calidad-precio",
 
     // Acciones
     viewDetails: "Ver detalles completos",
-    contact: "Contactar anfitrión",
-    reserve: "Reservar ahora",
+    contact: "Contactar",
+    viewProfile: "Ver perfil completo",
     addToFavorites: "Agregar a favoritos",
     share: "Compartir",
   },

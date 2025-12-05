@@ -1,24 +1,42 @@
 <script setup>
 import { defineProps } from "vue";
+import { useRouter } from "vue-router";
+import { formatRelativeDate } from "@/utils/dateFormatter";
+
+const router = useRouter();
 
 const props = defineProps({
   posts: {
     type: Array,
     required: true,
   },
+  userVotes: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 // Emitir evento para votar
 const emit = defineEmits(["vote"]);
 
-const handleVote = (postId, voteType) => {
+const handleVote = (postId, voteType, event) => {
+  event.stopPropagation(); // Prevenir navegación al hacer click en votar
   emit("vote", { postId, voteType });
 };
 
-// Formatear fecha
-const formatDate = (date) => {
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  return new Date(date).toLocaleDateString("es-CL", options);
+// Navegar al detalle del post
+const goToPost = (postId) => {
+  router.push(`/forum/${postId}`);
+};
+
+// Verificar si el usuario ya votó en este post
+const getUserVote = (postId) => {
+  return props.userVotes[postId] || null;
+};
+
+// Verificar si el voto está activo
+const isVoteActive = (postId, voteType) => {
+  return getUserVote(postId) === voteType;
 };
 </script>
 
@@ -40,29 +58,34 @@ const formatDate = (date) => {
     <div
       v-for="post in posts"
       :key="post.id"
-      class="bg-[#1a1a1a] border-2 border-[#FFD700] rounded-xl p-4 md:p-5 mode-card"
+      @click="goToPost(post.id)"
+      class="bg-[#1a1a1a] border-2 border-[#FFD700] rounded-xl p-4 md:p-5 mode-card cursor-pointer transition-all duration-300 lg:hover:border-[#FFB200] lg:hover:scale-[1.02] lg:hover:shadow-lg lg:hover:shadow-[#FFD700]/20"
     >
       <!-- Header del post -->
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
-            <font-awesome-icon
-              icon="user-circle"
-              class="text-[#FFD700] text-lg mode-icon"
-            />
-            <h3
-              class="text-white font-semibold text-sm md:text-base mode-paragraph"
-            >
-              {{ post.alias }}
-            </h3>
+            <span class="text-2xl">{{ post.author?.avatar || "👤" }}</span>
+            <div>
+              <h3
+                class="text-white font-semibold text-sm md:text-base mode-paragraph"
+              >
+                {{ post.author?.name || "Usuario Anónimo" }}
+              </h3>
+              <div class="flex items-center gap-2 text-xs text-gray-400">
+                <font-awesome-icon
+                  icon="map-marker-alt"
+                  class="text-[#FFD700] text-[10px]"
+                />
+                <span>{{
+                  post.author?.location || "Ubicación desconocida"
+                }}</span>
+              </div>
+            </div>
           </div>
-          <div class="flex items-center gap-3 text-xs text-gray-400">
-            <span class="flex items-center gap-1">
-              <font-awesome-icon icon="map-marker-alt" class="text-[#FFD700]" />
-              {{ post.city }}
-            </span>
-            <span>•</span>
-            <span>{{ formatDate(post.date) }}</span>
+          <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+            <font-awesome-icon icon="clock" class="text-[10px]" />
+            <span>{{ formatRelativeDate(post.date) }}</span>
           </div>
         </div>
         <span
@@ -96,10 +119,25 @@ const formatDate = (date) => {
         <div class="flex items-center gap-3">
           <!-- Like -->
           <button
-            @click="handleVote(post.id, 'like')"
-            class="flex items-center gap-1 text-gray-400 lg:hover:text-green-500 transition-colors cursor-pointer"
+            @click="(e) => handleVote(post.id, 'like', e)"
+            :class="[
+              'flex items-center gap-1 transition-all duration-300 cursor-pointer',
+              isVoteActive(post.id, 'like')
+                ? 'text-green-500 scale-110'
+                : 'text-gray-400 lg:hover:text-green-500 lg:hover:scale-105',
+            ]"
+            :title="
+              isVoteActive(post.id, 'like') ? 'Quitar me gusta' : 'Me gusta'
+            "
           >
-            <font-awesome-icon icon="thumbs-up" class="text-sm md:text-base" />
+            <font-awesome-icon
+              :icon="
+                isVoteActive(post.id, 'like')
+                  ? 'thumbs-up'
+                  : ['far', 'thumbs-up']
+              "
+              class="text-sm md:text-base"
+            />
             <span class="text-xs md:text-sm font-semibold">{{
               post.likes
             }}</span>
@@ -107,11 +145,25 @@ const formatDate = (date) => {
 
           <!-- Dislike -->
           <button
-            @click="handleVote(post.id, 'dislike')"
-            class="flex items-center gap-1 text-gray-400 lg:hover:text-red-500 transition-colors cursor-pointer"
+            @click="(e) => handleVote(post.id, 'dislike', e)"
+            :class="[
+              'flex items-center gap-1 transition-all duration-300 cursor-pointer',
+              isVoteActive(post.id, 'dislike')
+                ? 'text-red-500 scale-110'
+                : 'text-gray-400 lg:hover:text-red-500 lg:hover:scale-105',
+            ]"
+            :title="
+              isVoteActive(post.id, 'dislike')
+                ? 'Quitar no me gusta'
+                : 'No me gusta'
+            "
           >
             <font-awesome-icon
-              icon="thumbs-down"
+              :icon="
+                isVoteActive(post.id, 'dislike')
+                  ? 'thumbs-down'
+                  : ['far', 'thumbs-down']
+              "
               class="text-sm md:text-base"
             />
             <span class="text-xs md:text-sm font-semibold">{{
@@ -120,10 +172,10 @@ const formatDate = (date) => {
           </button>
         </div>
 
-        <!-- Contador de comentarios (futuro) -->
+        <!-- Contador de comentarios -->
         <div class="flex items-center gap-1 text-gray-400">
           <font-awesome-icon icon="comment" class="text-sm" />
-          <span class="text-xs md:text-sm">0</span>
+          <span class="text-xs md:text-sm">{{ post.commentsCount || 0 }}</span>
         </div>
       </div>
     </div>

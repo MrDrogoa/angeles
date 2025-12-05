@@ -9,7 +9,7 @@
         <div class="header-content">
           <div class="bot-info">
             <div class="bot-avatar">
-              <img :src="Amin" alt="Ayda" class="bot-avatar-img" />
+              <img :src="Ayda" alt="Ayda" class="bot-avatar-img" />
             </div>
             <div class="bot-details">
               <h6 class="bot-name">AYDA</h6>
@@ -73,7 +73,7 @@
             <div v-if="isTyping" class="typing-indicator">
               <div class="typing-avatar">
                 <img
-                  src="@/assets/amin-transparente.webp"
+                  src="@/assets/ayda-transparente.webp"
                   alt="Ayda"
                   class="typing-avatar-img"
                 />
@@ -183,10 +183,10 @@
       <button
         @click="openChatBot"
         class="btn btn-primary btn-floating"
-        title="Abrir Asistente de Reportes"
+        title="Abrir Asistente AYDA"
       >
         <img
-          src="@/assets/amin-transparente.webp"
+          src="@/assets/ayda-transparente.webp"
           alt="Ayda"
           class="bot-floating-img"
         />
@@ -224,7 +224,7 @@ import ProgressIndicator from "./ProgressIndicator.vue";
 import ReportViewModal from "./ReportViewModal.vue";
 import ReportConfirmation from "./ReportConfirmation.vue";
 import ChatBotRealTimeInput from "./ChatBotRealTimeInput.vue";
-import Amin from "@/assets/amin-transparente.webp";
+import Ayda from "@/assets/ayda-transparente.webp";
 
 // Stores
 const chatBotStore = useChatBotStore();

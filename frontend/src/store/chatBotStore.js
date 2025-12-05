@@ -711,24 +711,24 @@ export const useChatBotStore = defineStore("chatBot", {
       this.validationState.isValidating = false;
 
       this.addBotMessage(
-        "🏠 Regresamos al menú principal. ¿Qué te gustaría hacer?",
+        "💋 Regresamos al menú principal. ¿Qué te gustaría hacer?",
         "options",
         [
-          { id: "1", text: "🔍 Buscar reportes", value: "search" },
+          { id: "1", text: "📍 Buscar por región", value: "search_region" },
           {
             id: "2",
-            text: "📝 Crear reporte completo",
-            value: "create_report",
+            text: "🏷️ Buscar por categoría",
+            value: "search_category",
           },
           {
             id: "3",
-            text: "⚡ Crear reporte express",
-            value: "create_express",
+            text: "💰 Buscar por presupuesto",
+            value: "search_price",
           },
           {
             id: "4",
-            text: "🏠 Navegar en la app",
-            value: "navigate_dashboard",
+            text: "⭐ Ver agencias destacadas",
+            value: "featured",
           },
           { id: "5", text: "❓ Ayuda", value: "help" },
         ],
@@ -1097,6 +1097,11 @@ export const useChatBotStore = defineStore("chatBot", {
         case "search":
           return this.handleSearchFlow(input, option);
 
+        case "search_region":
+        case "search_category":
+        case "search_price":
+          return this.handleSearchFlow(input, option);
+
         case "create_report":
           return this.handleCreateReportFlow(input, option);
 
@@ -1235,22 +1240,63 @@ export const useChatBotStore = defineStore("chatBot", {
       }
 
       switch (selection) {
-        case "search":
+        case "search_region":
         case "1":
-          this.currentFlow = "search";
+          this.currentFlow = "search_region";
           this.currentStep = 1;
           return {
-            text: botPersonalityService.getSearchMessage("howToSearch"),
+            text: "📍 **¿En qué región buscas?**\n\nSelecciona una región:",
             type: "options",
             options: [
               {
                 id: "1",
-                text: "🆔 Por número de identificación",
-                value: "by_id",
+                text: "🏜️ Norte",
+                value: "region_norte",
               },
-              { id: "2", text: "📱 Por número de teléfono", value: "by_phone" },
-              { id: "3", text: "👤 Por nombre", value: "by_name" },
+              { id: "2", text: "🏙️ Centro", value: "region_centro" },
+              { id: "3", text: "🏔️ Sur", value: "region_sur" },
               { id: "4", text: "🔙 Volver al menú", value: "back_to_menu" },
+            ],
+            expectsResponse: true,
+          };
+
+        case "search_category":
+        case "2":
+          this.currentFlow = "search_category";
+          this.currentStep = 1;
+          return {
+            text: "🏷️ **¿Qué categoría prefieres?**\n\nSelecciona una categoría:",
+            type: "options",
+            options: [
+              { id: "1", text: "👑 Enterprise", value: "category_enterprise" },
+              { id: "2", text: "💎 VIP", value: "category_vip" },
+              { id: "3", text: "⭐ Premium", value: "category_premium" },
+              { id: "4", text: "🔥 Top", value: "category_top" },
+              { id: "5", text: "💃 Normal", value: "category_normal" },
+              { id: "6", text: "🔙 Volver al menú", value: "back_to_menu" },
+            ],
+            expectsResponse: true,
+          };
+
+        case "search_price":
+        case "3":
+          this.currentFlow = "search_price";
+          this.currentStep = 1;
+          return {
+            text: "💰 **¿Cuál es tu presupuesto?**\n\nEscribe un monto (ej: 30000) o un rango (ej: 20000-50000):",
+            type: "input",
+            expectsResponse: true,
+          };
+
+        case "featured":
+        case "4":
+          this.currentFlow = "featured";
+          return {
+            text: "⭐ **Agencias Destacadas (Versión Beta)**\n\nEstas agencias pagan para aparecer como recomendadas:\n\n💎 Agencia Premium 1\n📍 Santiago Centro\n💰 $45.000 - $80.000\n🔗 Ver perfil\n\n💎 Agencia VIP 2\n📍 Providencia\n💰 $50.000 - $100.000\n🔗 Ver perfil\n\n*Nota: Esta es una versión beta. Próximamente más funciones.*",
+            type: "options",
+            options: [
+              { id: "1", text: "🔍 Buscar por región", value: "search_region" },
+              { id: "2", text: "🏠 Menú principal", value: "back_to_menu" },
             ],
             expectsResponse: true,
           };
@@ -1451,6 +1497,69 @@ export const useChatBotStore = defineStore("chatBot", {
                 expectsResponse: true,
               };
 
+            // Nuevos flujos de búsqueda por región/categoría/precio
+            case "region_norte":
+            case "region_centro":
+            case "region_sur":
+              this.tempSearchData.region = option?.value;
+              this.currentStep = 100; // Selección de ciudad
+              const regionName =
+                option?.value === "region_norte"
+                  ? "Norte"
+                  : option?.value === "region_centro"
+                  ? "Centro"
+                  : "Sur";
+              const cities = this.getCitiesByRegion(option?.value);
+              return {
+                text: `📍 Región ${regionName} seleccionada. ¿En qué ciudad buscas?`,
+                type: "options",
+                options: cities.concat([
+                  { id: "99", text: "🔙 Cambiar región", value: "back" },
+                ]),
+                expectsResponse: true,
+              };
+
+            case "category_enterprise":
+            case "category_vip":
+            case "category_premium":
+            case "category_top":
+            case "category_normal":
+              this.tempSearchData.category = option?.value.replace(
+                "category_",
+                ""
+              );
+              this.currentStep = 102; // Pedir presupuesto
+              const categoryNames = {
+                enterprise: "Enterprise 👑",
+                vip: "VIP 💎",
+                premium: "Premium ⭐",
+                top: "Top 🔥",
+                normal: "Normal 💃",
+              };
+              return {
+                text: `${
+                  categoryNames[this.tempSearchData.category]
+                } seleccionada. ¿Cuál es tu presupuesto máximo? (en $)`,
+                type: "input",
+                expectsResponse: true,
+              };
+
+            case "price_low":
+            case "price_medium":
+            case "price_high":
+            case "price_custom":
+              this.currentStep = 103;
+              if (option?.value === "price_custom") {
+                return {
+                  text: "💰 Ingresa tu presupuesto máximo (solo el número):",
+                  type: "input",
+                  expectsResponse: true,
+                };
+              } else {
+                this.tempSearchData.priceRange = option?.value;
+                return this.searchProfiles();
+              }
+
             default:
               return {
                 text: "No entendí tu selección. ¿Cómo quieres buscar?",
@@ -1465,6 +1574,81 @@ export const useChatBotStore = defineStore("chatBot", {
                 expectsResponse: true,
               };
           }
+
+        // ========== NUEVOS FLUJOS DE BÚSQUEDA POR REGIÓN/CATEGORÍA/PRECIO ==========
+        case 100: // Selección de ciudad después de región
+          if (option?.value === "back") {
+            this.currentStep = 1;
+            // Volver a mostrar selección de región
+            return {
+              text: "🗺️ ¿En qué región quieres buscar?",
+              type: "options",
+              options: [
+                { id: "1", text: "🌊 Norte", value: "region_norte" },
+                { id: "2", text: "🏙️ Centro", value: "region_centro" },
+                { id: "3", text: "🏔️ Sur", value: "region_sur" },
+                { id: "4", text: "🔙 Volver al menú", value: "back_to_menu" },
+              ],
+              expectsResponse: true,
+            };
+          }
+
+          this.tempSearchData.city = option?.text
+            ?.replace(/[🏙️📍🌊🏔️⛰️🏖️🌴🏢]/g, "")
+            .trim();
+          this.currentStep = 101; // Preguntar categoría
+          return {
+            text: `Ciudad ${this.tempSearchData.city} seleccionada. ¿Qué categoría te interesa?`,
+            type: "options",
+            options: [
+              { id: "1", text: "👑 Enterprise", value: "category_enterprise" },
+              { id: "2", text: "💎 VIP", value: "category_vip" },
+              { id: "3", text: "⭐ Premium", value: "category_premium" },
+              { id: "4", text: "🔥 Top", value: "category_top" },
+              { id: "5", text: "💃 Normal", value: "category_normal" },
+              { id: "6", text: "🔙 Cambiar ciudad", value: "back" },
+            ],
+            expectsResponse: true,
+          };
+
+        case 101: // Selección de categoría (ya manejado en case 1, pero agregamos back)
+          if (option?.value === "back") {
+            this.currentStep = 100;
+            const cities = this.getCitiesByRegion(this.tempSearchData.region);
+            return {
+              text: "📍 ¿En qué ciudad buscas?",
+              type: "options",
+              options: cities.concat([
+                { id: "99", text: "🔙 Cambiar región", value: "back" },
+              ]),
+              expectsResponse: true,
+            };
+          }
+          break;
+
+        case 102: // Entrada de presupuesto
+          const budget = parseInt(input?.replace(/[^0-9]/g, ""));
+          if (isNaN(budget) || budget <= 0) {
+            return {
+              text: "❌ Por favor ingresa un presupuesto válido (solo números). Ejemplo: 50000",
+              type: "input",
+              expectsResponse: true,
+            };
+          }
+          this.tempSearchData.maxPrice = budget;
+          return this.searchProfiles();
+
+        case 103: // Presupuesto personalizado
+          const customBudget = parseInt(input?.replace(/[^0-9]/g, ""));
+          if (isNaN(customBudget) || customBudget <= 0) {
+            return {
+              text: "❌ Por favor ingresa un monto válido (solo números).",
+              type: "input",
+              expectsResponse: true,
+            };
+          }
+          this.tempSearchData.maxPrice = customBudget;
+          return this.searchProfiles();
 
         // ========== SUBFLUJOS DE BÚSQUEDA POR ID ==========
         case 2: // Tipo de identificación específico
@@ -2207,6 +2391,93 @@ export const useChatBotStore = defineStore("chatBot", {
       }
 
       return allOptions;
+    },
+
+    // Obtener ciudades por región
+    getCitiesByRegion(region) {
+      const citiesByRegion = {
+        region_norte: [
+          { id: "1", text: "🌊 Arica", value: "arica" },
+          { id: "2", text: "🏖️ Iquique", value: "iquique" },
+          { id: "3", text: "⛰️ Antofagasta", value: "antofagasta" },
+          { id: "4", text: "🏙️ Calama", value: "calama" },
+          { id: "5", text: "🏢 Copiapó", value: "copiapo" },
+          { id: "6", text: "🌴 Vallenar", value: "vallenar" },
+          { id: "7", text: "📍 Chañaral", value: "chanaral" },
+          { id: "8", text: "🏖️ Tocopilla", value: "tocopilla" },
+        ],
+        region_centro: [
+          { id: "1", text: "🌊 La Serena", value: "la_serena" },
+          { id: "2", text: "🏖️ Coquimbo", value: "coquimbo" },
+          { id: "3", text: "🏙️ Ovalle", value: "ovalle" },
+          { id: "4", text: "🏢 Valparaíso", value: "valparaiso" },
+          { id: "5", text: "🌴 Viña del Mar", value: "vina_del_mar" },
+          { id: "6", text: "🏛️ Santiago", value: "santiago" },
+          { id: "7", text: "🏙️ Rancagua", value: "rancagua" },
+          { id: "8", text: "🌳 Talca", value: "talca" },
+        ],
+        region_sur: [
+          { id: "1", text: "🏙️ Concepción", value: "concepcion" },
+          { id: "2", text: "🌲 Temuco", value: "temuco" },
+          { id: "3", text: "🌊 Valdivia", value: "valdivia" },
+          { id: "4", text: "🏔️ Puerto Montt", value: "puerto_montt" },
+          { id: "5", text: "🏢 Osorno", value: "osorno" },
+          { id: "6", text: "❄️ Punta Arenas", value: "punta_arenas" },
+          { id: "7", text: "🏞️ Coyhaique", value: "coyhaique" },
+          { id: "8", text: "🏝️ Castro", value: "castro" },
+        ],
+      };
+      return citiesByRegion[region] || [];
+    },
+
+    // Buscar perfiles según criterios
+    async searchProfiles() {
+      try {
+        const { region, city, category, maxPrice } = this.tempSearchData;
+
+        // Aquí iría la lógica real de búsqueda llamando al repository
+        // Por ahora retornamos un mensaje de éxito simulado
+
+        this.addMessage({
+          sender: "bot",
+          text: `🔍 Buscando perfiles...\n\n📍 Ciudad: ${city}\n🏆 Categoría: ${category}\n💰 Presupuesto máximo: $${maxPrice?.toLocaleString()}`,
+          type: "text",
+        });
+
+        // Simular resultados (esto se reemplazará con llamada real al API)
+        setTimeout(() => {
+          this.addMessage({
+            sender: "bot",
+            text: botPersonalityService.getProfileMessage(
+              "resultsFound",
+              3,
+              city,
+              category
+            ),
+            type: "text",
+          });
+
+          // Aquí agregarías los perfiles reales
+          this.addMessage({
+            sender: "bot",
+            text: "🔗 Ver perfiles disponibles en la sección principal",
+            type: "menu",
+            options: this.getMenuOptions(),
+            expectsResponse: true,
+          });
+        }, 1500);
+
+        this.resetToMenu();
+        return null;
+      } catch (error) {
+        console.error("Error searching profiles:", error);
+        return {
+          text: "❌ Hubo un error al buscar perfiles. Por favor intenta nuevamente.",
+          type: "menu",
+          options: this.getMenuOptions(),
+          expectsResponse: true,
+        };
+      }
     },
 
     // Resetear al menú principal
@@ -4680,23 +4951,67 @@ export const useChatBotStore = defineStore("chatBot", {
      */
     processMenuInput(input) {
       switch (input) {
-        case "search":
+        case "search_region":
         case "1":
-          // Usar el flujo nuevo simplificado en lugar del sistema viejo SEARCH_TYPE
-          this.currentFlow = "search";
+          this.currentFlow = "search_region";
           this.currentStep = 1;
           this.addBotMessage(
-            "🔍 Perfecto, vamos a buscar reportes. ¿Cómo quieres buscar?",
+            "📍 **¿En qué región buscas?**\n\nSelecciona una región:",
             "options",
             [
               {
                 id: "1",
-                text: "🆔 Por número de identificación",
-                value: "by_id",
+                text: "🏜️ Norte",
+                value: "region_norte",
               },
-              { id: "2", text: "📱 Por número de teléfono", value: "by_phone" },
-              { id: "3", text: "👤 Por nombre", value: "by_name" },
+              { id: "2", text: "🏙️ Centro", value: "region_centro" },
+              { id: "3", text: "🏔️ Sur", value: "region_sur" },
               { id: "4", text: "🔙 Volver al menú", value: "back_to_menu" },
+            ],
+            true
+          );
+          return;
+
+        case "search_category":
+        case "2":
+          this.currentFlow = "search_category";
+          this.currentStep = 1;
+          this.addBotMessage(
+            "🏷️ **¿Qué categoría prefieres?**\n\nSelecciona una categoría:",
+            "options",
+            [
+              { id: "1", text: "👑 Enterprise", value: "category_enterprise" },
+              { id: "2", text: "💎 VIP", value: "category_vip" },
+              { id: "3", text: "⭐ Premium", value: "category_premium" },
+              { id: "4", text: "🔥 Top", value: "category_top" },
+              { id: "5", text: "💃 Normal", value: "category_normal" },
+              { id: "6", text: "🔙 Volver al menú", value: "back_to_menu" },
+            ],
+            true
+          );
+          return;
+
+        case "search_price":
+        case "3":
+          this.currentFlow = "search_price";
+          this.currentStep = 1;
+          this.addBotMessage(
+            "💰 **¿Cuál es tu presupuesto?**\n\nEscribe un monto (ej: 30000) o un rango (ej: 20000-50000):",
+            "input",
+            null,
+            true
+          );
+          return;
+
+        case "featured":
+        case "4":
+          this.currentFlow = "featured";
+          this.addBotMessage(
+            "⭐ **Agencias Destacadas (Versión Beta)**\n\nEstas agencias pagan para aparecer como recomendadas:\n\n💎 Agencia Premium 1\n📍 Santiago Centro\n💰 $45.000 - $80.000\n🔗 Ver perfil\n\n💎 Agencia VIP 2\n📍 Providencia\n💰 $50.000 - $100.000\n🔗 Ver perfil\n\n*Nota: Esta es una versión beta. Próximamente más funciones.*",
+            "options",
+            [
+              { id: "1", text: "🔍 Buscar por región", value: "search_region" },
+              { id: "2", text: "🏠 Menú principal", value: "back_to_menu" },
             ],
             true
           );

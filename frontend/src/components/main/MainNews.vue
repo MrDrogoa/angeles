@@ -16,7 +16,7 @@ const carouselKey = ref(0); // Para resetear el carrusel
 const categories = [
   {
     id: "primera-vez",
-    label: "Por primera vez",
+    label: "Hospedajes",
     route: "/news/primera-vez",
     cards: [
       { id: 1, title: "Persona A", img: Hero, path: "/" },
@@ -27,7 +27,7 @@ const categories = [
   },
   {
     id: "de-vuelta",
-    label: "Están de vuelta",
+    label: "Departamentos",
     route: "/news/de-vuelta",
     cards: [
       { id: 5, title: "Persona E", img: Hero, path: "/" },
@@ -38,7 +38,7 @@ const categories = [
   },
   {
     id: "fotos-nuevas",
-    label: "Fotos nuevas",
+    label: "Agencias",
     route: "/news/fotos-nuevas",
     cards: [
       { id: 9, title: "Persona I", img: Hero, path: "/" },
@@ -95,7 +95,10 @@ const goToPage = (path) => {
 
 <template>
   <section class="max-w-[1300px] mx-auto py-8 md:py-20 lg:py-25 xl:py-30 px-4">
-    <title-h-2-components title="Novedades" class="text-center mb-6 md:mb-8" />
+    <title-h-2-components
+      title="Recomendados"
+      class="text-center mb-6 md:mb-8"
+    />
 
     <!-- Categorías (Tabs) -->
     <div class="flex justify-center items-center gap-2 md:gap-4 mb-6 md:mb-8">

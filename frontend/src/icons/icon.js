@@ -49,12 +49,27 @@ import {
   faComment,
   faTimes,
   faSort,
+  faBookMedical,
+  faIdCard,
+  faUserShield,
+  faBan,
+  faCircleInfo,
+  faFlag,
+  faGavel,
+  faLock,
+  faScaleBalanced,
+  faBookmark,
+  faHandshakeAngle,
+  faTriangleExclamation,
+  faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Regular icons
 import {
   faHeart as farHeart,
   faStar as farStar,
+  faThumbsUp as farThumbsUp,
+  faThumbsDown as farThumbsDown,
 } from "@fortawesome/free-regular-svg-icons";
 
 // Brands icons
@@ -111,8 +126,23 @@ library.add(
   // Regular
   farHeart,
   farStar,
+  farThumbsUp,
+  farThumbsDown,
   // Brands
-  faWhatsapp
+  faWhatsapp,
+  faBookMedical,
+  faIdCard,
+  faUserShield,
+  faBan,
+  faCircleInfo,
+  faFlag,
+  faGavel,
+  faLock,
+  faScaleBalanced,
+  faBookmark,
+  faHandshakeAngle,
+  faTriangleExclamation,
+  faPenToSquare
 );
 
 export default FontAwesomeIcon;

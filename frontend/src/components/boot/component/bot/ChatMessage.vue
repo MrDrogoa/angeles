@@ -5,7 +5,7 @@
       <div class="message-avatar">
         <div class="bot-avatar">
           <img
-            src="@/assets/amin-transparente.webp"
+            src="@/assets/ayda-transparente.webp"
             alt="Ayda"
             class="bot-avatar-img"
           />

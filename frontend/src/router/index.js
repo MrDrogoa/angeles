@@ -15,6 +15,7 @@ import ContactViews from "@/views/ContactViews.vue";
 import LoginViews from "@/views/LoginViews.vue";
 import RegisterViews from "@/views/RegisterViews.vue";
 import ForoViews from "@/views/ForoViews.vue";
+import PostDetailView from "@/views/PostDetailView.vue";
 
 const routes = [
   {
@@ -143,6 +144,14 @@ const routes = [
     component: ForoViews,
     meta: {
       title: "Foro - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/forum/:id",
+    name: "PostDetail",
+    component: PostDetailView,
+    meta: {
+      title: "Detalle del Post - Angeles y Demonios",
     },
   },
 ];
