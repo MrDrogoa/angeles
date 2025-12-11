@@ -16,6 +16,9 @@ import LoginViews from "@/views/LoginViews.vue";
 import RegisterViews from "@/views/RegisterViews.vue";
 import ForoViews from "@/views/ForoViews.vue";
 import PostDetailView from "@/views/PostDetailView.vue";
+import TestAPIView from "@/views/TestAPIView.vue";
+import AgencyViews from "@/views/agency/AgencyViews.vue";
+import KarinViews from "@/views/agency/KarinViews.vue";
 
 const routes = [
   {
@@ -152,6 +155,30 @@ const routes = [
     component: PostDetailView,
     meta: {
       title: "Detalle del Post - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/test-api",
+    name: "TestAPI",
+    component: TestAPIView,
+    meta: {
+      title: "Prueba de API - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/agency",
+    name: "Agency",
+    component: AgencyViews,
+    meta: {
+      title: "Agency - Angeles y Demonios",
+    },
+  },
+  {
+    path: "/karin-agency",
+    name: "KarinAgency",
+    component: KarinViews,
+    meta: {
+      title: "Karin Agency - Angeles y Demonios",
     },
   },
 ];

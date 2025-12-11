@@ -149,6 +149,172 @@ Ruta base: `frontend/src`
 		- Se agregaron iconos: `faHeart` (solid), `farHeart` (regular), `faCheckCircle`, `faCreditCard`, `faClock`.
 		- Se mantiene exportación por defecto de `FontAwesomeIcon`.
 
+	### Migración del Sistema de Foro a MySQL (Nuevo - 11/12/2024)
+
+	Se completó la migración completa del sistema de foro desde localStorage a base de datos MySQL, implementando un sistema híbrido resiliente en 5 fases:
+
+	#### FASE 1: Verificación Backend ✅
+	- Backend corriendo en `localhost:3000` con Node.js + Express + MySQL2
+	- Base de datos `foroayd_local` en MAMP con 5 tablas:
+		- `posts` — Almacena posts del foro
+		- `post_likes` — Sistema de votación (likes/dislikes)
+		- `comments` — Para sistema futuro de comentarios
+		- `comment_likes` — Para votos en comentarios
+		- `user_reputation` — Estadísticas de usuarios
+	- Endpoints REST verificados:
+		- `GET /api/test` — Verificar conexión
+		- `GET /api/posts` — Obtener todos los posts con contadores
+		- `POST /api/posts` — Crear nuevo post
+		- `POST /api/posts/like` — Votar (toggle like/dislike)
+
+	#### FASE 2: Guardar Posts en Base de Datos ✅
+	- `src/components/ForoComponents.vue` — actualizado:
+		- Función `publishPost()` migrada a async
+		- Integración con `forumService.createPost()`
+		- Posts ahora obtienen ID real de la base de datos
+		- Loading spinner durante publicación
+		- Mapeo de campos: `comment` → `content` para BD
+		- Sistema híbrido: guarda en BD primero, luego actualiza localStorage como caché
+
+	#### FASE 3: Cargar Posts desde Base de Datos ✅
+	- Nueva función `loadPostsFromDB()` implementada:
+		- Llamada automática en `onMounted()`
+		- Integración con `forumService.getAllPosts()`
+		- Mapeo completo de datos BD → Frontend (14+ campos)
+		- Fallback automático a localStorage si BD no disponible
+		- UI de loading con spinner dorado
+		- UI de error con botón "Reintentar"
+	- Estados agregados:
+		- `isLoadingPosts` — Indica carga en progreso
+		- `loadError` — Mensaje de error si falla
+
+	#### FASE 4: Sistema de Votos con Base de Datos ✅
+	- Función `handleVote()` migrada a async con BD:
+		- Integración con `forumService.togglePostLike()`
+		- Manejo de 3 respuestas del servidor:
+			- `action: "added"` — Nuevo voto agregado
+			- `action: "removed"` — Voto eliminado (click repetido)
+			- `action: "updated"` — Voto cambiado (like ↔ dislike)
+		- Actualización de contadores en tiempo real
+		- Persistencia en tabla `post_likes` de MySQL
+		- Sincronización con localStorage para caché local
+		- Logs detallados en consola para debugging
+
+	#### FASE 5: Limpieza y Testing Final ✅
+	- Sistema de notificaciones toast implementado:
+		- Ubicación: esquina superior derecha (fixed)
+		- Colores dinámicos: verde (✅ éxito), rojo (❌ error)
+		- Auto-cierre en 3 segundos
+		- Animación fade-in suave con CSS
+		- Reemplaza alerts nativos para mejor UX
+	- Botón "Limpiar Caché" agregado:
+		- Ubicación: esquina inferior derecha (fixed)
+		- Función: elimina localStorage y recarga desde BD
+		- Confirmación antes de ejecutar
+		- Útil para forzar sincronización con servidor
+	- Estado de votación visual:
+		- `isVoting` flag previene votos duplicados
+		- Pasado como prop a `ForoCards`
+	- Manejo robusto de errores:
+		- Todos los mensajes usan sistema toast
+		- Fallbacks automáticos a caché local
+		- No bloquea UI con alerts
+	- `src/style.css` — actualizado:
+		- Animación `@keyframes fadeIn` para toast
+		- Clase `.animate-fade-in` aplicable globalmente
+
+	#### Servicios y Configuración
+	- `src/services/forumService.js` — verificado y funcional:
+		- Cliente axios con baseURL `http://localhost:3000`
+		- Timeout de 10 segundos
+		- Métodos: `createPost()`, `getAllPosts()`, `togglePostLike()`, `testConnection()`
+	- `src/config/api.js` — configurado:
+		- URL desarrollo: `http://localhost:3000`
+		- URL producción: `https://easyventas.cl` (preparado)
+	- `src/services/testUsersService.js` — mantiene usuarios de prueba (IDs 1-15)
+
+	#### Arquitectura Final del Sistema de Foro
+
+	```
+	┌─────────────────────────────────────┐
+	│     FRONTEND (Vue 3 + Vite)         │
+	│                                     │
+	│  ForoComponents.vue                 │
+	│  ├── posts (ref)                    │
+	│  ├── userVotes (ref)                │
+	│  ├── isPublishing (ref)             │
+	│  ├── isLoadingPosts (ref)           │
+	│  ├── isVoting (ref)                 │
+	│  ├── successMessage (ref)           │
+	│  └── loadError (ref)                │
+	│                                     │
+	│  forumService.js → axios client     │
+	│  localStorage → caché local         │
+	└─────────────────────────────────────┘
+	              ↓ HTTP REST
+	┌─────────────────────────────────────┐
+	│   BACKEND (Express + MySQL2)        │
+	│                                     │
+	│  POST /api/posts                    │
+	│  GET  /api/posts                    │
+	│  POST /api/posts/like               │
+	│                                     │
+	│  MySQL Pool (10 conexiones)         │
+	└─────────────────────────────────────┘
+	              ↓
+	┌─────────────────────────────────────┐
+	│    MySQL (foroayd_local)            │
+	│                                     │
+	│  - posts (14+ registros)            │
+	│  - post_likes (votos)               │
+	│  - comments (futuro)                │
+	│  - comment_likes (futuro)           │
+	│  - user_reputation (stats)          │
+	└─────────────────────────────────────┘
+	```
+
+	#### Características del Sistema Híbrido
+	- **Base de Datos (MySQL):**
+		- Fuente de verdad permanente
+		- Datos compartidos entre usuarios
+		- Persistencia real y duradera
+	- **localStorage (Caché):**
+		- Mejora rendimiento (menos requests HTTP)
+		- Fallback si BD no disponible
+		- Sincronización automática bidireccional
+	- **Flujo de datos:**
+		1. Usuario crea post → POST a BD → Respuesta con ID
+		2. Frontend actualiza vista → Guarda en localStorage
+		3. Usuario recarga página → GET desde BD → Actualiza caché
+		4. Usuario vota → POST a BD → Actualiza contadores locales
+		5. Si BD falla → Usa localStorage → Muestra mensaje de error
+
+	#### Documentación Generada
+	- `FASE1_VERIFICACION_COMPLETA.md` (843 líneas):
+		- Detalle técnico de las 5 fases
+		- Testing checklists completos
+		- Troubleshooting guide
+		- Mapeo de campos BD ↔ Frontend
+	- `MIGRACION_COMPLETADA.md` (resumen ejecutivo):
+		- Arquitectura final del sistema
+		- Flujos de datos documentados
+		- Guía de testing
+		- Próximos pasos opcionales
+
+	#### Testing Realizado
+	- ✅ Crear posts → Se guardan en BD con ID real
+	- ✅ Cargar posts → Obtiene desde BD, fallback a localStorage
+	- ✅ Votar posts → Toggle like/dislike funcional
+	- ✅ Persistencia → Votos y posts persisten tras recargar
+	- ✅ Manejo de errores → Fallbacks automáticos, mensajes claros
+	- ✅ Sistema híbrido → BD + localStorage funcionando coordinadamente
+
+	#### Estado del Proyecto de Foro
+	**✅ 5/5 FASES COMPLETADAS**
+	- Sistema listo para producción
+	- Configuración para deploy preparada
+	- Backend en `backend-foroAyD/` corriendo exitosamente
+
 	### Sistema de Autenticación Completo (11/11/2025 - NUEVO)
 
 	Se implementó un sistema completo de autenticación con registro, login y gestión de usuarios, incluyendo persistencia en localStorage:

@@ -6,6 +6,7 @@ import ForoCards from "@/components/main/ForoCards.vue";
 import ForoRule from "@/components/main/ForoRule.vue";
 import testUsersService from "@/services/testUsersService";
 import ButtonComponents from "@/components/buttons/ButtonComponents.vue";
+import forumService from "@/services/forumService";
 
 // Ref para el componente de reglamento
 const foroRuleRef = ref(null);
@@ -86,6 +87,17 @@ const posts = ref([]);
 // Votos del usuario actual (localStorage)
 const userVotes = ref({});
 
+// Estados de publicación (FASE 2)
+const isPublishing = ref(false);
+
+// Estados de carga (FASE 3)
+const isLoadingPosts = ref(false);
+const loadError = ref(null);
+
+// Estados FASE 5
+const successMessage = ref(null);
+const isVoting = ref(false);
+
 // Categorías para tabs
 const categories = [
   { id: "todos", label: "Todos" },
@@ -122,40 +134,85 @@ const openModalRule = () => {
 };
 
 // Publicar post
-const publishPost = () => {
+const publishPost = async () => {
   if (!formData.value.title || !formData.value.comment) {
     alert("Por favor completa título y comentario");
     return;
   }
 
-  // Obtener usuario actual (de prueba)
-  const user = currentUser.value;
+  isPublishing.value = true;
 
-  // Determinar categoría aleatoria (será reemplazado con datos reales)
-  const randomCategory = Math.random() > 0.5 ? "Clientes" : "Chicas";
+  try {
+    // Obtener usuario actual (de prueba)
+    const user = currentUser.value;
 
-  const newPost = {
-    id: Date.now(),
-    author: {
-      id: user.id,
-      name: user.name,
-      location: user.location,
-      avatar: user.avatar,
-    },
-    title: formData.value.title,
-    comment: formData.value.comment,
-    category: randomCategory,
-    city: user.location.split(",")[0].trim(), // Extraer ciudad de la ubicación
-    date: new Date().toISOString(),
-    likes: 0,
-    dislikes: 0,
-    commentsCount: 0,
-    userVotes: {}, // Control de votos únicos
-  };
+    // Determinar categoría aleatoria (será reemplazado con datos reales)
+    const randomCategory = Math.random() > 0.5 ? "Clientes" : "Chicas";
 
-  posts.value.unshift(newPost);
-  localStorage.setItem("foroPosts", JSON.stringify(posts.value));
-  closeModal();
+    // Preparar datos para la BD
+    const postData = {
+      user_id: user.id,
+      title: formData.value.title,
+      content: formData.value.comment, // ⚠️ BD usa "content", no "comment"
+      category: randomCategory,
+      image_url: null,
+    };
+
+    // Guardar en BD
+    const response = await forumService.createPost(postData);
+
+    // Crear objeto completo para el frontend
+    const newPost = {
+      id: response.data.id, // ID real de la BD
+      user_id: user.id,
+      author: {
+        id: user.id,
+        name: user.name,
+        location: user.location,
+        avatar: user.avatar,
+      },
+      title: formData.value.title,
+      comment: formData.value.comment,
+      content: formData.value.comment,
+      category: randomCategory,
+      city: user.location.split(",")[0].trim(),
+      date: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      likes: 0,
+      dislikes: 0,
+      commentsCount: 0,
+      comment_count: 0,
+      userVotes: {},
+    };
+
+    // Actualizar vista (agregar al inicio)
+    posts.value.unshift(newPost);
+
+    // Guardar en localStorage (caché local)
+    localStorage.setItem("foroPosts", JSON.stringify(posts.value));
+
+    // Cerrar modal y resetear formulario
+    closeModal();
+
+    // Mostrar mensaje de éxito
+    successMessage.value = "✅ Post publicado exitosamente";
+    setTimeout(() => {
+      successMessage.value = null;
+    }, 3000);
+
+    console.log("✅ Post creado exitosamente en BD:", response.data);
+  } catch (error) {
+    console.error("❌ Error al publicar post:", error);
+
+    // Mostrar mensaje de error con toast
+    successMessage.value =
+      "❌ No se pudo publicar el post. Intenta nuevamente.";
+    setTimeout(() => {
+      successMessage.value = null;
+    }, 3000);
+  } finally {
+    isPublishing.value = false;
+  }
 };
 
 // Cambiar categoría
@@ -237,70 +294,168 @@ const filteredPosts = computed(() => {
   return filtered;
 });
 
-// Manejar votación (Sistema de voto único)
-const handleVote = ({ postId, voteType }) => {
+// Manejar votación (Sistema de voto único - FASE 4: Con BD)
+const handleVote = async ({ postId, voteType }) => {
   const post = posts.value.find((p) => p.id === postId);
   if (!post || !currentUser.value) return;
 
   const userId = currentUser.value.id;
   const currentVote = userVotes.value[postId];
 
-  // Si ya votó lo mismo, remover voto
-  if (currentVote === voteType) {
-    if (voteType === "like") {
-      post.likes = Math.max(0, post.likes - 1);
-    } else if (voteType === "dislike") {
-      post.dislikes = Math.max(0, post.dislikes - 1);
-    }
-    delete userVotes.value[postId];
-  }
-  // Si votó diferente, cambiar voto
-  else if (currentVote && currentVote !== voteType) {
-    // Remover voto anterior
-    if (currentVote === "like") {
-      post.likes = Math.max(0, post.likes - 1);
-    } else if (currentVote === "dislike") {
-      post.dislikes = Math.max(0, post.dislikes - 1);
-    }
-    // Agregar nuevo voto
-    if (voteType === "like") {
-      post.likes++;
-    } else if (voteType === "dislike") {
-      post.dislikes++;
-    }
-    userVotes.value[postId] = voteType;
-  }
-  // Si no ha votado, agregar voto
-  else {
-    if (voteType === "like") {
-      post.likes++;
-    } else if (voteType === "dislike") {
-      post.dislikes++;
-    }
-    userVotes.value[postId] = voteType;
-  }
+  try {
+    console.log(
+      `🗳️ Votando: postId=${postId}, userId=${userId}, voteType=${voteType}`
+    );
 
-  // Guardar en localStorage
-  localStorage.setItem("foroPosts", JSON.stringify(posts.value));
-  localStorage.setItem("foroUserVotes", JSON.stringify(userVotes.value));
+    // Llamar a la API para registrar el voto
+    const response = await forumService.togglePostLike({
+      post_id: postId,
+      user_id: userId,
+      like_type: voteType,
+    });
+
+    console.log(`✅ Respuesta del servidor:`, response);
+
+    // Actualizar contadores según la acción del servidor
+    if (response.action === "added") {
+      // Voto agregado
+      if (voteType === "like") {
+        post.likes++;
+      } else if (voteType === "dislike") {
+        post.dislikes++;
+      }
+      userVotes.value[postId] = voteType;
+      console.log(`➕ Voto agregado: ${voteType}`);
+    } else if (response.action === "removed") {
+      // Voto eliminado (votó lo mismo)
+      if (voteType === "like") {
+        post.likes = Math.max(0, post.likes - 1);
+      } else if (voteType === "dislike") {
+        post.dislikes = Math.max(0, post.dislikes - 1);
+      }
+      delete userVotes.value[postId];
+      console.log(`➖ Voto removido: ${voteType}`);
+    } else if (response.action === "updated") {
+      // Voto cambiado (de like a dislike o viceversa)
+      if (voteType === "like") {
+        post.likes++;
+        post.dislikes = Math.max(0, post.dislikes - 1);
+      } else if (voteType === "dislike") {
+        post.dislikes++;
+        post.likes = Math.max(0, post.likes - 1);
+      }
+      userVotes.value[postId] = voteType;
+      console.log(`🔄 Voto actualizado: ${currentVote} → ${voteType}`);
+    }
+
+    // Guardar en localStorage (caché)
+    localStorage.setItem("foroPosts", JSON.stringify(posts.value));
+    localStorage.setItem("foroUserVotes", JSON.stringify(userVotes.value));
+  } catch (error) {
+    console.error("❌ Error al votar:", error);
+
+    // Mensaje de error más amigable
+    successMessage.value = "❌ Error al registrar voto. Intenta nuevamente.";
+    setTimeout(() => {
+      successMessage.value = null;
+    }, 3000);
+  } finally {
+    isVoting.value = false;
+  }
+};
+
+// FASE 5: Limpiar localStorage
+const clearLocalStorage = () => {
+  if (
+    confirm(
+      "¿Eliminar todos los datos locales? Los posts en la base de datos permanecerán."
+    )
+  ) {
+    localStorage.removeItem("foroPosts");
+    localStorage.removeItem("foroUserVotes");
+    console.log("🗑️ localStorage limpiado");
+
+    // Limpiar votos del usuario
+    userVotes.value = {};
+
+    successMessage.value =
+      "✅ Datos locales eliminados. Recargando desde base de datos...";
+    setTimeout(() => {
+      successMessage.value = null;
+    }, 3000);
+
+    // Recargar posts desde BD
+    loadPostsFromDB();
+  }
+};
+
+// Cargar posts desde la base de datos (FASE 3)
+const loadPostsFromDB = async () => {
+  isLoadingPosts.value = true;
+  loadError.value = null;
+
+  try {
+    console.log("🔄 Cargando posts desde BD...");
+    const response = await forumService.getAllPosts();
+
+    // Mapear posts de BD a formato del frontend
+    posts.value = response.data.map((post) => ({
+      id: post.id,
+      user_id: post.user_id,
+      author: {
+        id: post.user_id,
+        name: `Usuario ${post.user_id}`, // Por ahora
+        location: "Chile", // Por ahora
+        avatar: "👤",
+      },
+      title: post.title,
+      comment: post.content, // Mapear content → comment
+      content: post.content,
+      category: post.category || "General",
+      city: "Santiago", // Por ahora
+      date: post.created_at,
+      created_at: post.created_at,
+      likes: post.likes || 0,
+      dislikes: post.dislikes || 0,
+      commentsCount: post.comment_count || 0,
+      comment_count: post.comment_count || 0,
+      views: post.views || 0,
+      is_pinned: post.is_pinned,
+      is_locked: post.is_locked,
+    }));
+
+    // Guardar en localStorage (caché)
+    localStorage.setItem("foroPosts", JSON.stringify(posts.value));
+
+    console.log(`✅ ${posts.value.length} posts cargados desde BD`);
+  } catch (error) {
+    console.error("❌ Error al cargar posts:", error);
+    loadError.value = "Error al cargar posts. Usando caché local.";
+
+    // Fallback: intentar cargar desde localStorage
+    const savedPosts = localStorage.getItem("foroPosts");
+    if (savedPosts) {
+      posts.value = JSON.parse(savedPosts);
+      console.log("📦 Posts cargados desde localStorage (fallback)");
+    }
+  } finally {
+    isLoadingPosts.value = false;
+  }
 };
 
 // Cargar posts, usuario y votos al montar
-onMounted(() => {
+onMounted(async () => {
   // Cargar usuario de prueba
   currentUser.value = testUsersService.loadCurrentUser();
-
-  // Cargar posts guardados
-  const savedPosts = localStorage.getItem("foroPosts");
-  if (savedPosts) {
-    posts.value = JSON.parse(savedPosts);
-  }
 
   // Cargar votos del usuario
   const savedVotes = localStorage.getItem("foroUserVotes");
   if (savedVotes) {
     userVotes.value = JSON.parse(savedVotes);
   }
+
+  // FASE 3: Cargar posts desde BD
+  await loadPostsFromDB();
 });
 </script>
 
@@ -328,6 +483,17 @@ onMounted(() => {
     <button-components @click="openModalRule">
       Reglamento del Foro
     </button-components>
+
+    <!-- FASE 5: Mensaje de éxito/error -->
+    <div
+      v-if="successMessage"
+      :class="[
+        'fixed top-4 right-4 z-50 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in',
+        successMessage.includes('❌') ? 'bg-red-500' : 'bg-green-500',
+      ]"
+    >
+      {{ successMessage }}
+    </div>
 
     <!-- Categorías (Tabs) -->
     <div class="flex justify-center items-center gap-2 md:gap-4 mb-6 md:mb-8">
@@ -511,10 +677,44 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- Loading state (FASE 3) -->
+    <div v-if="isLoadingPosts" class="text-center py-16 md:py-20 lg:py-24">
+      <font-awesome-icon
+        icon="spinner"
+        spin
+        class="text-5xl md:text-6xl text-[#FFD700] mb-4 mode-icon"
+      />
+      <p class="text-xl md:text-2xl text-[#A2A2A2] font-medium mode-paragraph">
+        Cargando posts...
+      </p>
+    </div>
+
+    <!-- Error state (FASE 3) -->
+    <div v-else-if="loadError" class="text-center py-16 md:py-20 lg:py-24">
+      <font-awesome-icon
+        icon="exclamation-triangle"
+        class="text-5xl md:text-6xl text-red-500 mb-4 mode-icon"
+      />
+      <p
+        class="text-xl md:text-2xl text-red-400 font-medium mb-6 mode-paragraph"
+      >
+        {{ loadError }}
+      </p>
+      <button
+        @click="loadPostsFromDB"
+        class="px-6 py-3 bg-[#FFD700] lg:hover:bg-[#FFB200] text-black font-semibold rounded-lg transition-colors mode-btn cursor-pointer"
+      >
+        <font-awesome-icon icon="redo" class="mr-2" />
+        Reintentar
+      </button>
+    </div>
+
     <!-- Lista de Posts -->
     <foro-cards
+      v-else
       :posts="filteredPosts"
       :user-votes="userVotes"
+      :is-voting="isVoting"
       @vote="handleVote"
     />
 
@@ -589,9 +789,17 @@ onMounted(() => {
             <!-- Botón Publicar -->
             <button
               @click="publishPost"
-              class="w-full bg-[#FFD700] lg:hover:bg-[#FFB200] text-black font-bold py-3 rounded-lg transition-colors duration-300 text-base md:text-lg mode-btn cursor-pointer"
+              :disabled="isPublishing"
+              class="w-full bg-[#FFD700] lg:hover:bg-[#FFB200] text-black font-bold py-3 rounded-lg transition-colors duration-300 text-base md:text-lg mode-btn cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Publicar
+              <span
+                v-if="isPublishing"
+                class="flex items-center justify-center gap-2"
+              >
+                <font-awesome-icon icon="spinner" spin class="mode-icon" />
+                Publicando...
+              </span>
+              <span v-else>Publicar</span>
             </button>
           </div>
         </div>

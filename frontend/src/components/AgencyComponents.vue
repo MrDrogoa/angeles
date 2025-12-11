@@ -1,0 +1,60 @@
+<script setup>
+import TitleH2Components from "@/components/TitleH2Components.vue";
+import Hero from "@/assets/hero.webp";
+import ReturnComponents from "@/components/buttons/ReturnComponents.vue";
+
+const newsRedes = [
+  {
+    id: 1,
+    title: "Karin hospedajes",
+    location: "Temuco, Chile",
+    img: Hero,
+    url: {
+      path: "/karin-agency",
+    },
+  },
+];
+</script>
+
+<template>
+  <section class="max-w-[1300px] mx-auto pb-8 md:pb-20 lg:pb-25 xl:pb-30 px-4">
+    <return-components />
+    <title-h-2-components title="Agencias" class="text-center" />
+    <article class="flex justify-center flex-wrap gap-4">
+      <router-link
+        v-for="redes in newsRedes"
+        :key="redes.id"
+        :to="redes.url.path"
+        class="border-2 border-[#FFD700] rounded-xl p-4 md:p-5 lg:p-6 xl:p-7 max-w-md cursor-pointer mode-card"
+      >
+        <div class="flex justify-between max-w-xs">
+          <div class="flex flex-col gap-1 md:gap-2 xl:gap-3 w-[70%]">
+            <h3
+              class="text-[#F5F5F5] font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl drop-shadow-lg mode-title"
+            >
+              {{ redes.title }}
+            </h3>
+            <span
+              class="text-xs md:text-base lg:text-lg xl:text-xl text-[#FFD700] font-bold mode-paragraph"
+              >{{ redes.location }}</span
+            >
+            <p
+              class="text-[#A2A2A2] text-xs md:text-sm lg:text-base xl:text-lg mode-paragraph"
+            >
+              {{ redes.descripcion }}
+            </p>
+          </div>
+          <div class="overflow-hidden w-1/3 flex justify-end">
+            <img
+              :src="redes.img"
+              :alt="redes.title"
+              class="rounded-full object-cover w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28"
+            />
+          </div>
+        </div>
+      </router-link>
+    </article>
+  </section>
+</template>
+
+<style scoped></style>
