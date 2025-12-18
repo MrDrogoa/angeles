@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_URL_CURRENT } from "@/config/api.js";
+import { getApiUrl } from "@/config/api.js";
 
 // Crear instancia de axios con configuración base
 const apiClient = axios.create({
-  baseURL: API_URL_CURRENT,
+  baseURL: getApiUrl(),
   headers: {
     "Content-Type": "application/json",
   },

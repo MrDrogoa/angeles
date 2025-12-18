@@ -115,9 +115,9 @@
 <script setup>
 import { ref } from "vue";
 import forumService from "@/services/forumService.js";
-import { API_URL_CURRENT } from "@/config/api.js";
+import { getApiUrl } from "@/config/api.js";
 
-const apiUrl = API_URL_CURRENT;
+const apiUrl = getApiUrl();
 
 const loading = ref({
   test: false,

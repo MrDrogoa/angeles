@@ -4,11 +4,206 @@ Este README resume, de forma detallada, los cambios y componentes que se impleme
 
 Contenido
 - Resumen ejecutivo
+- **🚀 Deployment a Producción (16-17 Diciembre 2025)**
 - Lista de archivos / componentes creados o modificados
 - Descripción funcional por componente
 - Dependencias relevantes
 - Cómo ejecutar el proyecto (dev / build)
 - Notas y siguientes pasos
+
+---
+
+## 🚀 DEPLOYMENT A PRODUCCIÓN - SEXYANGELES.CL (16-17 Diciembre 2025)
+
+### Resumen del Deployment
+Se completó el deployment full-stack del proyecto Ángeles y Demonios en el servidor de producción Bluehost (sexyangeles.cl). El proceso incluyó configuración de frontend Vue, backend Node.js, base de datos MySQL y proxy Apache.
+
+### Configuraciones Realizadas
+
+#### Frontend (Vue 3 + Vite)
+- **URL Producción:** `https://sexyangeles.cl/`
+- **Build Tool:** Vite 7.1.7
+- **Compilación:** `npm run build` genera carpeta `dist/`
+- **Ubicación en servidor:** `/home/neekworl/public_html/sexyangeles.cl/`
+
+**Archivos modificados para producción:**
+- `src/config/api.js` — Configuración de URLs para producción:
+  ```javascript
+  export const API_URL = "https://sexyangeles.cl";
+  export const API_URL_DEV = "http://localhost:3000";
+  export const getApiUrl = () => {
+    return import.meta.env.PROD ? API_URL : API_URL_DEV;
+  };
+  ```
+- `src/services/forumService.js` — Uso de `getApiUrl()` en lugar de URL hardcodeada
+- `src/views/TestAPIView.vue` — Actualizado para usar `getApiUrl()`
+
+**Estructura en servidor:**
+```
+/home/neekworl/public_html/sexyangeles.cl/
+├── index.html
+├── assets/
+│   ├── index-txx0r4Ap.js
+│   └── index-8AfziV7N.css
+├── transparente-logo.webp
+└── .htaccess (proxy + Vue Router)
+```
+
+#### Backend (Node.js + Express)
+- **Puerto:** 3000
+- **Runtime:** Node.js 20.19.2
+- **Ubicación:** `/home/neekworl/backend-foroAyD/`
+- **Startup file:** `index.js`
+- **Dependencias:** express, mysql2, cors, dotenv
+
+**Configuración de producción (.env):**
+```env
+PORT=3000
+NODE_ENV=production
+DB_HOST=localhost
+DB_USER=neekworl_danielR
+DB_PASSWORD=DaRo.2001
+DB_NAME=neekworl_foroayd_prod
+DB_PORT=3306
+FRONTEND_URL=https://sexyangeles.cl
+ALLOWED_ORIGIN=https://sexyangeles.cl
+```
+
+**Archivos creados para deployment:**
+- `.env.production` — Variables de entorno para cPanel
+- `diagnostic-server.js` — Servidor de diagnóstico temporal
+- `test-db-connection.js` — Script de prueba de conexión MySQL
+
+#### Base de Datos (MySQL)
+- **Host:** localhost
+- **Base de datos:** `neekworl_foroayd_prod`
+- **Usuario:** `neekworl_danielR`
+- **Estructura:** 5 tablas (posts, post_likes, comments, comment_likes, user_reputation)
+- **Registros:** 14+ posts importados desde desarrollo local
+
+**Proceso de migración:**
+1. Exportación desde MAMP (phpMyAdmin) → `foroayd_backup.sql`
+2. Creación de BD y usuario en cPanel
+3. Asignación de privilegios ALL PRIVILEGES
+4. Importación via phpMyAdmin en cPanel
+
+#### Proxy y Configuración Apache (.htaccess)
+Ubicación: `/home/neekworl/public_html/sexyangeles.cl/.htaccess`
+
+```apache
+RewriteEngine On
+
+# Forzar HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Proxy para API Node.js
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ http://127.0.0.1:3000/api/$1 [P,L]
+
+# Vue Router - SPA
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule ^.*$ /index.html [L]
+
+# CORS Headers
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+```
+
+### Proceso de Deployment en cPanel
+
+#### Setup Node.js App
+1. Acceso: cPanel → "Setup Node.js App"
+2. Configuración:
+   - Node.js version: 20.19.2
+   - Application mode: Production
+   - Application root: `backend-foroAyD`
+   - Application startup file: `index.js`
+3. Instalación de dependencias: `npm install --production`
+4. Estado: 🟢 Running
+
+#### Comandos de activación:
+```bash
+source /home/neekworl/nodevenv/backend-foroAyD/20/bin/activate
+cd /home/neekworl/backend-foroAyD
+npm install --production
+```
+
+### Endpoints API Disponibles
+- `GET /api/test` — Verificación de conexión BD
+- `GET /api/posts` — Obtener todos los posts del foro
+- `POST /api/posts` — Crear nuevo post
+- `POST /api/posts/like` — Votar en post (like/dislike)
+
+### Guías Creadas
+- `GUIA_COMPLETA_CPANEL.md` — Guía general para cualquier proyecto en cPanel
+- `GUIA_DEPLOYMENT_SEXYANGELES.md` — Guía específica para este proyecto
+
+### Problemas Resueltos Durante el Deployment
+
+1. **Error: "Specified directory already used"**
+   - Causa: Aplicación Node.js previa usando el mismo directorio
+   - Solución: Eliminar app vieja y crear nueva
+
+2. **Error: "node_modules folder must be removed"**
+   - Causa: CloudLinux requiere symlink en lugar de carpeta real
+   - Solución: Eliminar node_modules/ y ejecutar "Run NPM Install" desde cPanel
+
+3. **Archivos .env ocultos no visibles**
+   - Solución: File Manager → Settings → "Show Hidden Files" → Save
+
+4. **Error 503 - Backend no responde**
+   - Causa: Credenciales DB incorrectas (faltaba prefijo `neekworl_`)
+   - Solución: Corregir .env con nombres completos: `neekworl_danielR`, `neekworl_foroayd_prod`
+
+5. **SSH Connection Timed Out**
+   - Causa: Puerto 22 bloqueado en plan de hosting
+   - Solución: Diagnóstico via endpoint HTTP temporal
+
+6. **Frontend carga pero error "can't access property 'map'"**
+   - Causa: Backend corriendo pero sin conexión a BD
+   - Solución: Verificar y corregir credenciales en .env del servidor
+
+### Actualizaciones Futuras del Sitio
+
+Para actualizar el sitio después de hacer cambios:
+
+```bash
+# 1. Reconstruir frontend
+cd C:/Users/danie/Desktop/AngelesyDemonios/frontend
+npm run build
+
+# 2. Subir a cPanel via File Manager
+# - Ir a: /home/neekworl/public_html/sexyangeles.cl/
+# - Eliminar archivos viejos (excepto .htaccess y backups)
+# - Upload: Todo el contenido de dist/
+
+# 3. Limpiar caché del navegador
+# - Ctrl + F5 para recarga forzada
+```
+
+### Estado Actual del Proyecto
+- ✅ Frontend Vue 3 desplegado y funcionando
+- ✅ Backend Node.js corriendo en puerto 3000
+- ⚠️ Base de datos MySQL con problemas de conexión (pendiente de resolver)
+- ✅ Proxy .htaccess configurado correctamente
+- ✅ Vue Router funcionando con redirecciones
+- ✅ Página 404 personalizada implementada
+- ⏸️ Sistema de foro temporalmente deshabilitado (BD pendiente)
+
+### Próximos Pasos
+1. Resolver conexión a base de datos MySQL
+2. Probar funcionalidad completa del foro en producción
+3. Configurar backups automáticos
+4. Implementar CI/CD para deployments automáticos
+5. Monitoreo y logging de errores en producción
+
+---
 
 ## Resumen ejecutivo
 

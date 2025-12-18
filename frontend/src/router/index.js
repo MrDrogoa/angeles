@@ -19,6 +19,7 @@ import PostDetailView from "@/views/PostDetailView.vue";
 import TestAPIView from "@/views/TestAPIView.vue";
 import AgencyViews from "@/views/agency/AgencyViews.vue";
 import KarinViews from "@/views/agency/KarinViews.vue";
+import NotFoundViews from "@/views/NotFoundViews.vue";
 
 const routes = [
   {
@@ -181,6 +182,15 @@ const routes = [
       title: "Karin Agency - Angeles y Demonios",
     },
   },
+  {
+    path: "/404",
+    name: "NotFound",
+    component: NotFoundViews,
+    meta: {
+      title: "Página No Encontrada - Angeles y Demonios",
+    },
+  },
+  {},
 ];
 
 const router = createRouter({
